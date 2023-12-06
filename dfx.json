@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "canisters": {
+    "test": {
+      "main": "backend/test/main.mo",
+      "type": "motoko"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env"
+}
