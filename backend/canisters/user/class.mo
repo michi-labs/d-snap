@@ -14,6 +14,9 @@ shared ({ caller }) actor class User(id : Principal, data : Types.CreateUserData
     stable let _id = id;
     stable var _data : Types.UserProfile = {
         username = data.username;
+        picture = data.picture;
+        bio = data.bio;
+        birthday = data.birthday;
         createdAt = Time.now();
     };
 

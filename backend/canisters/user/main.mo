@@ -17,14 +17,11 @@ actor User {
 
     let users = HashMap.HashMap<Principal, User>(0, Principal.equal, Principal.hash);
 
-    type CreateUser = {
-        username : Text;
-    };
+    type CreateUserError = { #userAlreadyExists; #userNotAuthenticated };
 
-    type CreateUserError = { #userAlreadyExists };
+    public shared ({ caller }) func create(data : Types.CreateUserData) : async Result.Result<(), CreateUserError> {
+        if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
-    public shared ({ caller }) func create(data : CreateUser) : async Result.Result<(), CreateUserError> {
-        // TODO: prevent create if user is anonymous
         let user : ?User = users.get(caller);
 
         switch user {
@@ -43,9 +40,11 @@ actor User {
         };
     };
 
-    type GetProfileError = { #userNotFound };
+    type GetProfileError = { #userNotFound; #userNotAuthenticated };
 
     public composite query ({ caller }) func getProfile() : async Result.Result<Types.UserProfile, GetProfileError> {
+        if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
+
         let user : ?User = users.get(caller);
 
         switch user {
@@ -57,9 +56,11 @@ actor User {
         };
     };
 
-    type GetPostsError = { #userNotFound };
+    type GetPostsError = { #userNotFound; #userNotAuthenticated };
 
     public composite query ({ caller }) func getPosts() : async Result.Result<Types.GetPostsResult, GetPostsError> {
+        if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
+
         let user : ?User = users.get(caller);
 
         switch user {
@@ -71,9 +72,11 @@ actor User {
         };
     };
 
-    type CreatePostError = { #userNotFound };
+    type CreatePostError = { #userNotFound; #userNotAuthenticated };
 
     public shared ({ caller }) func createPost(data : Types.CreatePostData) : async Result.Result<(), CreatePostError> {
+        if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
+
         let user : ?User = users.get(caller);
 
         switch user {

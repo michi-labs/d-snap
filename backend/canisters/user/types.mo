@@ -1,4 +1,5 @@
 import Text "mo:base/Text";
+import Nat8 "mo:base/Nat8";
 
 import Models "models";
 import Image "../../libs/Image";
@@ -6,11 +7,23 @@ import Image "../../libs/Image";
 module {
     public type UserProfile = {
         username : Text;
+        picture : Image.Image;
+        bio : Text;
+        birthday : BirthDay;
         createdAt : Int;
+    };
+
+    public type BirthDay = {
+        month : Nat8;
+        day : Nat8;
+        year : Nat8;
     };
 
     public type CreateUserData = {
         username : Text;
+        picture : Image.Image;
+        bio : Text;
+        birthday : BirthDay;
     };
 
     public type GetPostsResult = [(Text, Models.Post)];
