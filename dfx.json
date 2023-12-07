@@ -4,6 +4,10 @@
     "test": {
       "main": "backend/test/main.mo",
       "type": "motoko"
+    },
+    "user": {
+      "main": "backend/user/main.mo",
+      "type": "motoko"
     }
   },
   "defaults": {
