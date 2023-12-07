@@ -1,4 +1,5 @@
 import Blob "mo:base/Blob";
+
 import Image "../../libs/Image";
 
 module {
@@ -8,5 +9,6 @@ module {
         images : [Image.Image];
         likes : Nat8;
         createdAt : Int;
+        updatedAt : Int;
     };
 };

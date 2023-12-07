@@ -26,7 +26,16 @@ module {
         birthday : BirthDay;
     };
 
-    public type GetPostsResult = [(Text, Models.Post)];
+    public type GetPostsFilters = {
+        page : Nat;
+        pageSize : Nat;
+        from : Int;
+        to : Int;
+    };
+
+    public type GetPostsResult = {
+        data : [(Text, Models.Post)];
+    };
 
     public type CreatePostData = {
         description : Text;
