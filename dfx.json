@@ -2,11 +2,11 @@
   "version": 1,
   "canisters": {
     "test": {
-      "main": "backend/test/main.mo",
+      "main": "backend/canisters/test/main.mo",
       "type": "motoko"
     },
     "user": {
-      "main": "backend/user/main.mo",
+      "main": "backend/canisters/user/main.mo",
       "type": "motoko"
     }
   },

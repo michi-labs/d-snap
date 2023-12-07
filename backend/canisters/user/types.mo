@@ -1,5 +1,7 @@
 import Text "mo:base/Text";
+
 import Models "models";
+import Image "../../libs/Image";
 
 module {
     public type UserProfile = {
@@ -15,7 +17,7 @@ module {
 
     public type CreatePostData = {
         description : Text;
-        images : [Text];
+        images : [Image.Image];
     };
 
     public type CreatePostResult = {
