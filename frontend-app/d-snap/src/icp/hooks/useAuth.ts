@@ -1,7 +1,7 @@
-import { AuthClient } from "@dfinity/auth-client";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { useProvider } from "./useProvider";
 import { Identity } from "@dfinity/agent";
+import { IcpContext } from "../context";
 
 export type LoginOptions = {
   maxTimeToLive?: bigint;
@@ -16,7 +16,6 @@ export type LogoutOptions = {
 };
 
 export type Auth = {
-  isReady: boolean;
   login: (options?: LoginOptions) => Promise<void>;
   logout: (options?: LogoutOptions) => Promise<void>;
   isAuthenticated: () => Promise<boolean>;
@@ -24,52 +23,32 @@ export type Auth = {
 };
 
 export const useAuth = (): Auth => {
-  const [isReady, setIsReady] = useState<boolean>(false);
-  const [client, setClient] = useState<AuthClient | undefined>(undefined);
+  const { auth } = useContext(IcpContext);
 
   const provider = useProvider("internet-identity");
 
-  useEffect(() => {
-    init();
-  });
-
-  async function init() {
-    const client = await AuthClient.create();
-    setClient(client);
-    setIsReady(true);
-  }
-
   function login(options: LoginOptions = {}): Promise<void> {
-    if (!client) throw new Error("Auth is not ready");
-
     const identityProvider = provider.url || "https://identity.ic0.app";
     const opts = {
       identityProvider,
       ...options,
     };
-    return client?.login(opts);
+    return auth.login(opts);
   }
 
   function logout(options: LogoutOptions = {}): Promise<void> {
-    if (!client) throw new Error("Auth is not ready");
-
-    return client?.logout(options);
+    return auth.logout(options);
   }
 
   function isAuthenticated(): Promise<boolean> {
-    if (!client) throw new Error("Auth is not ready");
-
-    return client?.isAuthenticated();
+    return auth.isAuthenticated();
   }
 
   function getIdentity(): Identity {
-    if (!client) throw new Error("Auth is not ready");
-
-    return client?.getIdentity();
+    return auth.getIdentity();
   }
 
   return {
-    isReady,
     login,
     logout,
     isAuthenticated,

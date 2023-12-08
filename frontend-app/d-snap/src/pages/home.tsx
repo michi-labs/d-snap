@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 
 import { useActor } from "../icp/hooks/useActor";
-import { Auth, useAuth } from "../icp/hooks/useAuth";
+import { AuthButton } from "dsnap/components/auth/auth-button";
 
 export default function HomePage() {
   const [greet, setGreet] = useState("");
   const test = useActor("test");
-  const auth = useAuth();
 
   useEffect(() => {
     getGreet();
@@ -21,7 +20,7 @@ export default function HomePage() {
   return (
     <div>
       <h1>Home: {greet}</h1>
-      {auth.isReady && <button onClick={() => auth.login()}>Ingresar</button>}
+      <AuthButton />
     </div>
   );
 }
