@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { useAuth } from "../../packages/icp/hooks/useAuth";
+import { Button } from "../ui/button";
 
 export function AuthButton() {
   const [isAuth, setIsAuth] = useState<Boolean | undefined>(false);
@@ -11,8 +12,8 @@ export function AuthButton() {
   }, []);
 
   async function getAuth() {
-    const isAutheticated = await auth.isAuthenticated();
-    setIsAuth(isAutheticated);
+    const isAuthenticated = await auth.isAuthenticated();
+    setIsAuth(isAuthenticated);
   }
 
   function login() {
@@ -40,7 +41,15 @@ type LoginButtonProps = {
 };
 
 function LoginButton(props: LoginButtonProps) {
-  return <button onClick={() => props.login()}>Ingresar</button>;
+  return (
+    <Button
+      className="w-full py-2 bg-purple-600 text-white rounded-md"
+      variant="outline"
+      onClick={() => props.login()}
+    >
+      <div className="flex items-center justify-center gap-2">Login</div>
+    </Button>
+  );
 }
 
 type LogoutButtonProps = {
@@ -48,5 +57,13 @@ type LogoutButtonProps = {
 };
 
 function LogoutButton(props: LogoutButtonProps) {
-  return <button onClick={() => props.logout()}>Salir</button>;
+  return (
+    <Button
+      className="w-full py-2 bg-purple-600 text-white rounded-md"
+      variant="outline"
+      onClick={() => props.logout()}
+    >
+      <div className="flex items-center justify-center gap-2">Logout</div>
+    </Button>
+  );
 }

@@ -10,8 +10,39 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Layout from "dsnap/components/layout";
+import { useState } from "react";
+import { storage } from "@/lib/firebase";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 const ProfilePage = () => {
+  const [imgUrl, setImgUrl] = useState<string | null>(null);
+  const [progressPercent, setProgressPercent] = useState(0);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const file = e.target[0]?.files[0];
+    if (!file) return;
+    const storageRef = ref(storage, `dsnap-web/profile/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgressPercent(progress);
+      },
+      (error) => {
+        alert(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setImgUrl(downloadURL);
+        });
+      }
+    );
+  };
   return (
     <Layout>
       <div className="flex items-center justify-center h-screen">
@@ -21,15 +52,66 @@ const ProfilePage = () => {
             <CardDescription>Modify your account settings.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <form onSubmit={handleSubmit} className="form">
+              {!imgUrl && (
+                <div className="outerbar">
+                  <div
+                    className="innerbar"
+                    style={{ width: `${progressPercent}%` }}
+                  >
+                    {progressPercent}%
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-2">
+                {imgUrl && (
+                  <img
+                    className="my-2 rounded-full m-auto"
+                    height="100"
+                    width="100"
+                    src={imgUrl}
+                    alt="uploaded avatar"
+                    style={{
+                      aspectRatio: "100/100",
+                      objectFit: "cover",
+                    }}
+                  />
+                )}
+                {!imgUrl && (
+                  <img
+                    alt="uploaded avatar"
+                    className="my-2 rounded-full m-auto"
+                    height="100"
+                    width="100"
+                    src="https://placehold.it/100x100"
+                    style={{
+                      aspectRatio: "100/100",
+                      objectFit: "cover",
+                    }}
+                  />
+                )}
+                <Label htmlFor="profile-picture">Profile Picture</Label>
+                <Input
+                  accept="image/*"
+                  className="block mt-1 w-full"
+                  id="profile-picture"
+                  type="file"
+                />
+                <Button type="submit" className="ml-auto bg-purple-600">
+                  Upload Image
+                </Button>
+              </div>
+            </form>
             <div className="space-y-2">
               <Label htmlFor="username">Username</Label>
               <Input id="username" placeholder="Enter your username" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" placeholder="Enter your email" type="email" />
+              <Label htmlFor="bio">Bio</Label>
+              <Input id="bio" placeholder="Write about you" type="text" />
             </div>
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="private-profile">Private profile</Label>
               <div className="flex items-center space-x-4" id="private-profile">
                 <Input
@@ -78,10 +160,10 @@ const ProfilePage = () => {
                 />
                 <Label htmlFor="no-one">No One</Label>
               </div>
-            </div>
+            </div> */}
           </CardContent>
           <CardFooter>
-            <Button className="ml-auto">Save</Button>
+            <Button className="ml-auto bg-purple-600">Save</Button>
           </CardFooter>
         </Card>
       </div>
