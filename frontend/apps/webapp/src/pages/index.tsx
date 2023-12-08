@@ -1,27 +1,24 @@
-import { useContext, useEffect, useState } from "react";
-
-import { useActor } from "../packages/icp/hooks/useActor";
-import { AuthButton } from "../lib/auth/auth-button";
-
+import { useContext } from "react";
 import {
   CardTitle,
   CardDescription,
   CardHeader,
   CardContent,
-  CardFooter,
   Card,
 } from "@/components/ui/card";
-import { useAuth } from "dsnap/packages/icp/hooks/useAuth";
-import { AuthContext } from "dsnap/lib/auth/auth-context";
+
+import { AuthButton } from "../lib/auth/auth-button";
+import { AuthContext } from "../lib/auth/auth-context";
+import { useActor } from "../packages/icp/hooks/useActor";
 
 export default function HomePage() {
-  const [username, setUsername] = useState("");
   const { isAuth } = useContext(AuthContext);
+  const user = useActor("user");
 
   async function create() {
     try {
       // @ts-ignore
-      await user.create({
+      const response = await user.create({
         username: "adrian_hidalgo",
         bio: "Software developer",
         picture: {
@@ -29,11 +26,7 @@ export default function HomePage() {
         },
       });
 
-      // @ts-ignore
-      const profile = await user.getProfile();
-      console.log({ profile });
-
-      setUsername(profile.username);
+      console.log({ response });
     } catch (error) {
       console.log({ error });
     }

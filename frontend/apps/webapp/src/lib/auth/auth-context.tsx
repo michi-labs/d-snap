@@ -1,8 +1,20 @@
-import { useAuth } from "dsnap/packages/icp/hooks/useAuth";
 import { ReactNode, createContext, useEffect, useState } from "react";
+
+import { useActor } from "../../packages/icp/hooks/useActor";
+import { useAuth } from "../../packages/icp/hooks/useAuth";
+
+export type AuthUserProfile = {
+  bio: string;
+  username: string;
+  picture: {
+    url: string;
+  };
+  createdAt: string;
+};
 
 export type AuthContextType = {
   isAuth: boolean;
+  profile?: AuthUserProfile;
   login: () => void;
   logout: () => void;
 };
@@ -15,22 +27,46 @@ export const AuthContext = createContext({} as AuthContextType);
 
 export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
   const { isAuthenticated, login, logout } = useAuth();
+  const userActor = useActor("user");
   const [isAuth, setIsAuth] = useState<boolean>(false);
+  const [profile, setProfile] = useState<AuthUserProfile | undefined>();
 
   useEffect(() => {
     init();
   }, []);
 
+  useEffect(() => {
+    loadProfile();
+  }, [isAuth]);
+
   async function init() {
     const auth = await isAuthenticated();
-    console.log({ auth });
     setIsAuth(auth);
+  }
+
+  async function loadProfile() {
+    if (isAuth) {
+      try {
+        // @ts-ignore
+        const response = await userActor.getProfile();
+        const profile: AuthUserProfile = {
+          username: response.ok.username,
+          bio: response.ok.bio,
+          picture: response.ok.picture,
+          createdAt: response.ok.createdAt,
+        };
+        setProfile(profile);
+      } catch (error) {
+        console.log({ error });
+      }
+    } else {
+      setProfile(undefined);
+    }
   }
 
   function pLogin() {
     login({
       onSuccess: () => {
-        console.log("onSuccess from auth context");
         setIsAuth(true);
       },
     });
@@ -45,6 +81,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
     <AuthContext.Provider
       value={{
         isAuth,
+        profile,
         login: pLogin,
         logout: pLogout,
       }}
