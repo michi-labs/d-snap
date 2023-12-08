@@ -3,6 +3,8 @@ import HashMap "mo:base/HashMap";
 import List "mo:base/List";
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
+import Debug "mo:base/Debug";
+import Iter "mo:base/Iter";
 
 import Models "models";
 import Types "types";
@@ -14,27 +16,42 @@ actor User {
         canister : UserClass.User;
     };
 
+    // TODO: Not persistent
     let users = HashMap.HashMap<Principal, User>(0, Principal.equal, Principal.hash);
 
-    type CreateUserError = { #userAlreadyExists; #userNotAuthenticated };
+    type CreateUserError = {
+        #userAlreadyExists;
+        #userNotAuthenticated;
+        #userCouldNotBeCreated;
+    };
+
+    public query func getUsers() : async [User] {
+        Iter.toArray(users.vals());
+    };
 
     public shared ({ caller }) func create(data : Types.CreateUserData) : async Result.Result<(), CreateUserError> {
         if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
+        // TODO: Verifify crossdevice principals
 
         let user : ?User = users.get(caller);
 
         switch user {
-            case (?usr) #err(#userAlreadyExists);
+            case (?usr) return #err(#userAlreadyExists);
             case null {
-                // TODO: add cyles correctly
-                Cycles.add(113_846_199_230);
-                let canister = await UserClass.User(caller, data);
-                let newUser : User = {
-                    id = caller;
-                    canister = canister;
+                Debug.print("User does not exists");
+                try {
+                    // TODO: add cyles correctly
+                    Cycles.add(113_846_199_230);
+                    let canister = await UserClass.User(caller, data);
+                    let newUser : User = {
+                        id = caller;
+                        canister = canister;
+                    };
+                    users.put(caller, newUser);
+                    return #ok();
+                } catch (error) {
+                    return #err(#userCouldNotBeCreated);
                 };
-                users.put(caller, newUser);
-                #ok();
             };
         };
     };
