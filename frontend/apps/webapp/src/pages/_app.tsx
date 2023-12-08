@@ -21,6 +21,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           idlFactory: testIdlFactory,
           canisterId: process.env.NEXT_PUBLIC_TEST_CANISTER_ID!,
         },
+        user: {
+          idlFactory: userIdlFactory,
+          canisterId: process.env.NEXT_PUBLIC_USER_CANISTER_ID!,
+        },
       },
       providers: {
         "internet-identity": {

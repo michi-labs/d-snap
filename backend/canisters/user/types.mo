@@ -9,7 +9,7 @@ module {
         username : Text;
         picture : Image.Image;
         bio : Text;
-        birthday : BirthDay;
+        // birthday : BirthDay;
         createdAt : Int;
     };
 
@@ -23,12 +23,11 @@ module {
         username : Text;
         picture : Image.Image;
         bio : Text;
-        birthday : BirthDay;
+        // birthday : BirthDay;
     };
 
     // TODO: improve these fields
     public type GetPostsFilters = {
-
         from : Int;
         to : Int;
     };

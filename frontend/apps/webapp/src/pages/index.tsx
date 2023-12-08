@@ -18,6 +18,7 @@ import { useAuth } from "dsnap/packages/icp/hooks/useAuth";
 
 export default function HomePage() {
   const [greet, setGreet] = useState("");
+  const [username, setUsername] = useState("");
   const test = useActor("test");
   const auth = useAuth();
   const [authState, setAuthState] = useState<boolean>(false);
@@ -36,6 +37,27 @@ export default function HomePage() {
     // @ts-ignore
     const greet = await test.greet("Adrian");
     setGreet(greet);
+  }
+
+  async function create() {
+    try {
+      // @ts-ignore
+      await user.create({
+        username: "adrian_hidalgo",
+        bio: "Software developer",
+        picture: {
+          url: "https://www.google.com",
+        },
+      });
+
+      // @ts-ignore
+      const profile = await user.getProfile();
+      console.log({ profile });
+
+      setUsername(profile.username);
+    } catch (error) {
+      console.log({ error });
+    }
   }
 
   return (
