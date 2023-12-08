@@ -23,7 +23,7 @@ export const IcpContextProvider = ({
 
   useEffect(() => {
     initAuth();
-  });
+  }, []);
 
   async function initAuth() {
     const client = await AuthClient.create();

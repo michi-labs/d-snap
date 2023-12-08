@@ -22,14 +22,34 @@ const ProfilePage = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
+              <img
+                alt="uploaded avatar"
+                className="my-2 rounded-full m-auto"
+                height="100"
+                src="https://placehold.it/100x100"
+                style={{
+                  aspectRatio: "100/100",
+                  objectFit: "cover",
+                }}
+                width="100"
+              />
+              <Label htmlFor="profile-picture">Profile Picture</Label>
+              <Input
+                accept="image/*"
+                className="block mt-1 w-full"
+                id="profile-picture"
+                type="file"
+              />
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="username">Username</Label>
               <Input id="username" placeholder="Enter your username" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" placeholder="Enter your email" type="email" />
+              <Label htmlFor="bio">Bio</Label>
+              <Input id="bio" placeholder="Write about you" type="text" />
             </div>
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="private-profile">Private profile</Label>
               <div className="flex items-center space-x-4" id="private-profile">
                 <Input
@@ -78,10 +98,10 @@ const ProfilePage = () => {
                 />
                 <Label htmlFor="no-one">No One</Label>
               </div>
-            </div>
+            </div> */}
           </CardContent>
           <CardFooter>
-            <Button className="ml-auto">Save</Button>
+            <Button className="ml-auto bg-purple-600">Save</Button>
           </CardFooter>
         </Card>
       </div>
