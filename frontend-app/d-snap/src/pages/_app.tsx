@@ -1,38 +1,32 @@
 import type { AppProps } from "next/app";
 
-import { createClient } from "@connect2ic/core";
-import { InternetIdentity } from "@connect2ic/core/providers/internet-identity";
-import { Connect2ICProvider } from "@connect2ic/react";
-import "@connect2ic/core/style.css";
+import { Client } from "../icp/client";
+import { IcpContextProvider } from "../icp/context";
 
-import * as test from "../icp/test";
+import * as test from "../declarations/test";
+import { useEffect, useState } from "react";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <Connect2ICProvider client={client}>
+  const [client, setClient] = useState<Client | undefined>(undefined);
+
+  useEffect(() => {
+    const client = Client.createClient({
+      canisters: {
+        test: {
+          idlFactory: test.idlFactory,
+          canisterId: process.env.NEXT_PUBLIC_TEST_CANISTER_ID!,
+        },
+      },
+    });
+
+    setClient(client);
+  }, []);
+
+  return client ? (
+    <IcpContextProvider client={client}>
       <Component {...pageProps} />
-    </Connect2ICProvider>
+    </IcpContextProvider>
+  ) : (
+    <div>Loading</div>
   );
 }
-
-const client = createClient({
-  canisters: {
-    // @ts-ignore
-    test,
-  },
-  // @ts-ignore
-  // providers: defaultProviders,
-  providers: [
-    new InternetIdentity({
-      providerUrl: process.env.INTERNET_IDENTITY_URL,
-    }),
-  ],
-  globalProviderConfig: {
-    /*
-     * Disables dev mode in production
-     * Should be enabled when using local canisters
-     * TODO: Set this from env
-     */
-    dev: true,
-  },
-});
