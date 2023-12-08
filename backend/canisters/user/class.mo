@@ -32,7 +32,8 @@ shared ({ caller }) actor class User(id : Principal, data : Types.CreateUserData
             id = postId;
             description = data.description;
             images = data.images;
-            likes = 0;
+            likes = [];
+            comments = [];
             createdAt = Time.now();
             updatedAt = Time.now();
         };
