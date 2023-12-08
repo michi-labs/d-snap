@@ -12,9 +12,9 @@
     "webapp": {
       "dependencies": ["test", "user"],
       "frontend": {
-        "entrypoint": "frontend/webapp/build/index.html"
+        "entrypoint": "frontend/apps/webapp/build/index.html"
       },
-      "source": ["frontend/webapp/build"],
+      "source": ["frontend/apps/webapp/build"],
       "type": "assets"
     },
     "internet_identity": {

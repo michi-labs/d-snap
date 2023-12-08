@@ -4,9 +4,9 @@ function initCanisterIds() {
     let canisters;
 
     try {
-        canisters = require(path.resolve("../../.dfx", "local", "canister_ids.json"));
+        canisters = require(path.resolve("../../../.dfx", "local", "canister_ids.json"));
     } catch (error) {
-        console.log("No production canister_ids.json found. Continuing with local");
+        throw new Error("No canister_ids.json found");
     }
 
     const network = process.env.DFX_NETWORK || 'local';
