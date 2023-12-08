@@ -10,11 +10,13 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Layout from "dsnap/components/layout";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { storage } from "@/lib/firebase";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { AuthContext } from "dsnap/lib/auth/auth-context";
 
 const ProfilePage = () => {
+  const { profile } = useContext(AuthContext);
   const [imgUrl, setImgUrl] = useState<string | null>(null);
   const [progressPercent, setProgressPercent] = useState(0);
 
@@ -104,12 +106,12 @@ const ProfilePage = () => {
               </div>
             </form>
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
-              <Input id="username" placeholder="Enter your username" />
+              <Label htmlFor="username"></Label>
+              <Input id="username" placeholder={profile?.username} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="bio">Bio</Label>
-              <Input id="bio" placeholder="Write about you" type="text" />
+              <Input id="bio" placeholder={profile?.bio} type="text" />
             </div>
             {/* <div className="space-y-2">
               <Label htmlFor="private-profile">Private profile</Label>
