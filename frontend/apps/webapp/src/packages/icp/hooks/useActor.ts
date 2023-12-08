@@ -1,4 +1,5 @@
 import { useContext } from "react";
+
 import { IcpContext } from "../context";
 
 export const useActor = (name: string) => {

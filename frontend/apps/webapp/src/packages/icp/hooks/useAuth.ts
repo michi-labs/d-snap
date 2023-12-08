@@ -1,6 +1,7 @@
 import { useContext } from "react";
-import { useProvider } from "./useProvider";
 import { Identity } from "@dfinity/agent";
+
+import { useProvider } from "./useProvider";
 import { IcpContext } from "../context";
 
 export type LoginOptions = {

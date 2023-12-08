@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
+import { AuthClient } from "@dfinity/auth-client";
 
 import { Client } from "./client";
-import { AuthClient } from "@dfinity/auth-client";
 
 export type IcpContextType = {
   client: Client;

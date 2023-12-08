@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../icp/hooks/useAuth";
+
+import { useAuth } from "../../packages/icp/hooks/useAuth";
 
 export function AuthButton() {
   const [isAuth, setIsAuth] = useState<Boolean | undefined>(false);

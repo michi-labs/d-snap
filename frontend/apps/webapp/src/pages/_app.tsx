@@ -1,10 +1,13 @@
-import "../app/globals.css";
 import type { AppProps } from "next/app";
+import "../app/globals.css";
 
-import { Client } from "../icp/client";
-import { IcpContextProvider } from "../icp/context";
+import { Client } from "../packages/icp/client";
+import { IcpContextProvider } from "../packages/icp/context";
 
-import { idlFactory } from "../declarations/test/test.did.js";
+// @ts-ignore
+import { idlFactory as testIdlFactory } from "../declarations/test/test.did.js";
+// @ts-ignore
+import { idlFactory as userIdlFactory } from "../declarations/user/user.did.js";
 import { useEffect, useState } from "react";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
@@ -12,10 +15,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     const client = Client.createClient({
-      host: process.env.NEXT_PUBLIC_IC_HOST || "http://127.0.0.1:4943",
+      host: process.env.NEXT_PUBLIC_IC_HOST!,
       canisters: {
         test: {
-          idlFactory: idlFactory,
+          idlFactory: testIdlFactory,
           canisterId: process.env.NEXT_PUBLIC_TEST_CANISTER_ID!,
         },
       },

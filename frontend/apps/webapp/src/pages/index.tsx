@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { useActor } from "../icp/hooks/useActor";
-import { AuthButton } from "dsnap/components/auth/auth-button";
+import { useActor } from "../packages/icp/hooks/useActor";
+import { AuthButton } from "../components/auth/auth-button";
 
 export default function HomePage() {
   const [greet, setGreet] = useState("");
