@@ -26,9 +26,9 @@ module {
         birthday : BirthDay;
     };
 
+    // TODO: improve these fields
     public type GetPostsFilters = {
-        page : Nat;
-        pageSize : Nat;
+
         from : Int;
         to : Int;
     };
