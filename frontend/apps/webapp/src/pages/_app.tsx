@@ -1,14 +1,14 @@
+import { useEffect, useState } from "react";
 import type { AppProps } from "next/app";
 import "../app/globals.css";
 
 import { Client } from "../packages/icp/client";
 import { IcpContextProvider } from "../packages/icp/context";
-
+import { AuthContextProvider } from "../lib/auth/auth-context";
 // @ts-ignore
 import { idlFactory as testIdlFactory } from "../declarations/test/test.did.js";
 // @ts-ignore
 import { idlFactory as userIdlFactory } from "../declarations/user/user.did.js";
-import { useEffect, useState } from "react";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const [client, setClient] = useState<Client | undefined>(undefined);
@@ -42,7 +42,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   return client ? (
     <IcpContextProvider client={client}>
-      <Component {...pageProps} />
+      <AuthContextProvider>
+        <Component {...pageProps} />
+      </AuthContextProvider>
     </IcpContextProvider>
   ) : (
     <div>Loading</div>

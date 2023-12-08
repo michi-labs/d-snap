@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { useActor } from "../packages/icp/hooks/useActor";
-import { AuthButton } from "../components/auth/auth-button";
+import { AuthButton } from "../lib/auth/auth-button";
 
 import {
   CardTitle,
@@ -11,33 +11,12 @@ import {
   CardFooter,
   Card,
 } from "@/components/ui/card";
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { useAuth } from "dsnap/packages/icp/hooks/useAuth";
+import { AuthContext } from "dsnap/lib/auth/auth-context";
 
 export default function HomePage() {
-  const [greet, setGreet] = useState("");
   const [username, setUsername] = useState("");
-  const test = useActor("test");
-  const auth = useAuth();
-  const [authState, setAuthState] = useState<boolean>(false);
-
-  useEffect(() => {
-    getGreet();
-    getAuthState();
-  }, []);
-
-  async function getAuthState() {
-    const authState = await auth.isAuthenticated();
-    setAuthState(authState);
-  }
-
-  async function getGreet() {
-    // @ts-ignore
-    const greet = await test.greet("Adrian");
-    setGreet(greet);
-  }
+  const { isAuth } = useContext(AuthContext);
 
   async function create() {
     try {
@@ -68,7 +47,7 @@ export default function HomePage() {
             Welcome to DSnap
           </CardTitle>
           <CardDescription className="text-center text-lg text-gray-700">
-            {authState
+            {isAuth
               ? "Welcome back!"
               : "Sign in with your ICP identity to get started."}
           </CardDescription>

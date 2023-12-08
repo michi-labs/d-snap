@@ -1,33 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
-import { useAuth } from "../../packages/icp/hooks/useAuth";
-import { Button } from "../ui/button";
+import { Button } from "../../components/ui/button";
+import { AuthContext } from "./auth-context";
 
 export function AuthButton() {
-  const [isAuth, setIsAuth] = useState<Boolean | undefined>(false);
-  const auth = useAuth();
-
-  useEffect(() => {
-    getAuth();
-  }, []);
-
-  async function getAuth() {
-    const isAuthenticated = await auth.isAuthenticated();
-    setIsAuth(isAuthenticated);
-  }
-
-  function login() {
-    auth.login({
-      onSuccess: () => {
-        setIsAuth(true);
-      },
-    });
-  }
-
-  function logout() {
-    auth.logout();
-    setIsAuth(false);
-  }
+  const { isAuth, login, logout } = useContext(AuthContext);
 
   return !isAuth ? (
     <LoginButton login={login} />
