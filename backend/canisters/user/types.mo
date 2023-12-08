@@ -2,7 +2,7 @@ import Text "mo:base/Text";
 import Nat8 "mo:base/Nat8";
 
 import Models "models";
-import Image "../../libs/Image";
+import Image "../../packages/Image";
 
 module {
     public type UserProfile = {

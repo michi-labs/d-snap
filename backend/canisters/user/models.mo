@@ -1,7 +1,7 @@
 import Blob "mo:base/Blob";
 import Principal "mo:base/Principal";
 
-import Image "../../libs/Image";
+import Image "../../packages/Image";
 
 module {
     public type PostCommentLike = {
