@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/card";
 import { useAuth } from "dsnap/packages/icp/hooks/useAuth";
 import { AuthContext } from "dsnap/lib/auth/auth-context";
+import { Button } from "dsnap/components/ui/button";
+import Link from "next/link";
 
 export default function HomePage() {
   const [username, setUsername] = useState("");
@@ -46,13 +48,20 @@ export default function HomePage() {
           <CardTitle className="text-center text-3xl font-bold text-gray-900">
             Welcome to DSnap
           </CardTitle>
-          <CardDescription className="text-center text-lg text-gray-700">
+          <CardDescription className="text-center text-lg text-gray-700 flex flex-col">
             {isAuth
               ? "Welcome back!"
               : "Sign in with your ICP identity to get started."}
           </CardDescription>
         </CardHeader>
         <CardContent className="mt-10">
+          {isAuth && (
+            <Link href="/feed">
+              <Button className="w-full my-4" onClick={create}>
+                Home
+              </Button>
+            </Link>
+          )}
           <AuthButton />
         </CardContent>
       </Card>
