@@ -14,7 +14,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const [client, setClient] = useState<Client | undefined>(undefined);
 
   useEffect(() => {
-    const client = Client.createClient({
+    createClient();
+  }, []);
+
+  async function createClient() {
+    const client = await Client.createClient({
       host: process.env.NEXT_PUBLIC_IC_HOST!,
       canisters: {
         test: {
@@ -34,7 +38,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     });
 
     setClient(client);
-  }, []);
+  }
 
   return client ? (
     <IcpContextProvider client={client}>

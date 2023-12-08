@@ -5,7 +5,6 @@ import { Client } from "./client";
 
 export type IcpContextType = {
   client: Client;
-  auth: AuthClient;
 };
 
 export type IcpContextProviderType = {
@@ -34,7 +33,6 @@ export const IcpContextProvider = ({
     <IcpContext.Provider
       value={{
         client,
-        auth,
       }}
     >
       {children}

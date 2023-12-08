@@ -24,20 +24,34 @@ export type Auth = {
 };
 
 export const useAuth = (): Auth => {
-  const { auth } = useContext(IcpContext);
+  const { client } = useContext(IcpContext);
+  const auth = client.getAuth();
 
   const provider = useProvider("internet-identity");
 
   function login(options: LoginOptions = {}): Promise<void> {
     const identityProvider = provider.url || "https://identity.ic0.app";
+
+    const onSuccess = () => {
+      const identity = auth.getIdentity();
+      client.replaceIdentity(identity);
+
+      options.onSuccess?.();
+    };
+
     const opts = {
       identityProvider,
       ...options,
+      onSuccess,
     };
+
     return auth.login(opts);
   }
 
   function logout(options: LogoutOptions = {}): Promise<void> {
+    // TODO: create anonnymous identity
+    // const identity = auth.getIdentity();
+    // client.replaceIdentity(identity);
     return auth.logout(options);
   }
 

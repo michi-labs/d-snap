@@ -1,4 +1,5 @@
-import { Actor, ActorConfig, HttpAgent } from "@dfinity/agent";
+import { Actor, ActorConfig, HttpAgent, Identity } from "@dfinity/agent";
+import { AuthClient } from "@dfinity/auth-client";
 import { IDL } from "@dfinity/candid";
 import { Principal } from "@dfinity/principal";
 
@@ -9,7 +10,7 @@ export type Canister = {
 };
 export type Canisters = { [key: string]: Canister };
 
-export type CreateClientParams = {
+export type CreateClientOptions = {
   host: string;
   canisters: Canisters;
   providers: IdentityProviders;
@@ -25,7 +26,8 @@ export class Client {
 
   constructor(
     private readonly agent: HttpAgent,
-    canisters: Canisters,
+    private readonly auth: AuthClient,
+    private readonly canisters: Canisters,
     providers: IdentityProviders
   ) {
     this.init(canisters, providers);
@@ -40,6 +42,15 @@ export class Client {
 
     this.setActors(canisters);
     this.setProviders(providers);
+  }
+
+  public replaceIdentity(identity: Identity) {
+    this.agent.replaceIdentity(identity);
+    this.setActors(this.canisters);
+  }
+
+  public getAuth(): AuthClient {
+    return this.auth;
   }
 
   private setActors(canisters: Canisters): void {
@@ -76,14 +87,17 @@ export class Client {
     return this.providers.get(name);
   }
 
-  static createClient(params: CreateClientParams) {
-    const { host, canisters, providers } = params;
+  static async createClient(options: CreateClientOptions) {
+    const { host, canisters, providers } = options;
+
+    const auth = await AuthClient.create();
 
     const agent = new HttpAgent({
       host,
+      identity: auth.getIdentity(),
       verifyQuerySignatures: false,
     });
 
-    return new Client(agent, canisters, providers);
+    return new Client(agent, auth, canisters, providers);
   }
 }
