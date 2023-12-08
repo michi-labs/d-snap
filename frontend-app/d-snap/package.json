@@ -9,9 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@connect2ic/core": "^0.1.6",
-    "@connect2ic/react": "^0.1.4",
     "@dfinity/agent": "^0.20.2",
+    "@dfinity/auth-client": "^0.20.2",
     "@dfinity/candid": "^0.20.2",
     "next": "14.0.3",
     "react": "^18",
