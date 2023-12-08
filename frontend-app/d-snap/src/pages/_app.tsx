@@ -1,3 +1,4 @@
+import "../app/globals.css";
 import type { AppProps } from "next/app";
 
 import { Client } from "../icp/client";
