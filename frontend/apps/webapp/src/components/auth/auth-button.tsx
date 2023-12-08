@@ -8,7 +8,7 @@ export function AuthButton() {
 
   useEffect(() => {
     getAuth();
-  });
+  }, []);
 
   async function getAuth() {
     const isAutheticated = await auth.isAuthenticated();
