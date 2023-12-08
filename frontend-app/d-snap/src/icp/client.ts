@@ -10,26 +10,28 @@ export type Canister = {
 export type Canisters = { [key: string]: Canister };
 
 export type CreateClientParams = {
+  host: string;
   canisters: Canisters;
-  options?: CreateClientOptions;
+  providers: IdentityProviders;
 };
 
-export type CreateClientOptions = {
-  host: string;
-};
+export type IdentityProvider = { url: string };
+
+export type IdentityProviders = { [key: string]: IdentityProvider };
 
 export class Client {
   private actors: Map<string, Actor> = new Map();
+  private providers: Map<string, IdentityProvider> = new Map();
 
   constructor(
     private readonly agent: HttpAgent,
     canisters: Canisters,
-    private readonly options: CreateClientOptions
+    providers: IdentityProviders
   ) {
-    this.init(canisters);
+    this.init(canisters, providers);
   }
 
-  private init(canisters: Canisters): void {
+  private init(canisters: Canisters, providers: IdentityProviders): void {
     this.agent.fetchRootKey().then((err: any) => {
       console.warn(
         "Unable to fetch root key. Check to ensure that your local replica is running"
@@ -37,9 +39,10 @@ export class Client {
     });
 
     this.setActors(canisters);
+    this.setProviders(providers);
   }
 
-  private setActors(canisters: Canisters) {
+  private setActors(canisters: Canisters): void {
     Object.entries(canisters).forEach(([key, canister]) => {
       const { idlFactory, canisterId, options = {} } = canister;
 
@@ -53,22 +56,34 @@ export class Client {
     });
   }
 
-  public getActor(name: string) {
+  private setProviders(providers: IdentityProviders): void {
+    Object.entries(providers).forEach(([key, providers]) => {
+      const { url } = providers;
+
+      const provider = {
+        url,
+      };
+
+      this.providers.set(key, provider);
+    });
+  }
+
+  public getActor(name: string): Actor | undefined {
     return this.actors.get(name);
   }
 
-  static createClient(params: CreateClientParams) {
-    const { canisters, options } = params;
+  public getProvider(name: string): IdentityProvider | undefined {
+    return this.providers.get(name);
+  }
 
-    const config = {
-      host: options?.host || "http://127.0.0.1:4943",
-    };
+  static createClient(params: CreateClientParams) {
+    const { host, canisters, providers } = params;
 
     const agent = new HttpAgent({
-      host: config.host,
+      host,
       verifyQuerySignatures: false,
     });
 
-    return new Client(agent, canisters, config);
+    return new Client(agent, canisters, providers);
   }
 }

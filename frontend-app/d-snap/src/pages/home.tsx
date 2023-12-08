@@ -1,5 +1,7 @@
-import { useActor } from "dsnap/icp/hooks/useActor";
 import { useEffect, useState } from "react";
+
+import { useActor } from "../icp/hooks/useActor";
+import { AuthButton } from "dsnap/components/auth/auth-button";
 
 export default function HomePage() {
   const [greet, setGreet] = useState("");
@@ -14,5 +16,11 @@ export default function HomePage() {
     const greet = await test.greet("Adrian");
     setGreet(greet);
   }
-  return <div>Home: {greet}</div>;
+
+  return (
+    <div>
+      <h1>Home: {greet}</h1>
+      <AuthButton />
+    </div>
+  );
 }

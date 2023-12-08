@@ -55,5 +55,4 @@ shared ({ caller }) actor class User(id : Principal, data : Types.CreateUserData
 
         return result;
     };
-
 };

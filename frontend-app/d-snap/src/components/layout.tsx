@@ -26,7 +26,8 @@ export default function Layout({ children }: { children: ReactNode }) {
               <img
                 alt="Avatar"
                 className="rounded-full"
-                height="32"
+                height
+                x="32"
                 src="https://placehold.it/32x32"
                 style={{
                   aspectRatio: "32/32",
