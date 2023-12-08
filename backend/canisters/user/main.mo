@@ -12,7 +12,6 @@ actor User {
     type User = {
         id : Principal;
         canister : UserClass.User;
-
     };
 
     let users = HashMap.HashMap<Principal, User>(0, Principal.equal, Principal.hash);
