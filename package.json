@@ -1,0 +1,44 @@
+{
+  "name": "d-snap",
+  "version": "0.1.0",
+  "description": "Open Source Decentralized Photo Social Network",
+  "author": "MichiLabs",
+  "license": "ISC",
+  "private": "true",
+  "homepage": "https://github.com/michi-labs/d-snap#readme",
+  "bugs": {
+    "url": "https://github.com/michi-labs/d-snap/issues"
+  },
+  "engines": {
+    "node": ">=18.x",
+    "yarn": ">=1.19.0 < 2.0.0"
+  },
+  "workspaces": [
+    "frontend/apps/*",
+    "frontend/packages/*"
+  ],
+  "scripts": {
+    "start": "turbo run start",
+    "prebuild:frontend": "yarn generate",
+    "build:frontend": "turbo run build",
+    "predev": "dfx generate",
+    "dev": "turbo run dev --no-cache",
+    "start:backend": "dfx start --background",
+    "start:backend:clean": "dfx start --background --clean",
+    "generate": "yarn generate:test && yarn generate:user",
+    "generate:test": "dfx generate test",
+    "generate:user": "dfx generate user",
+    "predeploy:dev": "yarn build:frontend",
+    "deploy:dev": "dfx deploy",
+    "deploy:backend": "yarn deploy:backend:test && deploy:backend:user",
+    "deploy:backend:test": "dfx deploy test",
+    "deploy:backend:user": "dfx deploy user",
+    "deploy:frontend": "yarn deploy:frontend:webapp",
+    "deploy:frontend:webapp": "dfx deploy webapp",
+    "clean": "turbo run clean && rm -rf node_modules && rm -rf .dfx"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/michi-labs/d-snap.git"
+  }
+}
