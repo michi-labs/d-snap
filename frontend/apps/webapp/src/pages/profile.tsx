@@ -20,7 +20,7 @@ const ProfilePage = () => {
   const [imgUrl, setImgUrl] = useState<string | null>(null);
   const [progressPercent, setProgressPercent] = useState(0);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     const file = e.target[0]?.files[0];
     if (!file) return;
