@@ -1,5 +1,5 @@
 const DFXWebPackConfig = require("./dfx.webpack.config");
-DFXWebPackConfig.initCanisterIds();
+DFXWebPackConfig.bootstrap("../../..");
 
 const webpack = require("webpack")
 
@@ -13,7 +13,6 @@ module.exports = {
         // Plugin
         config.plugins.push(EnvPlugin)
 
-        // Important: return the modified config
         return config
     },
     output: 'export',
