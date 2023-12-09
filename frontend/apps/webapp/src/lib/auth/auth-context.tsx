@@ -49,6 +49,9 @@ export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
       try {
         // @ts-ignore
         const response = await userActor.getProfile();
+
+        if (response.err) return;
+
         const profile: AuthUserProfile = {
           username: response.ok.username,
           bio: response.ok.bio,

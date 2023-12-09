@@ -44,8 +44,10 @@ export class Client {
     this.setProviders(providers);
   }
 
-  public replaceIdentity(identity: Identity) {
-    this.agent.replaceIdentity(identity);
+  public replaceIdentity(identity?: Identity) {
+    if (identity) this.agent.replaceIdentity(identity);
+    else this.agent.invalidateIdentity();
+
     this.setActors(this.canisters);
   }
 

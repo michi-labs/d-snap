@@ -49,9 +49,7 @@ export const useAuth = (): Auth => {
   }
 
   function logout(options: LogoutOptions = {}): Promise<void> {
-    // TODO: create anonnymous identity
-    // const identity = auth.getIdentity();
-    // client.replaceIdentity(identity);
+    client.replaceIdentity();
     return auth.logout(options);
   }
 
