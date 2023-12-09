@@ -26,7 +26,7 @@ const InboxPage = () => {
             <div className="grid gap-1">
               <p className="text-sm font-medium">User 2</p>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Last message: How's it going? - 10 min ago
+                Last message: How&apos;s it going? - 10 min ago
               </p>
             </div>
           </div>

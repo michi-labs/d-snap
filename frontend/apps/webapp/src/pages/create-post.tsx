@@ -121,7 +121,7 @@ const CreatePostPage = () => {
                 placeholder="Describe your image here..."
               />
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Add a compelling description to capture your audience's
+                Add a compelling description to capture your audience&apos;s
                 attention.
               </p>
             </div>
