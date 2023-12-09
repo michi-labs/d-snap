@@ -10,29 +10,10 @@ import Link from "next/link";
 
 import { AuthContext } from "../lib/auth/auth-context";
 import { Button } from "../components/ui/button";
-import { useActor } from "../packages/icp/hooks/useActor";
 import { AuthButton } from "../lib/auth/auth-button";
 
 export default function HomePage() {
   const { isAuth } = useContext(AuthContext);
-  const user = useActor("user");
-
-  async function create() {
-    try {
-      // @ts-ignore
-      const response = await user.create({
-        username: "adrian_hidalgo",
-        bio: "Software developer",
-        picture: {
-          url: "https://www.google.com",
-        },
-      });
-
-      console.log({ response });
-    } catch (error) {
-      console.log({ error });
-    }
-  }
 
   return (
     <div className="flex items-center justify-center h-screen">
@@ -50,9 +31,7 @@ export default function HomePage() {
         <CardContent className="mt-10">
           {isAuth && (
             <Link href="/feed">
-              <Button className="w-full my-4" onClick={create}>
-                Home
-              </Button>
+              <Button className="w-full my-4">Home</Button>
             </Link>
           )}
           <AuthButton />
