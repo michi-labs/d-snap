@@ -26,6 +26,12 @@
       "dsnap/*": [
         "./src/*"
       ],
+      "@/packages/*": [
+        "./src/packages/*"
+      ],
+      "@/declarations/*": [
+        "./src/declarations/*"
+      ],
       "@/components/*": [
         "./src/components/*"
       ],
