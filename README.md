@@ -27,8 +27,12 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 nvm install 18
 nvm use 18
 yarn global add turbo
-yarn install
+yarn
 ```
+
+## Environment variables setup
+
+Some apps contain a `.env-example` file; you must copy it in the same location and replace the values with your own.
 
 ## Running the project locally
 
