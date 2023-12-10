@@ -2,15 +2,32 @@
 
 Welcome to your new dSnap project and to the internet computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.
 
-To get started, you might want to explore the project directory structure. Working with this project in your development environment will not affect any production deployment or identity tokens.
+## Install OS Dependencies
 
-If you want to start working on your project right away, you might want to try the following commands:
-
-TODO: add instructions to build frontend bundle
+### UNIX/Linux
 
 ```bash
-dfx help
-dfx canister --help
+sudo apt install clang
+sudo apt install build-essential
+sudo apt install libssl-dev
+sudo apt install pkg-config
+```
+
+### Mac
+
+```bash
+xcode-select --install
+```
+
+## Install project dependencies
+
+```bash
+sh -ci "$(curl -fsSL https://smartcontracts.org/install.sh)"
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+nvm install 18
+nvm use 18
+yarn global add turbo
+yarn install
 ```
 
 ## Running the project locally
@@ -18,12 +35,23 @@ dfx canister --help
 If you want to test your project locally, you can use the following commands:
 
 ```bash
-# Starts the replica, running in the background
-dfx start --background
+# Generates canister type declarations
+yarn generate
 
-# Deploys your canisters to the replica and generates your candid interface
-dfx deploy
+# Register unique canister identifiers on th local network
+yarn canister:local:create
+
+# Starts a local ICP replica, running in the background
+yarn serve
+
+# Deploys backend canisters to the local replica and generates their candid interface
+yarn deploy:local:backend
+
+# Run frontend apps in dev mode
+yarn dev
 ```
+
+## DOC DEPRECATED
 
 Once the job completes, your application will be available at `http://localhost:4943?canisterId={asset_canister_id}`.
 

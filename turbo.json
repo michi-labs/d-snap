@@ -1,14 +1,42 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
-    },
     "dev": {
+      "dependsOn": [
+        "generate",
+        "canister:local:create",
+        "stop",
+        "serve",
+        "deploy:local"
+      ],
       "cache": false,
       "persistent": true
     },
-    "start": {}
+    "build": {
+      "dependsOn": ["generate", "canister:local:create", "^build"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "start": {},
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "serve": {
+      "outputs": [".dfx"]
+    },
+    "stop": {},
+    "generate": {
+      "outputs": ["src/declarations"]
+    },
+    "canister:local:create": {},
+    "deploy:local": {
+      "dependsOn": ["build"],
+      "outputs": [".dfx/local"]
+    },
+    "deploy:ic": {
+      "dependsOn": ["build"]
+    },
+    "clean": {
+      "dependsOn": ["stop"]
+    }
   }
 }

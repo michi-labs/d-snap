@@ -6,6 +6,10 @@
   "license": "ISC",
   "private": "true",
   "homepage": "https://github.com/michi-labs/d-snap#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/michi-labs/d-snap.git"
+  },
   "bugs": {
     "url": "https://github.com/michi-labs/d-snap/issues"
   },
@@ -18,27 +22,29 @@
     "frontend/packages/*"
   ],
   "scripts": {
-    "start": "turbo run start",
-    "prebuild:frontend": "yarn generate",
-    "build:frontend": "turbo run build",
-    "predev": "dfx generate",
     "dev": "turbo run dev --no-cache",
-    "start:backend": "dfx start --background",
-    "start:backend:clean": "dfx start --background --clean",
-    "generate": "yarn generate:test && yarn generate:user",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
+    "serve": "dfx start --background",
+    "serve:clean": "dfx start --background --clean",
+    "stop": "dfx stop",
+    "generate": "concurrently \"yarn run generate:*\"",
     "generate:test": "dfx generate test",
     "generate:user": "dfx generate user",
-    "predeploy:dev": "yarn build:frontend",
-    "deploy:dev": "dfx deploy",
-    "deploy:backend": "yarn deploy:backend:test && deploy:backend:user",
-    "deploy:backend:test": "dfx deploy test",
-    "deploy:backend:user": "dfx deploy user",
-    "deploy:frontend": "yarn deploy:frontend:webapp",
-    "deploy:frontend:webapp": "dfx deploy webapp",
-    "clean": "turbo run clean && rm -rf node_modules && rm -rf .dfx"
+    "canister:local:create": "dfx canister create --all --network local",
+    "deploy:local": "dfx deploy --network local",
+    "deploy:local:backend": "concurrently \"yarn run deploy:local:backend:*\"",
+    "deploy:local:backend:test": "dfx deploy test --network local",
+    "deploy:local:backend:user": "dfx deploy user --network local",
+    "deploy:local:backend:ii": "dfx deploy internet-identity --network local",
+    "deploy:ic": "concurrently \"yarn run deploy:ic:*\"",
+    "deploy:ic:test": "dfx deploy test --network ic",
+    "deploy:ic:user": "dfx deploy user --network ic",
+    "deploy:ic:webapp": "dfx deploy webapp --network ic",
+    "clean": "turbo run clean && rm -rf node_modules && rm -rf .turbo && rm -rf src &&  rm -rf .dfx"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/michi-labs/d-snap.git"
+  "dependencies": {
+    "concurrently": "^8.2.2"
   }
 }
