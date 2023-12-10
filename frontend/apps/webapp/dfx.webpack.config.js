@@ -50,7 +50,7 @@ function copyDeclarations(canisterNames, relativeRootPath) {
     console.log("Declarations copied", canisterNames);
 }
 
-function replaceEnvsInFiles(canisterNames) {
+function fixFiles(canisterNames) {
     const DECLARATIONS_DIRECTORY_PATH = path.resolve('./src/declarations');
 
     for (const name of canisterNames) {
@@ -62,8 +62,9 @@ function replaceEnvsInFiles(canisterNames) {
 
             const ENV_NAME = `process.env.${name.toUpperCase()}_CANISTER_ID`;
             const NEXT_ENV_NAME = `process.env.NEXT_PUBLIC_${name.toUpperCase()}_CANISTER_ID`;
+            const CREATE_ACTOR_TEXT = `export const ${name} = createActor(canisterId);`;
 
-            const result = data.replace(ENV_NAME, NEXT_ENV_NAME);
+            const result = data.replace(ENV_NAME, NEXT_ENV_NAME).replace(CREATE_ACTOR_TEXT, '');
 
             fs.writeFile(CANISTER_DECLARATIONS_PATH, result, 'utf8', function (error) {
                 if (error) throw new Error('File can\'t be replaced');
@@ -86,7 +87,7 @@ function bootstrap(relativeRootPath) {
 
     setCanisterVariables(canisterNames, relativeRootPath);
     copyDeclarations(canisterNames, relativeRootPath);
-    replaceEnvsInFiles(canisterNames);
+    fixFiles(canisterNames);
 }
 
 module.exports = {
