@@ -50,6 +50,28 @@ function copyDeclarations(canisterNames, relativeRootPath) {
     console.log("Declarations copied", canisterNames);
 }
 
+function replaceEnvsInFiles(canisterNames) {
+    const DECLARATIONS_DIRECTORY_PATH = path.resolve('./src/declarations');
+
+    for (const name of canisterNames) {
+        const CANISTER_DECLARATIONS_PATH = path.resolve(DECLARATIONS_DIRECTORY_PATH, name, 'index.js');
+        fs.readFile(CANISTER_DECLARATIONS_PATH, 'utf8', function (err, data) {
+            if (err) {
+                throw new Error(`Read file index.js error`);
+            }
+
+            const ENV_NAME = `process.env.${name.toUpperCase()}_CANISTER_ID`;
+            const NEXT_ENV_NAME = `process.env.NEXT_PUBLIC_${name.toUpperCase()}_CANISTER_ID`;
+
+            const result = data.replace(ENV_NAME, NEXT_ENV_NAME);
+
+            fs.writeFile(CANISTER_DECLARATIONS_PATH, result, 'utf8', function (error) {
+                if (error) throw new Error('File can\'t be replaced');
+            });
+        });
+    }
+}
+
 /**
  * 
  * 
@@ -64,6 +86,7 @@ function bootstrap(relativeRootPath) {
 
     setCanisterVariables(canisterNames, relativeRootPath);
     copyDeclarations(canisterNames, relativeRootPath);
+    replaceEnvsInFiles(canisterNames);
 }
 
 module.exports = {
