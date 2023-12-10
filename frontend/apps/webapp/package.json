@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "clean": "rm -rf node_modules && rm -rf .next && rm -rf build"
+    "clean": "rm -rf node_modules && rm -rf .next && rm -rf build && rm -rf src/declarations"
   },
   "dependencies": {
     "@dfinity/agent": "^0.20.2",
