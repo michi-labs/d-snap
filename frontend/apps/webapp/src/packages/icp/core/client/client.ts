@@ -1,7 +1,6 @@
 import { Actor, HttpAgent, Identity } from "@dfinity/agent";
 
 import { Actors, CreateClientOptions, IdentityProviders } from "./client.types";
-import { IdentityProvider } from "../providers/identity-provider.interface";
 
 export class Client {
   private actors: { [key: string]: Actor } = {};

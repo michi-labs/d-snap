@@ -8,7 +8,7 @@ import {
 import { IDL } from "@dfinity/candid";
 import { Principal } from "@dfinity/principal";
 
-import { IdentityProvider } from "../providers/identity-provider.interface";
+import { IdentityProvider } from "../identity-providers/identity-provider.interface";
 
 export type CreateActorOptions = {
   /**
