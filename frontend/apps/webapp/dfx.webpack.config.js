@@ -82,7 +82,7 @@ function bootstrap(relativeRootPath) {
     const dfx = require(path.resolve(relativeRootPath, "dfx.json"));
 
     const canisterNames = Object.keys(dfx.canisters)
-        .filter(key => key !== "internet_identity")
+        .filter(key => key !== "internet-identity")
         .filter(key => dfx.canisters[key].type !== "assets");
 
     setCanisterVariables(canisterNames, relativeRootPath);
