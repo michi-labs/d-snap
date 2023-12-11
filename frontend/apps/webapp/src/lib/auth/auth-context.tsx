@@ -27,7 +27,7 @@ export const AuthContext = createContext({} as AuthContextType);
 
 export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
   const { connect, disconnect } = useAuth();
-  const userActor = useActor("user");
+  const user = useActor("user");
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [profile, setProfile] = useState<AuthUserProfile | undefined>();
 
@@ -39,7 +39,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
     if (isAuth) {
       try {
         // @ts-ignore
-        const response = await userActor.getProfile();
+        const response = await user.getProfile();
 
         if (response.err) return;
 
