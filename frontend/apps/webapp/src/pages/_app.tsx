@@ -2,38 +2,36 @@ import { useEffect, useState } from "react";
 import type { AppProps } from "next/app";
 import "../app/globals.css";
 
-import { Client } from "../packages/icp/client";
-import { IcpContextProvider } from "../packages/icp/context";
+import { Client } from "../packages/icp/core/client/client";
+import { IcpContextProvider } from "../packages/icp/react/context";
 import { AuthContextProvider } from "../lib/auth/auth-context";
-// @ts-ignore
-import { idlFactory as testIdlFactory } from "../declarations/test/test.did.js";
-// @ts-ignore
-import { idlFactory as userIdlFactory } from "../declarations/user/user.did.js";
+
+import * as test from "@/declarations/test";
+import * as user from "@/declarations/user";
+import { InternetIdentity } from "@/packages/icp/core/providers/internet-identity";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const [client, setClient] = useState<Client | undefined>(undefined);
+  const [client, setClient] = useState<Client | undefined>();
 
   useEffect(() => {
-    createClient();
+    initClient();
   }, []);
 
-  async function createClient() {
-    const client = await Client.createClient({
+  async function initClient() {
+    const internetIdentity = await InternetIdentity.create({
+      providerUrl: process.env.NEXT_PUBLIC_INTERNET_IDENTITY_URL,
+    });
+
+    const client = Client.create({
       host: process.env.NEXT_PUBLIC_IC_HOST!,
       canisters: {
-        test: {
-          idlFactory: testIdlFactory,
-          canisterId: process.env.NEXT_PUBLIC_TEST_CANISTER_ID!,
-        },
-        user: {
-          idlFactory: userIdlFactory,
-          canisterId: process.env.NEXT_PUBLIC_USER_CANISTER_ID!,
-        },
+        // @ts-ignore
+        test,
+        // @ts-ignore
+        user,
       },
       providers: {
-        "internet-identity": {
-          url: process.env.NEXT_PUBLIC_INTERNET_IDENTITY_URL!,
-        },
+        "internet-identity": internetIdentity,
       },
     });
 

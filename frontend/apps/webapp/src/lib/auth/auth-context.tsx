@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 
-import { useActor } from "../../packages/icp/hooks/useActor";
-import { useAuth } from "../../packages/icp/hooks/useAuth";
+import { useActor } from "../../packages/icp/react/hooks/useActor";
+import { useAuth } from "../../packages/icp/react/hooks/useAuth";
 
 export type AuthUserProfile = {
   bio: string;
@@ -26,23 +26,14 @@ export type AuthContextProviderType = {
 export const AuthContext = createContext({} as AuthContextType);
 
 export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
-  const { isAuthenticated, login, logout } = useAuth();
+  const { connect, disconnect } = useAuth();
   const userActor = useActor("user");
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [profile, setProfile] = useState<AuthUserProfile | undefined>();
 
   useEffect(() => {
-    init();
-  }, []);
-
-  useEffect(() => {
     loadProfile();
   }, [isAuth]);
-
-  async function init() {
-    const auth = await isAuthenticated();
-    setIsAuth(auth);
-  }
 
   async function loadProfile() {
     if (isAuth) {
@@ -60,23 +51,24 @@ export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
         };
         setProfile(profile);
       } catch (error) {
-        console.log({ error });
+        throw error;
       }
     } else {
       setProfile(undefined);
     }
   }
 
-  function pLogin() {
-    login({
-      onSuccess: () => {
-        setIsAuth(true);
-      },
-    });
+  async function login() {
+    try {
+      await connect();
+      setIsAuth(true);
+    } catch (error) {
+      throw error;
+    }
   }
 
-  async function pLogout() {
-    await logout();
+  async function logout() {
+    await disconnect();
     setIsAuth(false);
   }
 
@@ -85,8 +77,8 @@ export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
       value={{
         isAuth,
         profile,
-        login: pLogin,
-        logout: pLogout,
+        login,
+        logout,
       }}
     >
       {children}
