@@ -9,24 +9,6 @@ const defaultConfig: InternetIdentityConfig = {
   providerUrl: "https://identity.ic0.app",
 };
 
-function removeUndefined<T>(
-  obj: Record<string, T>
-): Partial<Record<string, T>> {
-  const newObject = Object.keys(obj).reduce<Partial<Record<string, T>>>(
-    (reducer: Partial<Record<string, T>>, key) => {
-      if (obj[key] === undefined) return reducer;
-
-      return {
-        ...reducer,
-        [key]: obj[key],
-      };
-    },
-    {}
-  );
-
-  return newObject;
-}
-
 export class InternetIdentity implements IdentityProvider {
   private config: InternetIdentityConfig = defaultConfig;
   private identity: Identity;

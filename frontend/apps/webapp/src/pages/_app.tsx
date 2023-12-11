@@ -8,7 +8,7 @@ import { AuthContextProvider } from "../lib/auth/auth-context";
 
 import * as test from "@/declarations/test";
 import * as user from "@/declarations/user";
-import { InternetIdentity } from "@/packages/icp/core/providers/internet-identity/internet-identity";
+import { InternetIdentity } from "@/packages/icp/core/providers/internet-identity";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const [client, setClient] = useState<Client | undefined>();
@@ -31,7 +31,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         user,
       },
       providers: {
-        // @ts-ignore
         "internet-identity": internetIdentity,
       },
     });
