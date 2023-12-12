@@ -1,9 +1,9 @@
 import { useContext } from "react";
 
-import { IcpContext } from "../context";
+import { IcpConnectContext } from "../context";
 
 export const useProviders = () => {
-  const { client } = useContext(IcpContext);
+  const { client } = useContext(IcpConnectContext);
 
   return client.getProviders();
 };

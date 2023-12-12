@@ -2,34 +2,35 @@ import { useEffect, useState } from "react";
 import type { AppProps } from "next/app";
 import "../app/globals.css";
 
-import { Client } from "../packages/icp/core/client/client";
-import { IcpContextProvider } from "../packages/icp/react/context";
+import { Client } from "../packages/icp-connect/core/client/client";
+import { IcpConnectContextProvider } from "../packages/icp-connect/react/context";
 import { AuthContextProvider } from "../lib/auth/auth-context";
 
 import * as test from "@/declarations/test";
 import * as user from "@/declarations/user";
-import { InternetIdentity } from "@/packages/icp/core/identity-providers/internet-identity";
+import { InternetIdentity } from "dsnap/packages/icp-connect/core/identity-providers/internet-identity";
+import { CanisterTypes } from "dsnap/declarations";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const [client, setClient] = useState<Client | undefined>();
+  const [client, setClient] = useState<Client<CanisterTypes> | undefined>();
+
+  const Canisters = {
+    test,
+    user,
+  };
 
   useEffect(() => {
     initClient();
   }, []);
 
   async function initClient() {
-    const internetIdentity = await InternetIdentity.create({
+    const internetIdentity = new InternetIdentity({
       providerUrl: process.env.NEXT_PUBLIC_INTERNET_IDENTITY_URL,
     });
 
-    const client = Client.create({
+    const client = await Client.create<CanisterTypes>({
       host: process.env.NEXT_PUBLIC_IC_HOST!,
-      canisters: {
-        // @ts-ignore
-        test,
-        // @ts-ignore
-        user,
-      },
+      canisters: Canisters,
       providers: {
         "internet-identity": internetIdentity,
       },
@@ -39,11 +40,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   }
 
   return client ? (
-    <IcpContextProvider client={client}>
+    <IcpConnectContextProvider client={client}>
       <AuthContextProvider>
         <Component {...pageProps} />
       </AuthContextProvider>
-    </IcpContextProvider>
+    </IcpConnectContextProvider>
   ) : (
     <div>Loading</div>
   );
