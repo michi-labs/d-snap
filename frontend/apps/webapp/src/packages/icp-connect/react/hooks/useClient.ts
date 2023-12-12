@@ -1,10 +1,10 @@
 import { useContext } from "react";
-import { IcpContext } from "../context";
+import { IcpConnectContext } from "../context";
 
-import { Client } from "@/packages/icp/core";
+import { Client } from "../../../../packages/icp-connect/core";
 import { CanisterTypes } from "../../../../declarations";
 
 export const useClient = (): Client<CanisterTypes> => {
-  const { client } = useContext(IcpContext);
+  const { client } = useContext(IcpConnectContext);
   return client;
 };

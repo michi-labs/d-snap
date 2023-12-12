@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 
-import { useActor } from "../../packages/icp/react/hooks/useActor";
-import { useAuth } from "../../packages/icp/react/hooks/useAuth";
+import { useActor } from "../../packages/icp-connect/react/hooks/useActor";
+import { useAuth } from "../../packages/icp-connect/react/hooks/useAuth";
 
 export type AuthUserProfile = {
   bio: string;
