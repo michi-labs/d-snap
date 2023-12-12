@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-
 import Link from "next/link";
 import { ReactNode } from "react";
 
@@ -67,8 +66,7 @@ function HomeIcon(props: { className?: string }) {
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
-      className={`lucide lucide-home ` + props.className}
-    >
+      className={`lucide lucide-home ` + props.className}>
       <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
       <polyline points="9 22 9 12 15 12 15 22" />
     </svg>
@@ -87,8 +85,7 @@ function PlusIcon(props: { className?: string }) {
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
-      className={`lucide lucide-plus ` + props.className}
-    >
+      className={`lucide lucide-plus ` + props.className}>
       <path d="M5 12h14" />
       <path d="M12 5v14" />
     </svg>
@@ -107,8 +104,7 @@ function InboxIcon(props: { className?: string }) {
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
-      className={`lucide lucide-inbox ` + props.className}
-    >
+      className={`lucide lucide-inbox ` + props.className}>
       <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
       <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
     </svg>
@@ -127,8 +123,7 @@ function FriendListIcon(props: { className?: string }) {
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
-      className={`lucide lucide-users ` + props.className}
-    >
+      className={`lucide lucide-users ` + props.className}>
       <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
       <circle cx="9" cy="7" r="4" />
       <path d="M22 21v-2a4 4 0 0 0-3-3.87" />

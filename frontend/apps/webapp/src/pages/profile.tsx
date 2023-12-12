@@ -1,19 +1,12 @@
-import {
-  CardTitle,
-  CardDescription,
-  CardHeader,
-  CardContent,
-  CardFooter,
-  Card,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Layout from "dsnap/components/layout";
-import { useContext, useState } from "react";
+import { CardTitle, CardDescription, CardHeader, CardContent, CardFooter, Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { storage } from "@/lib/firebase";
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import Layout from "dsnap/components/layout";
 import { AuthContext } from "dsnap/lib/auth/auth-context";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { useContext, useState } from "react";
 
 const ProfilePage = () => {
   const { profile } = useContext(AuthContext);
@@ -30,9 +23,7 @@ const ProfilePage = () => {
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        const progress = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
+        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
         setProgressPercent(progress);
       },
       (error) => {
@@ -57,10 +48,7 @@ const ProfilePage = () => {
             <form onSubmit={handleSubmit} className="form">
               {!imgUrl && (
                 <div className="outerbar">
-                  <div
-                    className="innerbar"
-                    style={{ width: `${progressPercent}%` }}
-                  >
+                  <div className="innerbar" style={{ width: `${progressPercent}%` }}>
                     {progressPercent}%
                   </div>
                 </div>
@@ -94,12 +82,7 @@ const ProfilePage = () => {
                   />
                 )}
                 <Label htmlFor="profile-picture">Profile Picture</Label>
-                <Input
-                  accept="image/*"
-                  className="block mt-1 w-full"
-                  id="profile-picture"
-                  type="file"
-                />
+                <Input accept="image/*" className="block mt-1 w-full" id="profile-picture" type="file" />
                 <Button type="submit" className="ml-auto bg-purple-600">
                   Upload Image
                 </Button>

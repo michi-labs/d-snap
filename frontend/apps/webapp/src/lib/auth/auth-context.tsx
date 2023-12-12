@@ -1,7 +1,6 @@
-import { ReactNode, createContext, useEffect, useState } from "react";
-
 import { useActor } from "icp-connect/react/hooks/useActor";
 import { useAuth } from "icp-connect/react/hooks/useAuth";
+import { ReactNode, createContext, useEffect, useState } from "react";
 
 export type AuthUserProfile = {
   bio: string;
@@ -81,8 +80,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
         profile,
         login,
         logout,
-      }}
-    >
+      }}>
       {children}
     </AuthContext.Provider>
   );
