@@ -1,19 +1,18 @@
-import { Actor, HttpAgent, Identity } from "@dfinity/agent";
+import { Actor, ActorSubclass, HttpAgent, Identity } from "@dfinity/agent";
 
 import {
   ActorMap,
-  ActorType,
   CanisterMap,
   CreateClientOptions,
   IdentityProviders,
 } from "./client.types";
 
-export class Client {
-  private actors: ActorMap = {};
+export class Client<T extends Record<string, any>> {
+  private actors: ActorMap<T> = {} as ActorMap<T>;
 
   private constructor(
     private readonly agent: HttpAgent,
-    private readonly _canisters: CanisterMap,
+    private readonly _canisters: CanisterMap<T>,
     private readonly providers: IdentityProviders
   ) {
     this.init();
@@ -42,7 +41,7 @@ export class Client {
         const [name, canister] = current;
         const { idlFactory, canisterId, configuration = {} } = canister;
 
-        const actor: ActorType = Actor.createActor(idlFactory, {
+        const actor = Actor.createActor(idlFactory, {
           agent: this.agent,
           canisterId,
           ...configuration,
@@ -56,10 +55,10 @@ export class Client {
       {}
     );
 
-    this.actors = actors;
+    this.actors = actors as ActorMap<T>;
   }
 
-  public getActor(name: string): ActorType {
+  public getActor<K extends keyof T>(name: K): ActorMap<T>[K] {
     return this.actors[name];
   }
 
@@ -67,7 +66,9 @@ export class Client {
     return this.providers;
   }
 
-  public static async create(options: CreateClientOptions) {
+  public static async create<T extends Record<string, any>>(
+    options: CreateClientOptions<T>
+  ) {
     const { host, canisters, providers } = options;
 
     Object.keys(providers).forEach(async (key) => {
@@ -79,6 +80,6 @@ export class Client {
       verifyQuerySignatures: false,
     });
 
-    return new Client(agent, canisters, providers);
+    return new Client<T>(agent, canisters, providers);
   }
 }

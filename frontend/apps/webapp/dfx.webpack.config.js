@@ -73,6 +73,27 @@ function fixFiles(canisterNames) {
     }
 }
 
+function createDeclarationsIndex(canisterNames) {
+    const DECLARATIONS_DIRECTORY_PATH = path.resolve('./src/declarations');
+
+    const imports = canisterNames.map(name => `import * as ${name} from './${name}';`).join('\n');
+    const canisters = `export const Canisters = {
+        ${canisterNames.map(name => `${name}`).join(',\n')}
+    };`;
+    const canisterTypes = 'export type CanisterTypes = typeof Canisters;';
+    const canisterTypeKeys = 'export type CanisterTypeKeys = keyof CanisterTypes;';
+
+    const index = [imports, canisters, canisterTypes, canisterTypeKeys].join('\n\n');
+
+    console.log({ index });
+
+    const DECLARATIONS_INDEX_PATH = path.resolve(DECLARATIONS_DIRECTORY_PATH, 'index.ts');
+
+    fs.writeFileSync(DECLARATIONS_INDEX_PATH, index, 'utf8', function (error) {
+        if (error) throw new Error('File can\'t be replaced');
+    });
+}
+
 /**
  * 
  * 
@@ -88,6 +109,7 @@ function bootstrap(relativeRootPath) {
     setCanisterVariables(canisterNames, relativeRootPath);
     copyDeclarations(canisterNames, relativeRootPath);
     fixFiles(canisterNames);
+    createDeclarationsIndex(canisterNames);
 }
 
 module.exports = {

@@ -1,9 +1,8 @@
 import {
+  Actor,
   ActorConfig,
-  ActorMethod,
   ActorSubclass,
   Agent,
-  HttpAgent,
   HttpAgentOptions,
 } from "@dfinity/agent";
 import { IDL } from "@dfinity/candid";
@@ -26,26 +25,33 @@ export type CreateActorOptions = {
   actorOptions?: ActorConfig;
 };
 
-export type CanisterType = {
+export type ActorSubclassType<
+  T extends Record<string, any>,
+  K extends keyof T
+> = ReturnType<T[K]["createActor"]>;
+
+export type CanisterType<T> = {
   canisterId: string | Principal;
-  createActor: <T = Record<string, ActorMethod<any[], any>>>(
+  createActor: (
     canisterId: string | Principal,
     options?: CreateActorOptions
-  ) => ActorSubclass<T>;
+  ) => T;
   idlFactory: IDL.InterfaceFactory;
   configuration?: ActorConfig;
 };
 
-export type CanisterMap = { [key: string]: CanisterType };
+export type CanisterMap<T extends Record<string, any>> = {
+  [K in keyof T]: CanisterType<ActorSubclassType<T, K>>;
+};
 
-export type CreateClientOptions = {
+export type CreateClientOptions<T extends Record<string, any>> = {
   host: string;
-  canisters: CanisterMap;
+  canisters: CanisterMap<T>;
   providers: IdentityProviders;
 };
 
-export type ActorType = ActorSubclass<Record<string, ActorMethod<any[], any>>>;
-
-export type ActorMap = { [key: string]: ActorType };
+export type ActorMap<T extends Record<string, any>> = {
+  [K in keyof T]: ActorSubclassType<T, K>;
+};
 
 export type IdentityProviders = { [key: string]: IdentityProvider };

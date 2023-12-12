@@ -9,7 +9,7 @@ export type AuthUserProfile = {
   picture: {
     url: string;
   };
-  createdAt: string;
+  createdAt: bigint;
 };
 
 export type AuthContextType = {
@@ -28,6 +28,7 @@ export const AuthContext = createContext({} as AuthContextType);
 export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
   const { connect, disconnect } = useAuth();
   const user = useActor("user");
+
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [profile, setProfile] = useState<AuthUserProfile | undefined>();
 
@@ -41,7 +42,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
         // @ts-ignore
         const response = await user.getProfile();
 
-        if (response.err) return;
+        if ("err" in response) return;
 
         const profile: AuthUserProfile = {
           username: response.ok.username,
@@ -49,6 +50,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
           picture: response.ok.picture,
           createdAt: response.ok.createdAt,
         };
+
         setProfile(profile);
       } catch (error) {
         throw error;

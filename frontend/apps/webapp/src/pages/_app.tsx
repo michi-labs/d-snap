@@ -9,9 +9,15 @@ import { AuthContextProvider } from "../lib/auth/auth-context";
 import * as test from "@/declarations/test";
 import * as user from "@/declarations/user";
 import { InternetIdentity } from "@/packages/icp/core/identity-providers/internet-identity";
+import { CanisterTypes } from "dsnap/declarations";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const [client, setClient] = useState<Client | undefined>();
+  const [client, setClient] = useState<Client<CanisterTypes> | undefined>();
+
+  const Canisters = {
+    test,
+    user,
+  };
 
   useEffect(() => {
     initClient();
@@ -22,14 +28,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       providerUrl: process.env.NEXT_PUBLIC_INTERNET_IDENTITY_URL,
     });
 
-    const client = await Client.create({
+    const client = await Client.create<CanisterTypes>({
       host: process.env.NEXT_PUBLIC_IC_HOST!,
-      canisters: {
-        // @ts-ignore
-        test,
-        // @ts-ignore
-        user,
-      },
+      canisters: Canisters,
       providers: {
         "internet-identity": internetIdentity,
       },
