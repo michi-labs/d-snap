@@ -29,6 +29,9 @@
       "@/packages/*": [
         "./src/packages/*"
       ],
+      "@/declarations": [
+        "./src/declarations"
+      ],
       "@/declarations/*": [
         "./src/declarations/*"
       ],

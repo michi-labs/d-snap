@@ -1,8 +1,7 @@
 import { SignIdentity } from "@dfinity/agent";
 import { IdleOptions } from "@dfinity/auth-client";
 import { AuthClientStorage } from "@dfinity/auth-client/lib/cjs/storage";
-
-export type BaseKeyType = "ECDSA" | "Ed25519";
+import { BaseKeyType } from "../internet-provider.constants";
 
 export type ConnectOptions = {
   /**

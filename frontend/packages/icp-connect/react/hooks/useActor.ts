@@ -1,13 +1,12 @@
 import { useContext } from "react";
 
-import { IcpConnectContext } from "../context";
-import { CanisterTypes, CanisterTypeKeys } from "../../../../declarations";
-import { ActorSubclassType } from "../../core/client";
+import { IcpConnectContext, IcpConnectContextType } from "../context";
+import { ActorMap } from "../../core/client/client.types";
 
-export const useActor = <K extends CanisterTypeKeys>(
-  name: K
-): ActorSubclassType<CanisterTypes, K> => {
-  const { client } = useContext(IcpConnectContext);
+export const useActor = <T extends Record<string, any>>(
+  name: keyof T
+): ActorMap<T>[keyof T] => {
+  const { client } = useContext(IcpConnectContext) as IcpConnectContextType<T>;
 
   const actor = client.getActor(name);
 

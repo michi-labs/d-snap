@@ -22,10 +22,6 @@ import { InternetIdentityReactNativeConfig } from "./internet-identity-react-nat
 export const KEY_STORAGE_KEY = "identity";
 export const KEY_STORAGE_DELEGATION = "delegation";
 
-export const ECDSA_KEY_LABEL = "ECDSA";
-export const ED25519_KEY_LABEL = "Ed25519";
-export type BaseKeyType = typeof ECDSA_KEY_LABEL | typeof ED25519_KEY_LABEL;
-
 export type StoredKey = string | CryptoKeyPair;
 
 export class InternetIdentityReactNative implements IdentityProvider {

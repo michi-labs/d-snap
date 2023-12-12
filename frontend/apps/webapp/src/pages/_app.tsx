@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import type { AppProps } from "next/app";
 import "../app/globals.css";
 
-import { Client } from "icp-connect/core/client/client";
+import { Client } from "icp-connect/core";
+import { InternetIdentity } from "icp-connect/core/identity-providers";
 import { IcpConnectContextProvider } from "icp-connect/react/context";
+
+import { CanisterTypes, Canisters } from "@/declarations";
 import { AuthContextProvider } from "../lib/auth/auth-context";
 
-import { InternetIdentity } from "icp-connect/core/identity-providers/internet-identity";
-import { CanisterTypes, Canisters } from "../declarations";
+export type ClientCanisterType = Client<CanisterTypes>;
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const [client, setClient] = useState<Client<CanisterTypes> | undefined>();
