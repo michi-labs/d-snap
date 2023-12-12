@@ -18,11 +18,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   async function initClient() {
-    const internetIdentity = await InternetIdentity.create({
+    const internetIdentity = new InternetIdentity({
       providerUrl: process.env.NEXT_PUBLIC_INTERNET_IDENTITY_URL,
     });
 
-    const client = Client.create({
+    const client = await Client.create({
       host: process.env.NEXT_PUBLIC_IC_HOST!,
       canisters: {
         // @ts-ignore

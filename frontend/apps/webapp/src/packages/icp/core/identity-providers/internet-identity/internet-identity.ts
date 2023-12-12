@@ -11,35 +11,24 @@ const defaultConfig: InternetIdentityConfig = {
 
 export class InternetIdentity implements IdentityProvider {
   private config: InternetIdentityConfig = defaultConfig;
-  private identity: Identity;
-  private principal: Principal;
+  private client!: AuthClient;
+  private isAuth!: boolean;
+  private identity!: Identity;
+  private principal!: Principal;
 
-  private constructor(
-    private readonly client: AuthClient,
-    private isAuth: boolean,
-    config: InternetIdentityConfig = {}
-  ) {
-    this.identity = this.client.getIdentity();
-    this.principal = this.identity?.getPrincipal();
+  constructor(config: InternetIdentityConfig = {}) {
     this.config = {
       ...this.config,
       ...config,
     };
   }
 
-  public static async create(config: InternetIdentityConfig = {}) {
-    try {
-      const client = await AuthClient.create();
-
-      const isAuth = await client.isAuthenticated();
-
-      return new InternetIdentity(client, isAuth, config);
-    } catch (error) {
-      throw error;
-    }
+  public async init(): Promise<void> {
+    this.client = await AuthClient.create();
+    this.isAuth = await this.client.isAuthenticated();
+    this.identity = this.client.getIdentity();
+    this.principal = this.identity?.getPrincipal();
   }
-
-  public async init(): Promise<void> {}
 
   private async setData(): Promise<void> {
     if (!this.client) throw new Error("init must be called before this method");
@@ -69,6 +58,8 @@ export class InternetIdentity implements IdentityProvider {
   }
 
   public async disconnect(): Promise<void> {
+    if (!this.client) throw new Error("init must be called before this method");
+
     try {
       await this.client.logout();
       await this.setData();
@@ -78,14 +69,20 @@ export class InternetIdentity implements IdentityProvider {
   }
 
   public isAuthenticated(): boolean {
+    if (!this.client) throw new Error("init must be called before this method");
+
     return this.isAuth;
   }
 
   public getIdentity(): Identity {
+    if (!this.client) throw new Error("init must be called before this method");
+
     return this.identity;
   }
 
   public getPrincipal(): Principal {
+    if (!this.client) throw new Error("init must be called before this method");
+
     return this.principal;
   }
 }

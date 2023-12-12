@@ -58,10 +58,12 @@ export class Client {
     return this.providers;
   }
 
-  public static create(options: CreateClientOptions) {
+  public static async create(options: CreateClientOptions) {
     const { host, canisters, providers } = options;
 
-    // TODO: Init providers using its init() method
+    Object.keys(providers).forEach(async (key) => {
+      await providers[key].init();
+    });
 
     const agent = new HttpAgent({
       host,
