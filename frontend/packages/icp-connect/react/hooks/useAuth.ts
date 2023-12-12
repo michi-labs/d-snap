@@ -1,8 +1,7 @@
+import { useClient } from "./useClient";
+import { useProviders } from "./useProviders";
 import { Identity } from "@dfinity/agent";
 import { Principal } from "@dfinity/principal";
-
-import { useProviders } from "./useProviders";
-import { useClient } from "./useClient";
 
 export type LoginOptions = {
   maxTimeToLive?: bigint;

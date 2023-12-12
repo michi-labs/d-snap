@@ -2,13 +2,7 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "dev": {
-      "dependsOn": [
-        "generate",
-        "canister:local:create",
-        "stop",
-        "serve",
-        "deploy:local"
-      ],
+      "dependsOn": ["generate", "canister:local:create", "stop", "serve", "deploy:local"],
       "cache": false,
       "persistent": true
     },

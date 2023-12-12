@@ -1,11 +1,5 @@
+import { ActorMap, CanisterMap, CreateClientOptions, IdentityProviders } from "./client.types";
 import { Actor, ActorSubclass, HttpAgent, Identity } from "@dfinity/agent";
-
-import {
-  ActorMap,
-  CanisterMap,
-  CreateClientOptions,
-  IdentityProviders,
-} from "./client.types";
 
 export class Client<T extends Record<string, any>> {
   private actors: ActorMap<T> = {} as ActorMap<T>;
@@ -20,9 +14,7 @@ export class Client<T extends Record<string, any>> {
 
   private init(): void {
     this.agent.fetchRootKey().then((err: any) => {
-      console.warn(
-        "Unable to fetch root key. Check to ensure that your local replica is running"
-      );
+      console.warn("Unable to fetch root key. Check to ensure that your local replica is running");
     });
 
     this.setActors();
@@ -36,24 +28,21 @@ export class Client<T extends Record<string, any>> {
   }
 
   private setActors(): void {
-    const actors = Object.entries(this._canisters).reduce(
-      (reducer, current) => {
-        const [name, canister] = current;
-        const { idlFactory, canisterId, configuration = {} } = canister;
+    const actors = Object.entries(this._canisters).reduce((reducer, current) => {
+      const [name, canister] = current;
+      const { idlFactory, canisterId, configuration = {} } = canister;
 
-        const actor = Actor.createActor(idlFactory, {
-          agent: this.agent,
-          canisterId,
-          ...configuration,
-        });
+      const actor = Actor.createActor(idlFactory, {
+        agent: this.agent,
+        canisterId,
+        ...configuration,
+      });
 
-        return {
-          ...reducer,
-          [name]: actor,
-        };
-      },
-      {}
-    );
+      return {
+        ...reducer,
+        [name]: actor,
+      };
+    }, {});
 
     this.actors = actors as ActorMap<T>;
   }
@@ -66,9 +55,7 @@ export class Client<T extends Record<string, any>> {
     return this.providers;
   }
 
-  public static async create<T extends Record<string, any>>(
-    options: CreateClientOptions<T>
-  ) {
+  public static async create<T extends Record<string, any>>(options: CreateClientOptions<T>) {
     const { host, canisters, providers } = options;
 
     Object.keys(providers).forEach(async (key) => {

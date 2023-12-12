@@ -1,14 +1,7 @@
-import {
-  Actor,
-  ActorConfig,
-  ActorSubclass,
-  Agent,
-  HttpAgentOptions,
-} from "@dfinity/agent";
+import { IdentityProvider } from "../identity-providers/identity-provider.interface";
+import { Actor, ActorConfig, ActorSubclass, Agent, HttpAgentOptions } from "@dfinity/agent";
 import { IDL } from "@dfinity/candid";
 import { Principal } from "@dfinity/principal";
-
-import { IdentityProvider } from "../identity-providers/identity-provider.interface";
 
 export type CreateActorOptions = {
   /**
@@ -25,17 +18,13 @@ export type CreateActorOptions = {
   actorOptions?: ActorConfig;
 };
 
-export type ActorSubclassType<
-  T extends Record<string, any>,
-  K extends keyof T
-> = ReturnType<T[K]["createActor"]>;
+export type ActorSubclassType<T extends Record<string, any>, K extends keyof T> = ReturnType<
+  T[K]["createActor"]
+>;
 
 export type CanisterType<T> = {
   canisterId: string | Principal;
-  createActor: (
-    canisterId: string | Principal,
-    options?: CreateActorOptions
-  ) => T;
+  createActor: (canisterId: string | Principal, options?: CreateActorOptions) => T;
   idlFactory: IDL.InterfaceFactory;
   configuration?: ActorConfig;
 };
