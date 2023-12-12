@@ -1,17 +1,19 @@
 import { Actor, HttpAgent, Identity } from "@dfinity/agent";
 
 import {
-  Canisters,
+  ActorMap,
+  ActorType,
+  CanisterMap,
   CreateClientOptions,
   IdentityProviders,
 } from "./client.types";
 
 export class Client {
-  private actors: { [key: string]: Actor } = {};
+  private actors: ActorMap = {};
 
   private constructor(
     private readonly agent: HttpAgent,
-    private readonly _canisters: Canisters,
+    private readonly _canisters: CanisterMap,
     private readonly providers: IdentityProviders
   ) {
     this.init();
@@ -40,7 +42,7 @@ export class Client {
         const [name, canister] = current;
         const { idlFactory, canisterId, configuration = {} } = canister;
 
-        const actor = Actor.createActor(idlFactory, {
+        const actor: ActorType = Actor.createActor(idlFactory, {
           agent: this.agent,
           canisterId,
           ...configuration,
@@ -57,7 +59,7 @@ export class Client {
     this.actors = actors;
   }
 
-  public getActor(name: string): Actor | undefined {
+  public getActor(name: string): ActorType {
     return this.actors[name];
   }
 

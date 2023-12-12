@@ -3,6 +3,7 @@ import {
   ActorMethod,
   ActorSubclass,
   Agent,
+  HttpAgent,
   HttpAgentOptions,
 } from "@dfinity/agent";
 import { IDL } from "@dfinity/candid";
@@ -25,7 +26,7 @@ export type CreateActorOptions = {
   actorOptions?: ActorConfig;
 };
 
-export type Canister = {
+export type CanisterType = {
   canisterId: string | Principal;
   createActor: <T = Record<string, ActorMethod<any[], any>>>(
     canisterId: string | Principal,
@@ -35,12 +36,16 @@ export type Canister = {
   configuration?: ActorConfig;
 };
 
-export type Canisters = { [key: string]: Canister };
+export type CanisterMap = { [key: string]: CanisterType };
 
 export type CreateClientOptions = {
   host: string;
-  canisters: Canisters;
+  canisters: CanisterMap;
   providers: IdentityProviders;
 };
+
+export type ActorType = ActorSubclass<Record<string, ActorMethod<any[], any>>>;
+
+export type ActorMap = { [key: string]: ActorType };
 
 export type IdentityProviders = { [key: string]: IdentityProvider };
