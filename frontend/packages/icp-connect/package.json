@@ -12,6 +12,12 @@
     "@dfinity/principal": "^0.20.2",
     "@react-native-async-storage/async-storage": "^1.21.0",
     "expo-secure-store": "^12.5.0",
-    "expo-web-browser": "^12.5.0"
+    "expo-web-browser": "^12.5.0",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "ts-loader": "^9.5.1",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
   }
 }

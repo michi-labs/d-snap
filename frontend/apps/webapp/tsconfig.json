@@ -19,11 +19,24 @@
       }
     ],
     "paths": {
-      "dsnap/*": ["./src/*"],
-      "@/packages/*": ["./src/packages/*"],
-      "@/declarations/*": ["./src/declarations/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/lib/*": ["./src/lib/*"]
+      "dsnap/*": [
+        "./src/*"
+      ],
+      "@/packages/*": [
+        "./src/packages/*"
+      ],
+      "@/declarations": [
+        "./src/declarations"
+      ],
+      "@/declarations/*": [
+        "./src/declarations/*"
+      ],
+      "@/components/*": [
+        "./src/components/*"
+      ],
+      "@/lib/*": [
+        "./src/lib/*"
+      ]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "build/types/**/*.ts"],

@@ -1,9 +1,9 @@
-import { CanisterTypes } from "../../../../declarations";
-import { Client } from "../../../../packages/icp-connect/core";
-import { IcpConnectContext } from "../context";
 import { useContext } from "react";
 
-export const useClient = (): Client<CanisterTypes> => {
+import { IcpConnectContext } from "../context";
+import { Client } from "../../../../packages/icp-connect/core";
+
+export const useClient = <T extends Record<string, any>>(): Client<T> => {
   const { client } = useContext(IcpConnectContext);
-  return client;
+  return client as Client<T>;
 };

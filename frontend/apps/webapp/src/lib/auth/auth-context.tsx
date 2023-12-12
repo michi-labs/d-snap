@@ -1,6 +1,9 @@
-import { useActor } from "icp-connect/react/hooks/useActor";
-import { useAuth } from "icp-connect/react/hooks/useAuth";
 import { ReactNode, createContext, useEffect, useState } from "react";
+
+import { useActor, useAuth } from "icp-connect/react/hooks";
+import { ActorMap } from "icp-connect/core/client/client.types";
+
+import { CanisterTypes } from "@/declarations";
 
 export type AuthUserProfile = {
   bio: string;
@@ -26,7 +29,12 @@ export const AuthContext = createContext({} as AuthContextType);
 
 export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
   const { connect, disconnect } = useAuth();
-  const user = useActor("user");
+  // TODO: Improve this type, example below is not working
+  // For now we need to force the type to infer the correct type
+  // const user = useActor<CanisterTypes>("user");
+  const user = useActor<CanisterTypes>(
+    "user"
+  ) as ActorMap<CanisterTypes>["user"];
 
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [profile, setProfile] = useState<AuthUserProfile | undefined>();
@@ -38,7 +46,6 @@ export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
   async function loadProfile() {
     if (isAuth) {
       try {
-        // @ts-ignore
         const response = await user.getProfile();
 
         if ("err" in response) return;
