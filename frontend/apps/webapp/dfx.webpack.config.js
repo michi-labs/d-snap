@@ -85,8 +85,6 @@ function createDeclarationsIndex(canisterNames) {
 
     const index = [imports, canisters, canisterTypes, canisterTypeKeys].join('\n\n');
 
-    console.log({ index });
-
     const DECLARATIONS_INDEX_PATH = path.resolve(DECLARATIONS_DIRECTORY_PATH, 'index.ts');
 
     fs.writeFileSync(DECLARATIONS_INDEX_PATH, index, 'utf8', function (error) {

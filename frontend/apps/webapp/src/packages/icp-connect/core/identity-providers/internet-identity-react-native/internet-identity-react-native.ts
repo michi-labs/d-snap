@@ -10,6 +10,7 @@ import {
   SignIdentity,
   toHex,
 } from "@dfinity/agent";
+import { Principal } from "@dfinity/principal";
 
 import * as SecureStore from "expo-secure-store";
 import * as WebBrowser from "expo-web-browser";
@@ -85,19 +86,19 @@ export class InternetIdentityReactNative implements IdentityProvider {
     return SecureStore.deleteItemAsync("delegation");
   }
 
-  public async successHandler(url: string) {
+  public async successHandler(url: string): Promise<void> {
     if (!this.getPrincipal().isAnonymous()) return;
 
     const search = new URLSearchParams(url?.split("?")[1]);
     const delegations = search.get("delegations");
     const userPublicKey = search.get("userPublicKey");
+    // TODO: validate this._key === userPublicKey
 
     if (delegations && userPublicKey) {
       const chain = DelegationChain.fromJSON(
         JSON.parse(decodeURIComponent(delegations))
       );
 
-      // TODO: Should I validate this._key === userPublicKey?
       await this.saveChain(chain);
 
       if (this._key && this._chain) {
@@ -115,11 +116,11 @@ export class InternetIdentityReactNative implements IdentityProvider {
     }
   }
 
-  public async connect() {
+  public async connect(): Promise<void> {
+    if (!this._key) throw new Error("Key not set");
+
     // If `connect` has been called previously, then close/remove any previous windows
     WebBrowser.dismissBrowser();
-
-    if (!this._key) throw new Error("Key not set");
 
     const derKey = toHex(this._key.getPublicKey().toDer());
 
@@ -134,20 +135,20 @@ export class InternetIdentityReactNative implements IdentityProvider {
     await WebBrowser.openBrowserAsync(url.toString());
   }
 
-  public async disconnect() {
+  public async disconnect(): Promise<void> {
     this._identity = new AnonymousIdentity();
     this._chain = null;
   }
 
-  public isAuthenticated() {
+  public isAuthenticated(): boolean {
     return !this.getPrincipal().isAnonymous();
   }
 
-  public getIdentity() {
+  public getIdentity(): Identity {
     return this._identity;
   }
 
-  public getPrincipal() {
+  public getPrincipal(): Principal {
     return this._identity.getPrincipal();
   }
 }
