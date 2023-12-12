@@ -1,5 +1,3 @@
-import { IdentityProvider } from "../identity-provider.interface";
-import { InternetIdentityReactNativeConfig } from "./internet-identity-react-native.types";
 import { AnonymousIdentity, Identity, SignIdentity, toHex } from "@dfinity/agent";
 import {
   Ed25519KeyIdentity,
@@ -11,6 +9,9 @@ import { Principal } from "@dfinity/principal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 import * as WebBrowser from "expo-web-browser";
+
+import { IdentityProvider } from "../identity-provider.interface";
+import { InternetIdentityReactNativeConfig } from "./internet-identity-react-native.types";
 
 export const KEY_STORAGE_KEY = "identity";
 export const KEY_STORAGE_DELEGATION = "delegation";

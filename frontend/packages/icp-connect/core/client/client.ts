@@ -1,5 +1,6 @@
+import { Actor, HttpAgent, Identity } from "@dfinity/agent";
+
 import { ActorMap, CanisterMap, CreateClientOptions, IdentityProviders } from "./client.types";
-import { Actor, ActorSubclass, HttpAgent, Identity } from "@dfinity/agent";
 
 export class Client<T extends Record<string, any>> {
   private actors: ActorMap<T> = {} as ActorMap<T>;

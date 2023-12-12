@@ -1,6 +1,6 @@
 import React, { ReactNode, createContext } from "react";
 
-import { Client } from "../core/client/client";
+import { Client } from "../core/client";
 
 export type IcpConnectContextType<T extends Record<string, any>> = {
   client: Client<T>;

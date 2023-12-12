@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
 import { IcpConnectContext } from "../context";
-import { Client } from "../../../../packages/icp-connect/core";
+import { Client } from "../../core";
 
 export const useClient = <T extends Record<string, any>>(): Client<T> => {
   const { client } = useContext(IcpConnectContext);
