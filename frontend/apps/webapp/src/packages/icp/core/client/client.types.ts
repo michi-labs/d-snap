@@ -25,7 +25,7 @@ export type CreateActorOptions = {
   actorOptions?: ActorConfig;
 };
 
-export type Actor = {
+export type Canister = {
   canisterId: string | Principal;
   createActor: <T = Record<string, ActorMethod<any[], any>>>(
     canisterId: string | Principal,
@@ -35,11 +35,11 @@ export type Actor = {
   configuration?: ActorConfig;
 };
 
-export type Actors = { [key: string]: Actor };
+export type Canisters = { [key: string]: Canister };
 
 export type CreateClientOptions = {
   host: string;
-  canisters: Actors;
+  canisters: Canisters;
   providers: IdentityProviders;
 };
 
