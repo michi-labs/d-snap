@@ -87,8 +87,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
         profile,
         login,
         logout,
-      }}
-    >
+      }}>
       {children}
     </AuthContext.Provider>
   );

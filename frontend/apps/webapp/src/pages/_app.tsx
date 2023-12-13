@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { AppProps } from "next/app";
+import { AppProps } from "next/app";
 import "../app/globals.css";
 
 import { Client } from "icp-connect/core";

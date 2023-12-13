@@ -1,20 +1,14 @@
+import { AnonymousIdentity, Identity, SignIdentity, toHex } from "@dfinity/agent";
 import {
   Ed25519KeyIdentity,
   DelegationChain,
   DelegationIdentity,
   isDelegationValid,
 } from "@dfinity/identity";
-import {
-  AnonymousIdentity,
-  Identity,
-  SignIdentity,
-  toHex,
-} from "@dfinity/agent";
 import { Principal } from "@dfinity/principal";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 import * as WebBrowser from "expo-web-browser";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { IdentityProvider } from "../identity-provider.interface";
 import { InternetIdentityReactNativeConfig } from "./internet-identity-react-native.types";
@@ -41,10 +35,7 @@ export class InternetIdentityReactNative implements IdentityProvider {
 
     if (localKey) {
       if (localChain && isDelegationValid(localChain)) {
-        const identity = DelegationIdentity.fromDelegation(
-          localKey,
-          localChain
-        );
+        const identity = DelegationIdentity.fromDelegation(localKey, localChain);
         this._identity = identity;
       }
     } else {
@@ -66,16 +57,12 @@ export class InternetIdentityReactNative implements IdentityProvider {
 
   private async getChain(): Promise<DelegationChain | undefined> {
     const storedDelegation = await AsyncStorage.getItem(KEY_STORAGE_DELEGATION);
-    if (storedDelegation)
-      return DelegationChain.fromJSON(JSON.parse(storedDelegation));
+    if (storedDelegation) return DelegationChain.fromJSON(JSON.parse(storedDelegation));
   }
 
   private saveChain(chain: DelegationChain): Promise<void> {
     this._chain = chain;
-    return AsyncStorage.setItem(
-      KEY_STORAGE_DELEGATION,
-      JSON.stringify(chain.toJSON())
-    );
+    return AsyncStorage.setItem(KEY_STORAGE_DELEGATION, JSON.stringify(chain.toJSON()));
   }
 
   private deleteChain(): Promise<void> {
@@ -91,17 +78,12 @@ export class InternetIdentityReactNative implements IdentityProvider {
     // TODO: validate this._key === userPublicKey
 
     if (delegations && userPublicKey) {
-      const chain = DelegationChain.fromJSON(
-        JSON.parse(decodeURIComponent(delegations))
-      );
+      const chain = DelegationChain.fromJSON(JSON.parse(decodeURIComponent(delegations)));
 
       await this.saveChain(chain);
 
       if (this._key && this._chain) {
-        const identity: DelegationIdentity = DelegationIdentity.fromDelegation(
-          this._key,
-          this._chain
-        );
+        const identity: DelegationIdentity = DelegationIdentity.fromDelegation(this._key, this._chain);
 
         this._identity = identity;
 
@@ -122,10 +104,7 @@ export class InternetIdentityReactNative implements IdentityProvider {
 
     // Open a new window with the IDP provider.
     const url = new URL(this.config.providerUrl);
-    url.searchParams.set(
-      "redirect_uri",
-      encodeURIComponent(this.config.appLink)
-    );
+    url.searchParams.set("redirect_uri", encodeURIComponent(this.config.appLink));
 
     url.searchParams.set("pubkey", derKey);
     await WebBrowser.openBrowserAsync(url.toString());

@@ -1,7 +1,6 @@
-import React from "react";
-import { ReactNode, createContext } from "react";
+import React, { ReactNode, createContext } from "react";
 
-import { Client } from "../core/client/client";
+import { Client } from "../core/client";
 
 export type IcpConnectContextType<T extends Record<string, any>> = {
   client: Client<T>;
@@ -24,8 +23,7 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
     <IcpConnectContext.Provider
       value={{
         client,
-      }}
-    >
+      }}>
       {children}
     </IcpConnectContext.Provider>
   );

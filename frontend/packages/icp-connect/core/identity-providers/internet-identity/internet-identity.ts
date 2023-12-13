@@ -1,5 +1,5 @@
-import { AuthClient } from "@dfinity/auth-client";
 import { Identity } from "@dfinity/agent";
+import { AuthClient } from "@dfinity/auth-client";
 import { Principal } from "@dfinity/principal";
 
 import { IdentityProvider } from "../identity-provider.interface";

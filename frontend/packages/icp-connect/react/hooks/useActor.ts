@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
 import { IcpConnectContext, IcpConnectContextType } from "../context";
-import { ActorMap } from "../../core/client/client.types";
+import { ActorMap } from "../../core/client";
 
 export const useActor = <T extends Record<string, any>>(
   name: keyof T

@@ -1,20 +1,15 @@
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
-import Link from "next/link";
-import {
-  CardHeader,
-  CardContent,
-  CardFooter,
-  Card,
-} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { CardHeader, CardContent, CardFooter, Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import Layout from "dsnap/components/layout";
-import { useState } from "react";
 import { storage } from "@/lib/firebase";
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import Layout from "dsnap/components/layout";
 import { Input } from "dsnap/components/ui/input";
 import { ScrollArea } from "dsnap/components/ui/scroll-area";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import Link from "next/link";
+import { useState } from "react";
 
 const CreatePostPage = () => {
   const [imgUrl, setImgUrl] = useState<string | null>(null);
@@ -30,9 +25,7 @@ const CreatePostPage = () => {
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        const progress = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
+        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
         setProgressPercent(progress);
       },
       (error) => {
@@ -50,10 +43,7 @@ const CreatePostPage = () => {
       <ScrollArea className="h-full">
         <Card className="w-full max-w-sm overflow-hidden min-w-[500px] h-screen">
           <CardHeader className="p-4 flex items-center">
-            <Link
-              className="flex items-center gap-2 text-sm font-semibold"
-              href="#"
-            >
+            <Link className="flex items-center gap-2 text-sm font-semibold" href="#">
               <Avatar className="w-8 h-8 border">
                 <AvatarImage alt="User avatar" src="/placeholder-user.jpg" />
                 <AvatarFallback>U</AvatarFallback>
@@ -65,10 +55,7 @@ const CreatePostPage = () => {
             <form onSubmit={handleSubmit} className="form">
               {!imgUrl && (
                 <div className="outerbar">
-                  <div
-                    className="innerbar"
-                    style={{ width: `${progressPercent}%` }}
-                  >
+                  <div className="innerbar" style={{ width: `${progressPercent}%` }}>
                     {progressPercent}%
                   </div>
                 </div>
@@ -102,12 +89,7 @@ const CreatePostPage = () => {
                   />
                 )}
                 <Label htmlFor="profile-picture">Select image to upload</Label>
-                <Input
-                  accept="image/*"
-                  className="block mt-1 w-full"
-                  id="profile-picture"
-                  type="file"
-                />
+                <Input accept="image/*" className="block mt-1 w-full" id="profile-picture" type="file" />
                 <Button type="submit" className="mt-1 ml-auto bg-purple-600">
                   Upload Image
                 </Button>
@@ -116,20 +98,14 @@ const CreatePostPage = () => {
 
             <div className="mt-4 grid w-full gap-1.5">
               <Label htmlFor="image-description">Add a description</Label>
-              <Textarea
-                id="image-description"
-                placeholder="Describe your image here..."
-              />
+              <Textarea id="image-description" placeholder="Describe your image here..." />
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Add a compelling description to capture your audience&apos;s
-                attention.
+                Add a compelling description to capture your audience&apos;s attention.
               </p>
             </div>
           </CardContent>
           <CardFooter className="p-2">
-            <Button className="w-full bg-purple-600 text-white rounded">
-              Upload
-            </Button>
+            <Button className="w-full bg-purple-600 text-white rounded">Upload</Button>
           </CardFooter>
         </Card>
       </ScrollArea>
