@@ -1,3 +1,4 @@
+import { InternetIdentityReactNativeConfig } from "./internet-identity-react-native.types";
 import { AnonymousIdentity, Identity, SignIdentity, toHex } from "@dfinity/agent";
 import {
   Ed25519KeyIdentity,
@@ -9,16 +10,14 @@ import { Principal } from "@dfinity/principal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 import * as WebBrowser from "expo-web-browser";
-
-import { IdentityProvider } from "../identity-provider.interface";
-import { InternetIdentityReactNativeConfig } from "./internet-identity-react-native.types";
+import { NativeIdentityProvider } from "icp-connect-core/identity-providers";
 
 export const KEY_STORAGE_KEY = "identity";
 export const KEY_STORAGE_DELEGATION = "delegation";
 
 export type StoredKey = string | CryptoKeyPair;
 
-export class InternetIdentityReactNative implements IdentityProvider {
+export class InternetIdentityReactNative implements NativeIdentityProvider {
   private _identity: Identity = new AnonymousIdentity();
   private _key: SignIdentity | null = null;
   private _chain: DelegationChain | null = null;

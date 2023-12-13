@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
-import { AppProps } from "next/app";
 import "../app/globals.css";
-
-import { Client } from "icp-connect/core";
-import { InternetIdentity } from "icp-connect/core/identity-providers";
-import { IcpConnectContextProvider } from "icp-connect/react/context";
-
-import { CanisterTypes, Canisters } from "@/declarations";
 import { AuthContextProvider } from "../lib/auth/auth-context";
+import { CanisterTypes, Canisters } from "@/declarations";
+import { Client } from "icp-connect-core/client";
+import { InternetIdentity } from "icp-connect-core/identity-providers";
+import { IcpConnectContextProvider } from "icp-connect-react/context";
+import { AppProps } from "next/app";
+import { useEffect, useState } from "react";
 
 export type ClientCanisterType = Client<CanisterTypes>;
 
