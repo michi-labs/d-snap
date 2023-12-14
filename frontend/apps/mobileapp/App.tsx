@@ -7,12 +7,12 @@ import { IcpConnectContextProvider } from "icp-connect-react/context";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-const Canisters = {
+const canisters = {
   test,
   user,
 };
 
-type CanisterTypes = typeof Canisters;
+type CanisterTypes = typeof canisters;
 
 export default function App() {
   const [client, setClient] = useState<Client<CanisterTypes> | undefined>();
@@ -29,7 +29,7 @@ export default function App() {
 
     const client = await Client.create<CanisterTypes>({
       host: process.env.NEXT_PUBLIC_IC_HOST!,
-      canisters: Canisters,
+      canisters,
       providers: {
         "internet-identity": internetIdentity,
       },
