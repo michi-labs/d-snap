@@ -1,5 +1,7 @@
 import * as test from "./src/declarations/test";
 import * as user from "./src/declarations/user";
+// @ts-ignore
+import { IC_HOST, INTERNET_IDENTITY_URL } from "@env";
 import { StatusBar } from "expo-status-bar";
 import { Client } from "icp-connect-core/client";
 import { InternetIdentityReactNative } from "icp-connect-react-native/identity-providers";
@@ -23,12 +25,12 @@ export default function App() {
 
   async function initClient() {
     const internetIdentity = new InternetIdentityReactNative({
-      providerUrl: process.env.NEXT_PUBLIC_INTERNET_IDENTITY_URL!,
+      providerUrl: INTERNET_IDENTITY_URL,
       appLink: "exp://192.168.0.125:8081", //TODO: Get this dinamically
     });
 
     const client = await Client.create<CanisterTypes>({
-      host: process.env.NEXT_PUBLIC_IC_HOST!,
+      host: IC_HOST,
       canisters,
       providers: {
         "internet-identity": internetIdentity,

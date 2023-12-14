@@ -1,3 +1,5 @@
+import "fast-text-encoding";
+import "react-native-url-polyfill/auto";
 import App from "./App";
 import { registerRootComponent } from "expo";
 
