@@ -29,10 +29,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       },
     });
 
-    const identity = client.getProviders()["internet-identity"].getIdentity();
-    const principal = identity.getPrincipal();
-    const isAnonymous = principal.isAnonymous();
-
     setClient(client);
   }
 
