@@ -143,11 +143,6 @@ const ProfilePage = () => {
                       size: BigInt(0),
                       blob: [0],
                     },
-                    birthday: {
-                      day: 0,
-                      month: 0,
-                      year: 0,
-                    },
                   });
                   console.log({ result });
                 } catch (error) {

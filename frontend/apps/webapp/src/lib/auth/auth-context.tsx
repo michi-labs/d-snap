@@ -80,6 +80,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
 
         setProfile(profile);
       } catch (error) {
+        console.log({ error });
         throw error;
       }
     } else {

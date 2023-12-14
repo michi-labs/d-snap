@@ -17,7 +17,6 @@ shared ({ caller }) actor class User(id : Principal, data : Types.CreateUserData
         username = data.username;
         picture = data.picture;
         bio = data.bio;
-        // birthday = data.birthday;
         createdAt = Time.now();
     };
 
