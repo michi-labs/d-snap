@@ -1,5 +1,9 @@
-const { getDefaultConfig } = require('expo/metro-config');
 const path = require('path');
+const { getDefaultConfig } = require('expo/metro-config');
+
+const DFXMetroConfig = require("./dfx.metro.config");
+DFXMetroConfig.bootstrap("../../..");
+
 
 // Find the project and workspace directories
 const projectRoot = __dirname;
