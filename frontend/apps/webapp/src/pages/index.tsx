@@ -3,10 +3,22 @@ import { AuthButton } from "../lib/auth/auth-button";
 import { AuthContext } from "../lib/auth/auth-context";
 import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/components/ui/card";
 import Link from "next/link";
-import { useContext } from "react";
+import { useRouter } from "next/navigation";
+import { useContext, useEffect } from "react";
 
 export default function HomePage() {
-  const { isAuth } = useContext(AuthContext);
+  const { isAuth, profile } = useContext(AuthContext);
+  const router = useRouter();
+
+  // useEffect(() => {
+  //   if (isAuth && profile) {
+  //     // Go to feed
+  //     router.push("/feed");
+  //   } else {
+  //     // Go to profile
+  //     router.push("/profile");
+  //   }
+  // }, [isAuth, profile]);
 
   return (
     <div className="flex items-center justify-center h-screen">

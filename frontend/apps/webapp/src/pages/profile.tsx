@@ -4,16 +4,33 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { storage } from "@/lib/firebase";
 import Layout from "dsnap/components/layout";
+import { CanisterTypes } from "dsnap/declarations";
 import { AuthContext } from "dsnap/lib/auth/auth-context";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { useContext, useState } from "react";
+import { ActorMap } from "icp-connect-core/client";
+import { useActor } from "icp-connect-react/hooks";
+import { useContext, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 const ProfilePage = () => {
   const { profile } = useContext(AuthContext);
   const [imgUrl, setImgUrl] = useState<string | null>(null);
   const [progressPercent, setProgressPercent] = useState(0);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const user = useActor<CanisterTypes>("user") as ActorMap<CanisterTypes>["user"];
 
-  const handleSubmit = (e: any) => {
+  useEffect(() => {
+    console.log(profile);
+    if (profile?.picture?.url) {
+      setImgUrl(profile?.picture?.url);
+    }
+  }, [profile]);
+
+  const handleSubmitProfilePicture = (e: any) => {
     e.preventDefault();
     const file = e.target[0]?.files[0];
     if (!file) return;
@@ -44,9 +61,9 @@ const ProfilePage = () => {
             <CardTitle>Profile Customization</CardTitle>
             <CardDescription>Modify your account settings.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <form onSubmit={handleSubmit} className="form">
-              {!imgUrl && (
+          <CardContent className="my-2">
+            <form onSubmit={handleSubmitProfilePicture} className="form">
+              {!imgUrl && progressPercent > 0 && (
                 <div className="outerbar">
                   <div className="innerbar" style={{ width: `${progressPercent}%` }}>
                     {progressPercent}%
@@ -54,7 +71,7 @@ const ProfilePage = () => {
                 </div>
               )}
 
-              <div className="space-y-2">
+              <div className="">
                 {imgUrl && (
                   <img
                     className="my-2 rounded-full m-auto"
@@ -83,72 +100,65 @@ const ProfilePage = () => {
                 )}
                 <Label htmlFor="profile-picture">Profile Picture</Label>
                 <Input accept="image/*" className="block mt-1 w-full" id="profile-picture" type="file" />
-                <Button type="submit" className="ml-auto bg-purple-600">
+                <Button type="submit" className="mt-4 ml-auto bg-purple-600">
                   Upload Image
                 </Button>
               </div>
             </form>
-            <div className="space-y-2">
-              <Label htmlFor="username"></Label>
-              <Input id="username" placeholder={profile?.username} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="bio">Bio</Label>
-              <Input id="bio" placeholder={profile?.bio} type="text" />
-            </div>
-            {/* <div className="space-y-2">
-              <Label htmlFor="private-profile">Private profile</Label>
-              <div className="flex items-center space-x-4" id="private-profile">
+            <form name="user-profile">
+              <div className="space-y-2 mt-2">
+                <Label htmlFor="username">Username</Label>
                 <Input
-                  className="w-4 h-4"
-                  id="public"
-                  name="profile"
-                  type="radio"
-                  value="public"
+                  id="username"
+                  placeholder={profile?.username}
+                  {...register("username", { required: true, value: profile?.username || null })}
                 />
-                <Label htmlFor="public">Public</Label>
-                <Input
-                  className="w-4 h-4"
-                  id="private"
-                  name="profile"
-                  type="radio"
-                  value="private"
-                />
-                <Label htmlFor="private">Private</Label>
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="user-messaging">User Messaging Privacy</Label>
-              <div className="flex items-center space-x-4" id="user-messaging">
+              <div className="space-y-2 mt-2">
+                <Label htmlFor="bio">Bio</Label>
                 <Input
-                  className="w-4 h-4"
-                  id="everyone"
-                  name="messaging"
-                  type="radio"
-                  value="everyone"
+                  id="bio"
+                  placeholder={profile?.bio}
+                  type="text"
+                  {...register("bio", { required: true, value: profile?.bio || null })}
                 />
-                <Label htmlFor="everyone">Everyone</Label>
-                <Input
-                  className="w-4 h-4"
-                  id="followed"
-                  name="messaging"
-                  type="radio"
-                  value="followed"
-                />
-                <Label htmlFor="followed">Followed Users Only</Label>
-                <Input
-                  className="w-4 h-4"
-                  id="no-one"
-                  name="messaging"
-                  type="radio"
-                  value="no-one"
-                />
-                <Label htmlFor="no-one">No One</Label>
               </div>
-            </div> */}
+            </form>
           </CardContent>
           <CardFooter>
-            <Button className="ml-auto bg-purple-600">Save</Button>
+            <Button
+              onClick={handleSubmit(async (data) => {
+                console.log(data);
+                try {
+                  const result = await user.create({
+                    bio: data.bio,
+                    username: data.username,
+                    picture: {
+                      url: imgUrl || "",
+                      mimetype: {
+                        jpg: null,
+                      },
+                      name: "profile.png",
+                      encoding: "",
+                      size: BigInt(0),
+                      blob: [0],
+                    },
+                    birthday: {
+                      day: 0,
+                      month: 0,
+                      year: 0,
+                    },
+                  });
+                  console.log({ result });
+                } catch (error) {
+                  console.log(error);
+                }
+              })}
+              type="submit"
+              form="user-profile"
+              className="mt-4 ml-auto bg-purple-600">
+              Save
+            </Button>
           </CardFooter>
         </Card>
       </div>

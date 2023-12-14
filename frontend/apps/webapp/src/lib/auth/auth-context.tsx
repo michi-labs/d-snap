@@ -2,6 +2,7 @@ import { CanisterTypes } from "@/declarations";
 import { ActorMap } from "icp-connect-core/client";
 import { useActor, useAuth } from "icp-connect-react/hooks";
 import { ReactNode, createContext, useEffect, useState } from "react";
+import z from "zod";
 
 export type AuthUserProfile = {
   bio: string;
@@ -22,6 +23,24 @@ export type AuthContextType = {
 export type AuthContextProviderType = {
   children: ReactNode;
 };
+
+const ZUserProfileSchema = z.object({
+  bio: z.string(),
+  username: z.string(),
+  picture: z.object({
+    url: z.string(),
+  }),
+  createdAt: z.bigint(),
+});
+
+const ZResponseSchema = z
+  .object({
+    ok: ZUserProfileSchema.optional(),
+    err: z.object({}).optional(),
+  })
+  .refine((data) => (data.ok !== undefined) !== (data.err !== undefined), {
+    message: 'Either "ok" or "err" should be present, but not both.',
+  });
 
 export const AuthContext = createContext({} as AuthContextType);
 
@@ -44,13 +63,19 @@ export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
       try {
         const response = await user.getProfile();
 
-        if ("err" in response) return;
+        const responseParse = ZResponseSchema.safeParse(response);
+
+        if (!responseParse.success) throw new Error(`Invalid response schema: ${responseParse.error}`);
+        if (responseParse.success && "err" in responseParse.data) {
+          // No profile found
+          return;
+        }
 
         const profile: AuthUserProfile = {
-          username: response.ok.username,
-          bio: response.ok.bio,
-          picture: response.ok.picture,
-          createdAt: response.ok.createdAt,
+          username: responseParse.data?.ok?.username || "",
+          bio: responseParse.data?.ok?.bio || "",
+          picture: responseParse.data?.ok?.picture || { url: "" },
+          createdAt: responseParse.data?.ok?.createdAt || BigInt(0),
         };
 
         setProfile(profile);
