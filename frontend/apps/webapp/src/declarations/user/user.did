@@ -1,0 +1,119 @@
+type UserProfile = 
+ record {
+   bio: text;
+   birthday: BirthDay;
+   createdAt: int;
+   picture: Image;
+   username: text;
+ };
+type Result_3 = 
+ variant {
+   err: CreateUserError;
+   ok;
+ };
+type Result_2 = 
+ variant {
+   err: CreatePostError;
+   ok;
+ };
+type Result_1 = 
+ variant {
+   err: GetPostsError;
+   ok: GetPostsResult;
+ };
+type Result = 
+ variant {
+   err: GetProfileError;
+   ok: UserProfile;
+ };
+type PostCommentLike = 
+ record {
+   createdAt: int;
+   userId: principal;
+ };
+type PostComment = 
+ record {
+   comment: text;
+   createdAt: int;
+   id: principal;
+   likes: vec PostCommentLike;
+   linkedComment: opt principal;
+   userId: principal;
+ };
+type Post = 
+ record {
+   comments: vec PostComment;
+   createdAt: int;
+   description: text;
+   id: text;
+   images: vec Image;
+   likes: vec principal;
+   updatedAt: int;
+ };
+type ImageMimeTypes = 
+ variant {
+   jpeg;
+   jpg;
+ };
+type Image = 
+ record {
+   "blob": blob;
+   encoding: text;
+   mimetype: ImageMimeTypes;
+   name: text;
+   size: nat;
+   url: text;
+ };
+type GetProfileError = 
+ variant {
+   userNotAuthenticated;
+   userNotFound;
+ };
+type GetPostsResult = record {data: vec record {
+                                          text;
+                                          Post;
+                                        };};
+type GetPostsFilters = 
+ record {
+   from: int;
+   to: int;
+ };
+type GetPostsError = 
+ variant {
+   userNotAuthenticated;
+   userNotFound;
+ };
+type CreateUserError = 
+ variant {
+   userAlreadyExists;
+   userNotAuthenticated;
+ };
+type CreateUserData = 
+ record {
+   bio: text;
+   birthday: BirthDay;
+   picture: Image;
+   username: text;
+ };
+type CreatePostError = 
+ variant {
+   userNotAuthenticated;
+   userNotFound;
+ };
+type CreatePostData = 
+ record {
+   description: text;
+   images: vec Image;
+ };
+type BirthDay = 
+ record {
+   day: nat8;
+   month: nat8;
+   year: nat8;
+ };
+service : {
+  create: (CreateUserData) -> (Result_3);
+  createPost: (CreatePostData) -> (Result_2);
+  getPosts: (GetPostsFilters) -> (Result_1) composite_query;
+  getProfile: () -> (Result) composite_query;
+}
