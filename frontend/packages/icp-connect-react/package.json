@@ -1,0 +1,21 @@
+{
+  "name": "icp-connect-react",
+  "version": "0.1.0",
+  "main": "index.ts",
+  "author": "MichiLabs",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "@dfinity/agent": "^0.20.2",
+    "@dfinity/auth-client": "^0.20.2",
+    "@dfinity/identity": "^0.20.2",
+    "@dfinity/principal": "^0.20.2",
+    "icp-connect-core": "*",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "ts-loader": "^9.5.1",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  }
+}
