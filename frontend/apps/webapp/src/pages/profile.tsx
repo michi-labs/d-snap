@@ -135,13 +135,6 @@ const ProfilePage = () => {
                     username: data.username,
                     picture: {
                       url: imgUrl || "",
-                      mimetype: {
-                        jpg: null,
-                      },
-                      name: "profile.png",
-                      encoding: "",
-                      size: BigInt(0),
-                      blob: [0],
                     },
                   });
                   console.log({ result });

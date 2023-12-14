@@ -1,6 +1,5 @@
-import { Actor, HttpAgent, Identity } from "@dfinity/agent";
-
 import { ActorMap, CanisterMap, CreateClientOptions, IdentityProviders } from "./client.types";
+import { Actor, HttpAgent, Identity } from "@dfinity/agent";
 
 export class Client<T extends Record<string, any>> {
   private actors: ActorMap<T> = {} as ActorMap<T>;
@@ -59,9 +58,13 @@ export class Client<T extends Record<string, any>> {
   public static async create<T extends Record<string, any>>(options: CreateClientOptions<T>) {
     const { host, canisters, providers } = options;
 
-    Object.keys(providers).forEach(async (key) => {
-      await providers[key].init();
-    });
+    const inits = Object.entries(providers).map(async (current) => current[1].init());
+
+    try {
+      await Promise.all(inits);
+    } catch (error) {
+      throw error;
+    }
 
     const agent = new HttpAgent({
       host,

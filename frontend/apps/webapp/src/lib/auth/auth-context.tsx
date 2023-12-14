@@ -14,10 +14,7 @@ export type AuthUserProfile = {
 };
 
 export type AuthContextType = {
-  isAuth: boolean;
   profile?: AuthUserProfile;
-  login: () => void;
-  logout: () => void;
 };
 
 export type AuthContextProviderType = {
@@ -45,21 +42,20 @@ const ZResponseSchema = z
 export const AuthContext = createContext({} as AuthContextType);
 
 export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
-  const { connect, disconnect } = useAuth();
+  const { isAuthenticated } = useAuth();
   // TODO: Improve this type, example below is not working
   // For now we need to force the type to infer the correct type
   // const user = useActor<CanisterTypes>("user");
   const user = useActor<CanisterTypes>("user") as ActorMap<CanisterTypes>["user"];
 
-  const [isAuth, setIsAuth] = useState<boolean>(false);
   const [profile, setProfile] = useState<AuthUserProfile | undefined>();
 
   useEffect(() => {
     loadProfile();
-  }, [isAuth]);
+  }, [isAuthenticated]);
 
   async function loadProfile() {
-    if (isAuth) {
+    if (isAuthenticated) {
       try {
         const response = await user.getProfile();
 
@@ -88,27 +84,10 @@ export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
     }
   }
 
-  async function login() {
-    try {
-      await connect();
-      setIsAuth(true);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async function logout() {
-    await disconnect();
-    setIsAuth(false);
-  }
-
   return (
     <AuthContext.Provider
       value={{
-        isAuth,
         profile,
-        login,
-        logout,
       }}>
       {children}
     </AuthContext.Provider>
