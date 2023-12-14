@@ -7,18 +7,18 @@ import { useRouter } from "next/navigation";
 import { useContext, useEffect } from "react";
 
 export default function HomePage() {
-  const { isAuth, profile } = useContext(AuthContext);
+  const { isAuthenticated, profile } = useContext(AuthContext);
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (isAuth && profile) {
-  //     // Go to feed
-  //     router.push("/feed");
-  //   } else {
-  //     // Go to profile
-  //     router.push("/profile");
-  //   }
-  // }, [isAuth, profile]);
+  useEffect(() => {
+    if (isAuthenticated && profile) {
+      // Go to feed
+      router.push("/feed");
+    } else {
+      // Go to profile
+      router.push("/profile");
+    }
+  }, [isAuthenticated, profile]);
 
   return (
     <div className="flex items-center justify-center h-screen">
@@ -26,11 +26,11 @@ export default function HomePage() {
         <CardHeader className="space-y-2">
           <CardTitle className="text-center text-3xl font-bold text-gray-900">Welcome to DSnap</CardTitle>
           <CardDescription className="text-center text-lg text-gray-700 flex flex-col">
-            {isAuth ? "Welcome back!" : "Sign in with your ICP identity to get started."}
+            {isAuthenticated ? "Welcome back!" : "Sign in with your ICP identity to get started."}
           </CardDescription>
         </CardHeader>
         <CardContent className="mt-10">
-          {isAuth && (
+          {isAuthenticated && (
             <Link href="/feed">
               <Button className="w-full my-4">Home</Button>
             </Link>

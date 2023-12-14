@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 
 const ProfilePage = () => {
   const { profile } = useContext(AuthContext);
+  console.log({ profile });
   const [imgUrl, setImgUrl] = useState<string | null>(null);
   const [progressPercent, setProgressPercent] = useState(0);
   const {

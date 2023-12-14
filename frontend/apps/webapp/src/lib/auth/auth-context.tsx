@@ -15,6 +15,7 @@ export type AuthUserProfile = {
 
 export type AuthContextType = {
   profile?: AuthUserProfile;
+  isAuthenticated: boolean;
 };
 
 export type AuthContextProviderType = {
@@ -51,43 +52,43 @@ export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
   const [profile, setProfile] = useState<AuthUserProfile | undefined>();
 
   useEffect(() => {
+    async function loadProfile() {
+      if (isAuthenticated) {
+        try {
+          const response = await user.getProfile();
+
+          const responseParse = ZResponseSchema.safeParse(response);
+
+          if (!responseParse.success) throw new Error(`Invalid response schema: ${responseParse.error}`);
+          if (responseParse.success && "err" in responseParse.data) {
+            // No profile found
+            return;
+          }
+
+          const profile: AuthUserProfile = {
+            username: responseParse.data?.ok?.username || "",
+            bio: responseParse.data?.ok?.bio || "",
+            picture: responseParse.data?.ok?.picture || { url: "" },
+            createdAt: responseParse.data?.ok?.createdAt || BigInt(0),
+          };
+
+          setProfile(profile);
+        } catch (error) {
+          console.log({ error });
+          throw error;
+        }
+      } else {
+        setProfile(undefined);
+      }
+    }
     loadProfile();
   }, [isAuthenticated]);
-
-  async function loadProfile() {
-    if (isAuthenticated) {
-      try {
-        const response = await user.getProfile();
-
-        const responseParse = ZResponseSchema.safeParse(response);
-
-        if (!responseParse.success) throw new Error(`Invalid response schema: ${responseParse.error}`);
-        if (responseParse.success && "err" in responseParse.data) {
-          // No profile found
-          return;
-        }
-
-        const profile: AuthUserProfile = {
-          username: responseParse.data?.ok?.username || "",
-          bio: responseParse.data?.ok?.bio || "",
-          picture: responseParse.data?.ok?.picture || { url: "" },
-          createdAt: responseParse.data?.ok?.createdAt || BigInt(0),
-        };
-
-        setProfile(profile);
-      } catch (error) {
-        console.log({ error });
-        throw error;
-      }
-    } else {
-      setProfile(undefined);
-    }
-  }
 
   return (
     <AuthContext.Provider
       value={{
         profile,
+        isAuthenticated,
       }}>
       {children}
     </AuthContext.Provider>
