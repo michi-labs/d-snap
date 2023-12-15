@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { storage } from "@/lib/firebase";
 import Layout from "dsnap/components/layout";
 import { CanisterTypes } from "dsnap/declarations";
+import { useAuthGuard } from "dsnap/hooks/useRouterGuard";
 import { AuthContext } from "dsnap/lib/auth/auth-context";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { ActorMap } from "icp-connect-core/client";
@@ -13,6 +14,8 @@ import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const ProfilePage = () => {
+  useAuthGuard({ isPrivate: true });
+
   const { profile } = useContext(AuthContext);
   console.log({ profile });
   const [imgUrl, setImgUrl] = useState<string | null>(null);

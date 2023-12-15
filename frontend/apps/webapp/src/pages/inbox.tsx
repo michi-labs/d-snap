@@ -1,7 +1,10 @@
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import Layout from "dsnap/components/layout";
+import { useAuthGuard } from "dsnap/hooks/useRouterGuard";
 
 const InboxPage = () => {
+  useAuthGuard({ isPrivate: true });
+
   return (
     <Layout>
       <div className="flex flex-col items-center justify-center">
