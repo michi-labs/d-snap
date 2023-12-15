@@ -1,5 +1,5 @@
-import * as test from "./src/declarations/test";
-import * as user from "./src/declarations/user";
+import * as test from "./declarations/test";
+import * as user from "./declarations/user";
 // @ts-ignore
 import { IC_HOST, INTERNET_IDENTITY_URL } from "@env";
 import { StatusBar } from "expo-status-bar";
