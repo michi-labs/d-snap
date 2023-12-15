@@ -74,14 +74,14 @@ actor User {
 
     type GetPostsError = { #userNotFound; #userNotAuthenticated };
 
-    public composite query ({ caller }) func getPosts(filters : Types.GetPostsFilters) : async Result.Result<Types.GetPostsResult, GetPostsError> {
+    public composite query ({ caller }) func getPosts() : async Result.Result<Types.GetPostsResult, GetPostsError> {
         if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
 
         let user : ?User = users.get(caller);
 
         switch user {
             case (?usr) {
-                let posts : Types.GetPostsResult = await usr.canister.getPosts(filters);
+                let posts : Types.GetPostsResult = await usr.canister.getPosts();
                 #ok(posts);
             };
             case null #err(#userNotFound);
