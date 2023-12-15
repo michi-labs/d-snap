@@ -19,9 +19,9 @@ export const useAuth = (): Auth => {
   const { connect, disconnect, isAuthenticated, identity } = useContext(IcpConnectContext);
 
   return {
+    identity,
+    isAuthenticated,
     connect,
     disconnect,
-    isAuthenticated,
-    identity,
   };
 };
