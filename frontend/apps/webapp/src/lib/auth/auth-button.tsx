@@ -1,11 +1,10 @@
 import { Button } from "../../components/ui/button";
-import { AuthContext } from "./auth-context";
-import { useContext, useEffect, useState } from "react";
+import { useAuth } from "icp-connect-react/hooks";
 
 export function AuthButton() {
-  const { isAuth, login, logout } = useContext(AuthContext);
+  const { isAuthenticated, connect, disconnect } = useAuth();
 
-  return !isAuth ? <LoginButton login={login} /> : <LogoutButton logout={logout} />;
+  return !isAuthenticated ? <LoginButton login={connect} /> : <LogoutButton logout={disconnect} />;
 }
 
 type LoginButtonProps = {

@@ -9,21 +9,13 @@ module {
         username : Text;
         picture : Image.Image;
         bio : Text;
-        // birthday : BirthDay;
         createdAt : Int;
-    };
-
-    public type BirthDay = {
-        month : Nat8;
-        day : Nat8;
-        year : Nat8;
     };
 
     public type CreateUserData = {
         username : Text;
         picture : Image.Image;
         bio : Text;
-        // birthday : BirthDay;
     };
 
     // TODO: improve these fields
