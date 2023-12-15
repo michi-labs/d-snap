@@ -10,8 +10,6 @@ export function useAuthGuard(options: AuthGuardOptions) {
   const router = useRouter();
   const { isAuthenticated, profile } = useContext(AuthContext);
 
-  console.log("path", router.pathname);
-
   if (isAuthenticated && router.pathname === "/login") {
     router.push("feed");
     return;

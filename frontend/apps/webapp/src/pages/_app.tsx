@@ -1,4 +1,5 @@
 import "../app/globals.css";
+import { AppLoader } from "../components/app-loader";
 import { AuthContextProvider } from "../lib/auth/auth-context";
 import { CanisterTypes, Canisters } from "@/declarations";
 import { Client } from "icp-connect-core/client";
@@ -39,6 +40,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       </AuthContextProvider>
     </IcpConnectContextProvider>
   ) : (
-    <div>Loading</div>
+    <AppLoader />
   );
 }
