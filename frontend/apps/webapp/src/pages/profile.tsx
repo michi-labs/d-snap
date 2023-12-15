@@ -6,20 +6,23 @@ import { storage } from "@/lib/firebase";
 import Layout from "dsnap/components/layout";
 import { CanisterTypes } from "dsnap/declarations";
 import { useAuthGuard } from "dsnap/hooks/useRouterGuard";
+import { AuthButton } from "dsnap/lib/auth/auth-button";
 import { AuthContext } from "dsnap/lib/auth/auth-context";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { ActorMap } from "icp-connect-core/client";
 import { useActor } from "icp-connect-react/hooks";
 import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { set } from "zod";
 
 const ProfilePage = () => {
   useAuthGuard({ isPrivate: true });
 
   const { profile } = useContext(AuthContext);
-  console.log({ profile });
+
   const [imgUrl, setImgUrl] = useState<string | null>(null);
   const [progressPercent, setProgressPercent] = useState(0);
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -28,7 +31,6 @@ const ProfilePage = () => {
   const user = useActor<CanisterTypes>("user") as ActorMap<CanisterTypes>["user"];
 
   useEffect(() => {
-    console.log(profile);
     if (profile?.picture?.url) {
       setImgUrl(profile?.picture?.url);
     }
@@ -133,8 +135,9 @@ const ProfilePage = () => {
           </CardContent>
           <CardFooter>
             <Button
+              disabled={loading}
               onClick={handleSubmit(async (data) => {
-                console.log(data);
+                setLoading(true);
                 try {
                   const result = await user.create({
                     bio: data.bio,
@@ -147,12 +150,17 @@ const ProfilePage = () => {
                 } catch (error) {
                   console.log(error);
                 }
+                setLoading(false);
               })}
               type="submit"
               form="user-profile"
               className="mt-4 ml-auto bg-purple-600">
               Save
             </Button>
+
+            <div className="flex items-center justify-end w-16 mt-4">
+              <AuthButton />
+            </div>
           </CardFooter>
         </Card>
       </div>

@@ -7,18 +7,22 @@ import { storage } from "@/lib/firebase";
 import Layout from "dsnap/components/layout";
 import { Input } from "dsnap/components/ui/input";
 import { ScrollArea } from "dsnap/components/ui/scroll-area";
+import { CanisterTypes } from "dsnap/declarations";
 import { useAuthGuard } from "dsnap/hooks/useRouterGuard";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { ActorMap } from "icp-connect-core/client";
+import { useActor } from "icp-connect-react/hooks";
 import Link from "next/link";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 const CreatePostPage = () => {
   useAuthGuard({ isPrivate: true });
-
   const [imgUrl, setImgUrl] = useState<string | null>(null);
   const [progressPercent, setProgressPercent] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: any) => {
+  const handleUploadPostImage = (e: any) => {
     e.preventDefault();
     const file = e.target[0]?.files[0];
     if (!file) return;
@@ -41,6 +45,14 @@ const CreatePostPage = () => {
       }
     );
   };
+
+  const user = useActor<CanisterTypes>("user") as ActorMap<CanisterTypes>["user"];
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   return (
     <Layout>
       <ScrollArea className="h-full">
@@ -55,7 +67,7 @@ const CreatePostPage = () => {
             </Link>
           </CardHeader>
           <CardContent className="p-4">
-            <form onSubmit={handleSubmit} className="form">
+            <form onSubmit={handleUploadPostImage} className="form">
               {!imgUrl && (
                 <div className="outerbar">
                   <div className="innerbar" style={{ width: `${progressPercent}%` }}>
@@ -98,17 +110,40 @@ const CreatePostPage = () => {
                 </Button>
               </div>
             </form>
-
-            <div className="mt-4 grid w-full gap-1.5">
-              <Label htmlFor="image-description">Add a description</Label>
-              <Textarea id="image-description" placeholder="Describe your image here..." />
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Add a compelling description to capture your audience&apos;s attention.
-              </p>
-            </div>
+            <form name="create-post">
+              <div className="mt-4 grid w-full gap-1.5">
+                <Label htmlFor="image-description">Add a description</Label>
+                <Textarea
+                  id="image-description"
+                  placeholder="Describe your image here..."
+                  {...register("description")}
+                />
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Add a compelling description to capture your audience&apos;s attention.
+                </p>
+              </div>
+            </form>
           </CardContent>
           <CardFooter className="p-2">
-            <Button className="w-full bg-purple-600 text-white rounded">Upload</Button>
+            <Button
+              disabled={loading}
+              onClick={handleSubmit(async (data) => {
+                setLoading(true);
+                if (imgUrl === null) return;
+                try {
+                  const result = await user.createPost({
+                    images: [{ url: imgUrl }],
+                    description: data.description,
+                  });
+                  console.log({ result });
+                } catch (error) {
+                  console.log(error);
+                }
+                setLoading(false);
+              })}
+              className="w-full bg-purple-600 text-white rounded">
+              Create Post
+            </Button>
           </CardFooter>
         </Card>
       </ScrollArea>

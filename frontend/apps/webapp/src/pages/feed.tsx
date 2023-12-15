@@ -3,69 +3,103 @@ import { Button } from "@/components/ui/button";
 import { CardHeader, CardContent, CardFooter, Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Layout from "dsnap/components/layout";
+import { CanisterTypes } from "dsnap/declarations";
 import { useAuthGuard } from "dsnap/hooks/useRouterGuard";
+import { AuthContext } from "dsnap/lib/auth/auth-context";
+import { ActorMap } from "icp-connect-core/client";
+import { useActor } from "icp-connect-react/hooks";
 import Link from "next/link";
+import { useContext, useEffect, useState } from "react";
+import z from "zod";
+
+type NestedArray = Array<[string, { id: string; images: { url: string }[]; description: string }]>;
+
+const ZResponseSchema = z.object({
+  ok: z.object({
+    data: z.array(
+      z.tuple([
+        z.string(),
+        z.object({
+          id: z.string(),
+          images: z.array(z.object({ url: z.string() })),
+          description: z.string(),
+        }),
+      ])
+    ),
+  }),
+});
 
 const FeedPage = () => {
   useAuthGuard({ isPrivate: true });
+  const { profile } = useContext(AuthContext);
+  const user = useActor<CanisterTypes>("user") as ActorMap<CanisterTypes>["user"];
+  const [feed, setFeed] = useState<NestedArray>([]);
+  useEffect(() => {
+    async function run() {
+      const res = await user.getPosts();
+      const parsed = ZResponseSchema.safeParse(res);
+      if (parsed.success && parsed.data.ok) {
+        setFeed(parsed.data.ok?.data);
+      }
+    }
+    run();
+  }, []);
 
   return (
     <Layout>
       <div className="flex items-center justify-center h-screen">
         <ScrollArea className="h-full">
           <div className="grid gap-4">
-            <Card className="rounded-none shadow-none border-0">
-              <CardHeader className="p-4 flex flex-row items-center">
-                <Link className="flex items-center gap-2 text-sm font-semibold" href="#">
-                  <Avatar className="w-8 h-8 border">
-                    <AvatarImage alt="@user1" src="/placeholder-user.jpg" />
-                    <AvatarFallback>U1</AvatarFallback>
-                  </Avatar>
-                  User1
-                </Link>
-              </CardHeader>
-              <CardContent className="p-0">
-                <img alt="Image" className="aspect-square object-cover" src="https://placehold.it/500x500" />
-              </CardContent>
-              <CardFooter className="p-2 pb-4 grid gap-2">
-                <div className="flex items-center w-full">
-                  <Button size="icon" variant="ghost">
-                    <HeartIcon className="w-4 h-4" />
-                    <span className="sr-only">Like</span>
-                  </Button>
-                  <Button size="icon" variant="ghost">
-                    <MessageCircleIcon className="w-4 h-4" />
-                    <span className="sr-only">Comment</span>
-                  </Button>
+            {feed.length === 0 && (
+              <div className="flex items-center justify-center h-full mt-11">
+                <div className="flex flex-col items-center justify-center gap-4">
+                  <p className="text-lg font-semibold">No posts yet</p>
+                  <p className="text-sm text-gray-500">When you post, they'll show up here.</p>
                 </div>
-              </CardFooter>
-            </Card>
-            <Card className="rounded-none shadow-none border-0">
-              <CardHeader className="p-4 flex flex-row items-center">
-                <Link className="flex items-center gap-2 text-sm font-semibold" href="#">
-                  <Avatar className="w-8 h-8 border">
-                    <AvatarImage alt="@user2" src="/placeholder-user.jpg" />
-                    <AvatarFallback>U2</AvatarFallback>
-                  </Avatar>
-                  User2
-                </Link>
-              </CardHeader>
-              <CardContent className="p-0">
-                <img alt="Image" className="aspect-square object-cover" src="https://placehold.it/500x500" />
-              </CardContent>
-              <CardFooter className="p-2 pb-4 grid gap-2">
-                <div className="flex items-center w-full">
-                  <Button size="icon" variant="ghost">
-                    <HeartIcon className="w-4 h-4" />
-                    <span className="sr-only">Like</span>
-                  </Button>
-                  <Button size="icon" variant="ghost">
-                    <MessageCircleIcon className="w-4 h-4" />
-                    <span className="sr-only">Comment</span>
-                  </Button>
-                </div>
-              </CardFooter>
-            </Card>
+              </div>
+            )}
+            {feed.map((wrapper) => {
+              const [_id, item] = wrapper;
+              return (
+                <Card key={item.id} className="rounded-none shadow-none border-0">
+                  <CardHeader className="p-4 flex flex-row items-center">
+                    <Link className="flex items-center gap-2 text-sm font-semibold" href="#">
+                      <Avatar className="w-8 h-8 border">
+                        <AvatarImage
+                          alt="@user1"
+                          src={profile?.picture?.url ? profile.picture.url : "https://placehold.it/50x50"}
+                        />
+                        <AvatarFallback>{profile?.username || "User"}</AvatarFallback>
+                      </Avatar>
+                      {profile?.username || "User"}
+                    </Link>
+                  </CardHeader>
+                  <CardContent className="p-0">
+                    <img
+                      alt="Image"
+                      className="aspect-square object-cover"
+                      src={
+                        item.images && item.images[0] ? item.images[0]?.url : "https://placehold.it/500x500"
+                      }
+                    />
+                    {/* put a description */}
+                    <p className="p-4">{item.description}</p>
+                  </CardContent>
+                  <CardFooter className="p-2 pb-4 grid gap-2">
+                    <div className="flex items-center w-full">
+                      <Button size="icon" variant="ghost">
+                        <HeartIcon className="w-4 h-4" />
+                        <span className="sr-only">Like</span>
+                      </Button>
+                      <Button size="icon" variant="ghost">
+                        <MessageCircleIcon className="w-4 h-4" />
+                        <span className="sr-only">Comment</span>
+                      </Button>
+                    </div>
+                  </CardFooter>
+                </Card>
+              );
+            })}
           </div>
         </ScrollArea>
       </div>
