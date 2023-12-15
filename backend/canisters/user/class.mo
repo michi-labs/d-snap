@@ -45,7 +45,7 @@ shared ({ caller }) actor class User(id : Principal, data : Types.CreateUserData
         };
     };
 
-    public query func getPosts(filters : Types.GetPostsFilters) : async Types.GetPostsResult {
+    public query func getPosts() : async Types.GetPostsResult {
         // TODO: implement filters
         let postsIter : Iter.Iter<(Text, Models.Post)> = posts.entries();
         let postsArray : [(Text, Models.Post)] = Iter.toArray(postsIter);
