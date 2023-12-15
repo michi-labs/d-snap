@@ -3,9 +3,12 @@ import { Button } from "@/components/ui/button";
 import { CardHeader, CardContent, CardFooter, Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Layout from "dsnap/components/layout";
+import { useAuthGuard } from "dsnap/hooks/useRouterGuard";
 import Link from "next/link";
 
 const FeedPage = () => {
+  useAuthGuard({ isPrivate: true });
+
   return (
     <Layout>
       <div className="flex items-center justify-center h-screen">
