@@ -11,12 +11,14 @@ export default function HomePage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated && profile) {
-      // Go to feed
-      router.push("/feed");
-    } else {
-      // Go to profile
-      router.push("/profile");
+    if (isAuthenticated) {
+      if (profile) {
+        // Go to feed
+        router.push("/feed");
+      } else {
+        // Go to profile
+        router.push("/profile");
+      }
     }
   }, [isAuthenticated, profile]);
 
