@@ -9,6 +9,7 @@ const defaultConfig: InternetIdentityConfig = {
 };
 
 export class InternetIdentity implements IdentityProvider {
+  private name = "Internet Identity";
   private config: InternetIdentityConfig = defaultConfig;
   private client!: AuthClient;
   private isAuth!: boolean;
@@ -39,6 +40,10 @@ export class InternetIdentity implements IdentityProvider {
     } catch (error) {
       throw error;
     }
+  }
+
+  public getName(): string {
+    return this.name;
   }
 
   public connect(): Promise<void> {

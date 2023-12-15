@@ -3,9 +3,12 @@ import { Button } from "@/components/ui/button";
 import { CardHeader, Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Layout from "dsnap/components/layout";
+import { useAuthGuard } from "dsnap/hooks/useRouterGuard";
 import Link from "next/link";
 
 const FriendListPage = () => {
+  useAuthGuard({ isPrivate: true });
+
   return (
     <Layout>
       <div className="mx-auto max-w-[500px] space-y-6 p-6 h-full">

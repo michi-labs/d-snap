@@ -7,11 +7,14 @@ import { storage } from "@/lib/firebase";
 import Layout from "dsnap/components/layout";
 import { Input } from "dsnap/components/ui/input";
 import { ScrollArea } from "dsnap/components/ui/scroll-area";
+import { useAuthGuard } from "dsnap/hooks/useRouterGuard";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import Link from "next/link";
 import { useState } from "react";
 
 const CreatePostPage = () => {
+  useAuthGuard({ isPrivate: true });
+
   const [imgUrl, setImgUrl] = useState<string | null>(null);
   const [progressPercent, setProgressPercent] = useState(0);
 

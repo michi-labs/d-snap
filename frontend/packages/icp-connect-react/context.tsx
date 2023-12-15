@@ -22,14 +22,14 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
   client,
 }: IcpConnectContextProviderProps<T>) => {
   const [isReady, setIsReady] = useState<boolean>(false);
-  // TODO: implement select auth provider
-  const [currentAuthProvider, setCurrentAuthProvider] = useState<string | null>("internet-identity");
-  const authProvider = currentAuthProvider ? client.getProviders()[currentAuthProvider] : undefined;
+
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [identity, setIdentity] = useState<Identity>(new AnonymousIdentity());
 
+  const authProvider = client.getProviders()["internet-identity"];
+
   useEffect(() => {
-    const identity = authProvider?.getIdentity() || new AnonymousIdentity();
+    const identity = authProvider.getIdentity();
 
     setIdentity(identity);
     client.setIdentity(identity);
@@ -44,8 +44,6 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
   }, []);
 
   async function connect() {
-    if (!authProvider) throw new Error("No auth provider selected");
-
     await authProvider.connect();
     const identity = authProvider.getIdentity();
     setIdentity(identity);
@@ -54,26 +52,25 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
   }
 
   async function disconnect() {
-    await authProvider?.disconnect();
+    await authProvider.disconnect();
     const identity = new AnonymousIdentity();
     setIdentity(identity);
     client.setIdentity(identity);
     setIsAuthenticated(false);
   }
 
-  return isReady ? (
-    <IcpConnectContext.Provider
-      value={{
-        client,
-        identity,
-        isAuthenticated,
-        connect,
-        disconnect,
-      }}>
-      {children}
-    </IcpConnectContext.Provider>
-  ) : (
-    // TODO: Improve this screen
-    <div>Loading</div>
+  return (
+    isReady && (
+      <IcpConnectContext.Provider
+        value={{
+          client,
+          identity,
+          isAuthenticated,
+          connect,
+          disconnect,
+        }}>
+        {children}
+      </IcpConnectContext.Provider>
+    )
   );
 };

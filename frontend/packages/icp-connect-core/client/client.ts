@@ -1,11 +1,11 @@
 import { ActorMap, CanisterMap, CreateClientOptions, IdentityProviders } from "./client.types";
-import { Actor, HttpAgent, Identity } from "@dfinity/agent";
+import { Actor, AnonymousIdentity, HttpAgent, Identity } from "@dfinity/agent";
 
 export class Client<T extends Record<string, any>> {
   private actors: ActorMap<T> = {} as ActorMap<T>;
-  private identity?: Identity;
 
   private constructor(
+    private identity: Identity,
     private readonly agent: HttpAgent,
     private readonly _canisters: CanisterMap<T>,
     private readonly providers: IdentityProviders
@@ -21,7 +21,7 @@ export class Client<T extends Record<string, any>> {
     this.setActors();
   }
 
-  public setIdentity(identity?: Identity) {
+  public setIdentity(identity: Identity) {
     if (identity) this.agent.replaceIdentity(identity);
     else this.agent.invalidateIdentity();
 
@@ -30,7 +30,7 @@ export class Client<T extends Record<string, any>> {
     this.setActors();
   }
 
-  public getIdentity(): Identity | undefined {
+  public getIdentity(): Identity {
     return this.identity;
   }
 
@@ -73,11 +73,13 @@ export class Client<T extends Record<string, any>> {
       throw error;
     }
 
+    const identity = new AnonymousIdentity();
+
     const agent = new HttpAgent({
       host,
-      verifyQuerySignatures: false,
+      identity: new AnonymousIdentity(),
     });
 
-    return new Client<T>(agent, canisters, providers);
+    return new Client<T>(identity, agent, canisters, providers);
   }
 }
