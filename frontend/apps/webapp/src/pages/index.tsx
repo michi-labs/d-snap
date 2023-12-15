@@ -10,17 +10,15 @@ export default function HomePage() {
   const { isAuthenticated, profile } = useContext(AuthContext);
   const router = useRouter();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      if (profile) {
-        // Go to feed
-        router.push("/feed");
-      } else {
-        // Go to profile
-        router.push("/profile");
-      }
-    }
-  }, [isAuthenticated, profile]);
+  // useEffect(() => {
+  //   if (isAuthenticated && profile?.username) {
+  //     // Go to feed
+  //     router.push("/feed");
+  //   } else {
+  //     // Go to profile
+  //     router.push("/profile");
+  //   }
+  // }, [isAuthenticated, profile]);
 
   return (
     <div className="flex items-center justify-center h-screen">

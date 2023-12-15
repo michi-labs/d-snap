@@ -111,17 +111,19 @@ const ProfilePage = () => {
                 <Label htmlFor="username">Username</Label>
                 <Input
                   id="username"
-                  placeholder={profile?.username}
-                  {...register("username", { required: true, value: profile?.username || null })}
+                  placeholder={"Type your desired username"}
+                  value={profile?.username || ""}
+                  {...register("username", { required: true })}
                 />
               </div>
               <div className="space-y-2 mt-2">
                 <Label htmlFor="bio">Bio</Label>
                 <Input
                   id="bio"
-                  placeholder={profile?.bio}
+                  placeholder={"Write something about you"}
                   type="text"
-                  {...register("bio", { required: true, value: profile?.bio || null })}
+                  value={profile?.bio || ""}
+                  {...register("bio", { required: true })}
                 />
               </div>
             </form>
