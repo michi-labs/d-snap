@@ -25,20 +25,27 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
   const [currentAuthProvider, setCurrentAuthProvider] = useState<string | null>("internet-identity");
   const authProvider = currentAuthProvider ? client.getProviders()[currentAuthProvider] : undefined;
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(authProvider?.isAuthenticated() || false);
-  const [identity, setIdentity] = useState<any>(authProvider?.getIdentity() || new AnonymousIdentity());
+  const [identity, setIdentity] = useState<Identity>(authProvider?.getIdentity() || new AnonymousIdentity());
 
   useEffect(() => {
-    client.setIdentity(identity);
-    setIdentity(identity);
+    if (isAuthenticated && !identity.getPrincipal().isAnonymous()) {
+      client.setIdentity(identity);
+    } else if (!isAuthenticated) {
+      setIsAuthenticated(false);
+    }
   }, [isAuthenticated]);
 
   async function connect() {
+    if (!authProvider) throw new Error("No auth provider selected");
+
     await authProvider?.connect();
+    setIdentity(authProvider?.getIdentity());
     setIsAuthenticated(true);
   }
 
   async function disconnect() {
     await authProvider?.disconnect();
+    setIdentity(new AnonymousIdentity());
     setIsAuthenticated(false);
   }
 

@@ -3,6 +3,7 @@ import { Actor, HttpAgent, Identity } from "@dfinity/agent";
 
 export class Client<T extends Record<string, any>> {
   private actors: ActorMap<T> = {} as ActorMap<T>;
+  private identity?: Identity;
 
   private constructor(
     private readonly agent: HttpAgent,
@@ -24,7 +25,13 @@ export class Client<T extends Record<string, any>> {
     if (identity) this.agent.replaceIdentity(identity);
     else this.agent.invalidateIdentity();
 
+    this.identity = identity;
+
     this.setActors();
+  }
+
+  public getIdentity(): Identity | undefined {
+    return this.identity;
   }
 
   private setActors(): void {
