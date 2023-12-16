@@ -14,7 +14,7 @@ export class Client<T extends Record<string, any>> {
   }
 
   private init(): void {
-    this.agent.fetchRootKey().then((err: any) => {
+    this.agent.fetchRootKey().then(() => {
       console.warn("Unable to fetch root key. Check to ensure that your local replica is running");
     });
 

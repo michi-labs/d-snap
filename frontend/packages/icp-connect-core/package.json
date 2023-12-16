@@ -1,10 +1,13 @@
 {
   "name": "icp-connect-core",
   "version": "0.1.0",
-  "main": "index.ts",
+  "main": "build/index.js",
   "author": "MichiLabs",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "build": "webpack --mode production"
+  },
   "dependencies": {
     "@dfinity/agent": "^0.20.2",
     "@dfinity/auth-client": "^0.20.2",
@@ -14,6 +17,7 @@
   },
   "devDependencies": {
     "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4"
   }
