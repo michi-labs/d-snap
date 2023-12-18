@@ -18,6 +18,7 @@ export const KEY_STORAGE_DELEGATION = "delegation";
 export type StoredKey = string | CryptoKeyPair;
 
 export class InternetIdentityReactNative implements NativeIdentityProvider {
+  public name = "Internet Identity";
   private _identity: Identity = new AnonymousIdentity();
   private _key: SignIdentity | null = null;
   private _chain: DelegationChain | null = null;
@@ -41,6 +42,10 @@ export class InternetIdentityReactNative implements NativeIdentityProvider {
       const key = Ed25519KeyIdentity.generate();
       await this.saveKey(key);
     }
+  }
+
+  public getName(): string {
+    return this.name;
   }
 
   private async getKey(): Promise<Ed25519KeyIdentity | undefined> {

@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { AuthContext } from "dsnap/lib/auth/auth-context";
 import Link from "next/link";
-import { ReactNode } from "react";
+import { ReactNode, useContext } from "react";
 
 export default function Layout({ children }: { children: ReactNode }) {
+  const { profile } = useContext(AuthContext);
   return (
     <div className="w-[500px] h-screen relative mx-auto">
       <main>{children}</main>
@@ -14,30 +16,30 @@ export default function Layout({ children }: { children: ReactNode }) {
               <span className="sr-only">Home</span>
             </Button>
           </Link>
-          <Link href="/inbox">
+          {/* <Link href="/inbox">
             <Button size="icon" variant="ghost">
               <InboxIcon className="w-6 h-6 text-gray-500" />
               <span className="sr-only">Inbox</span>
             </Button>
-          </Link>
+          </Link> */}
           <Link href="/create-post">
             <Button size="icon" variant="ghost">
               <PlusIcon className="w-6 h-6 text-gray-500" />
               <span className="sr-only">Add new</span>
             </Button>
           </Link>
-          <Link href="/friend-list">
+          {/* <Link href="/friend-list">
             <Button size="icon" variant="ghost">
               <FriendListIcon className="w-6 h-6 text-gray-500" />
               <span className="sr-only">Friends</span>
             </Button>
-          </Link>
+          </Link> */}
           <Link href="/profile">
             <Button size="icon" variant="ghost">
               <img
                 alt="Avatar"
                 className="rounded-full"
-                src="https://placehold.it/32x32"
+                src={profile && profile.picture?.url ? profile.picture.url : "https://placehold.it/32x32"}
                 style={{
                   aspectRatio: "32/32",
                   objectFit: "cover",
