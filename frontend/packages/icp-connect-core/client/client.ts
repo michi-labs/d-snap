@@ -14,9 +14,16 @@ export class Client<T extends Record<string, any>> {
   }
 
   private init(): void {
-    this.agent.fetchRootKey().then(() => {
-      console.warn("Unable to fetch root key. Check to ensure that your local replica is running");
-    });
+    this.agent
+      .fetchRootKey()
+      .then((key) => {
+        console.log("Root key fetched");
+        console.log({ key });
+      })
+      .catch((err: any) => {
+        console.warn("Unable to fetch root key. Check to ensure that your local replica is running");
+        console.log({ err });
+      });
 
     this.setActors();
   }
@@ -67,6 +74,7 @@ export class Client<T extends Record<string, any>> {
 
     const inits = Object.entries(providers).map(async (current) => current[1].init());
 
+    // TODO: donn't initialize inits here
     try {
       await Promise.all(inits);
     } catch (error) {

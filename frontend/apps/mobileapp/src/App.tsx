@@ -1,3 +1,4 @@
+import { AuthButton } from "./components/auth/auth-button";
 import * as test from "./declarations/test";
 import * as user from "./declarations/user";
 // @ts-ignore
@@ -44,6 +45,7 @@ export default function App() {
     <IcpConnectContextProvider client={client}>
       <View style={styles.container}>
         <Text>Open up App.tsx to start working on your app!</Text>
+        <AuthButton />
         <StatusBar style="auto" />
       </View>
     </IcpConnectContextProvider>
