@@ -34,6 +34,7 @@ export class InternetIdentityReactNative implements NativeIdentityProvider {
     }
 
     if (localKey) {
+      this._key = localKey;
       if (localChain && isDelegationValid(localChain)) {
         const identity = DelegationIdentity.fromDelegation(localKey, localChain);
         this._identity = identity;
