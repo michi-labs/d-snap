@@ -10,7 +10,10 @@ const projectRoot = __dirname;
 // This can be replaced with `find-yarn-workspace-root`
 const workspaceRoot = path.resolve(projectRoot, '../../..');
 
-const config = getDefaultConfig(projectRoot);
+const config = getDefaultConfig(projectRoot, {
+    // [Web-only]: Enables CSS support in Metro.
+    isCSSEnabled: true,
+});
 
 // 1. Watch all files within the monorepo
 config.watchFolders = [workspaceRoot];

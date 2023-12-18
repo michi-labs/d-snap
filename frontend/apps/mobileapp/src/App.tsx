@@ -1,14 +1,16 @@
-import { AuthButton } from "./components/auth/auth-button";
 import * as test from "./declarations/test";
 import * as user from "./declarations/user";
+import { Home } from "./pages/Home";
+import { Login } from "./pages/Login";
 // @ts-ignore
 import { IC_HOST, INTERNET_IDENTITY_URL } from "@env";
-import { StatusBar } from "expo-status-bar";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Client } from "icp-connect-core/client";
 import { InternetIdentityReactNative } from "icp-connect-react-native/identity-providers";
 import { IcpConnectContextProvider } from "icp-connect-react/context";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Text } from "react-native";
 
 const canisters = {
   test,
@@ -41,24 +43,19 @@ export default function App() {
     setClient(client);
   }
 
+  const Stack = createNativeStackNavigator();
+
   return client ? (
     <IcpConnectContextProvider client={client}>
-      <View style={styles.container}>
-        <Text>Open up App.tsx to start working on your app!</Text>
-        <AuthButton />
-        <StatusBar style="auto" />
-      </View>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="login" component={Login} options={{ headerShown: false }} />
+          {/* TODO: add tabs */}
+          {/* <Stack.Screen name="home" component={Home} /> */}
+        </Stack.Navigator>
+      </NavigationContainer>
     </IcpConnectContextProvider>
   ) : (
     <Text>Loading...</Text>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
