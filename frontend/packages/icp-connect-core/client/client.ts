@@ -14,6 +14,7 @@ export class Client<T extends Record<string, any>> {
   }
 
   private init(): void {
+    // TODO: only in development
     this.agent
       .fetchRootKey()
       .then((key) => {
