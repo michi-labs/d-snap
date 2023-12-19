@@ -54,7 +54,7 @@ const FeedPage = () => {
               <div className="flex items-center justify-center h-full mt-11">
                 <div className="flex flex-col items-center justify-center gap-4">
                   <p className="text-lg font-semibold">No posts yet</p>
-                  <p className="text-sm text-gray-500">When you post, they'll show up here.</p>
+                  <p className="text-sm text-gray-500">When you post, they&apos;ll show up here.</p>
                 </div>
               </div>
             )}
