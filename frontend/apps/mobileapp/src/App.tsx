@@ -2,6 +2,7 @@ import * as test from "./declarations/test";
 import * as user from "./declarations/user";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
+import SuccessPage from "./pages/Success";
 // @ts-ignore
 import { IC_HOST, INTERNET_IDENTITY_URL } from "@env";
 import { NavigationContainer } from "@react-navigation/native";
@@ -52,6 +53,7 @@ export default function App() {
           <Stack.Screen name="login" component={Login} options={{ headerShown: false }} />
           {/* TODO: add tabs */}
           {/* <Stack.Screen name="home" component={Home} /> */}
+          <Stack.Screen name="success" component={SuccessPage} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </IcpConnectContextProvider>
