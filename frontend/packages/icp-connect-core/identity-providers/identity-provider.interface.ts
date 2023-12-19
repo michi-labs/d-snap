@@ -10,6 +10,6 @@ export interface IdentityProvider {
   isAuthenticated: () => boolean;
   getIdentity: () => Identity;
   getPrincipal: () => Principal;
-  // This is mandatory if type is "native"
+  // TODO: This is mandatory if type is "native"
   onAppLinkOpened?: (params: URLSearchParams) => Promise<void>;
 }
