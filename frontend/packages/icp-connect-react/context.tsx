@@ -1,5 +1,5 @@
 import { AnonymousIdentity, Identity } from "@dfinity/agent";
-import { Client } from "icp-connect-core/client";
+import { Client } from "icp-connect-core";
 import React, { ReactNode, createContext, useEffect, useState } from "react";
 
 export type IcpConnectContextType<T extends Record<string, any>> = {
@@ -8,6 +8,7 @@ export type IcpConnectContextType<T extends Record<string, any>> = {
   isAuthenticated: boolean;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
+  onAppLinkOpened(params: URLSearchParams): Promise<void>;
 };
 
 export type IcpConnectContextProviderProps<T extends Record<string, any>> = {
@@ -45,10 +46,13 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
 
   async function connect() {
     await authProvider.connect();
-    const identity = authProvider.getIdentity();
-    setIdentity(identity);
-    client.setIdentity(identity);
-    setIsAuthenticated(true);
+
+    if (authProvider.type === "web") {
+      const identity = authProvider.getIdentity();
+      client.setIdentity(identity);
+      setIdentity(identity);
+      setIsAuthenticated(true);
+    }
   }
 
   async function disconnect() {
@@ -57,6 +61,21 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
     setIdentity(identity);
     client.setIdentity(identity);
     setIsAuthenticated(false);
+  }
+
+  async function onAppLinkOpened(params: URLSearchParams) {
+    if (authProvider.type !== "native") {
+      console.warn("onAppLinkOpened only should called in native apps");
+    }
+
+    if (authProvider.onAppLinkOpened) {
+      await authProvider.onAppLinkOpened(params);
+
+      const identity = authProvider.getIdentity();
+      client.setIdentity(identity);
+      setIdentity(identity);
+      setIsAuthenticated(true);
+    }
   }
 
   return (
@@ -68,6 +87,7 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
           isAuthenticated,
           connect,
           disconnect,
+          onAppLinkOpened,
         }}>
         {children}
       </IcpConnectContext.Provider>

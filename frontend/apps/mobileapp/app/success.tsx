@@ -1,7 +1,12 @@
+import { useAuth } from "icp-connect-react/hooks";
 import { useEffect } from "react";
 import { Text, View } from "react-native";
 
 const SuccessPage = () => {
+  const { onAppLinkOpened } = useAuth();
+
+  // TODO: Execute here onAppLinkOpened
+
   useEffect(() => {
     console.log("success");
   }, []);

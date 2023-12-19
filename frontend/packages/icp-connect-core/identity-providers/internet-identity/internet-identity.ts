@@ -1,6 +1,6 @@
 import { IdentityProvider } from "../identity-provider.interface";
 import { InternetIdentityConfig } from "./internet-identity.types";
-import { Identity } from "@dfinity/agent";
+import { AnonymousIdentity, Identity } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
 import { Principal } from "@dfinity/principal";
 
@@ -9,12 +9,13 @@ const defaultConfig: InternetIdentityConfig = {
 };
 
 export class InternetIdentity implements IdentityProvider {
+  public type: "web" | "native" = "web";
   private name = "Internet Identity";
   private config: InternetIdentityConfig = defaultConfig;
   private client!: AuthClient;
-  private isAuth!: boolean;
-  private identity!: Identity;
-  private principal!: Principal;
+  private isAuth: boolean = false;
+  private identity: Identity = new AnonymousIdentity();
+  private principal: Principal = this.identity.getPrincipal();
 
   constructor(config: InternetIdentityConfig = {}) {
     this.config = {
@@ -64,12 +65,15 @@ export class InternetIdentity implements IdentityProvider {
   public async disconnect(): Promise<void> {
     if (!this.client) throw new Error("init must be called before this method");
 
-    try {
-      await this.client.logout();
-      await this.setData();
-    } catch (error) {
-      throw error;
-    }
+    return new Promise<void>(async (resolve, reject) => {
+      try {
+        await this.client.logout();
+        await this.setData();
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
   public isAuthenticated(): boolean {

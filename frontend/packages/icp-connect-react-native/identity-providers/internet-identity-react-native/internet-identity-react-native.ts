@@ -10,14 +10,15 @@ import { Principal } from "@dfinity/principal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 import * as WebBrowser from "expo-web-browser";
-import { NativeIdentityProvider } from "icp-connect-core/identity-providers";
+import { ConnectOptions, IdentityProvider } from "icp-connect-core/identity-providers";
 
 export const KEY_STORAGE_KEY = "identity";
 export const KEY_STORAGE_DELEGATION = "delegation";
 
 export type StoredKey = string | CryptoKeyPair;
 
-export class InternetIdentityReactNative implements NativeIdentityProvider {
+export class InternetIdentityReactNative implements IdentityProvider {
+  public type: "web" | "native" = "native";
   public name = "Internet Identity";
   private _identity: Identity = new AnonymousIdentity();
   private _key: SignIdentity | null = null;
@@ -74,12 +75,11 @@ export class InternetIdentityReactNative implements NativeIdentityProvider {
     return SecureStore.deleteItemAsync("delegation");
   }
 
-  public async successHandler(url: string): Promise<void> {
+  public async onAppLinkOpened(params: URLSearchParams): Promise<void> {
     if (!this.getPrincipal().isAnonymous()) return;
 
-    const search = new URLSearchParams(url?.split("?")[1]);
-    const delegations = search.get("delegations");
-    const userPublicKey = search.get("userPublicKey");
+    const delegations = params.get("delegations");
+    const userPublicKey = params.get("userPublicKey");
     // TODO: validate this._key === userPublicKey
 
     if (delegations && userPublicKey) {
