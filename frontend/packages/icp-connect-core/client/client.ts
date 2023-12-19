@@ -44,7 +44,7 @@ export class Client<T extends Record<string, any>> {
   private isLocal(): boolean {
     const { hostname } = this.host;
     const localHostNames = ["127.0.0.1", "localhost"];
-    // Support for ngrok
+    // TODO: wildcard for ngrok free and premium
     const ngrokHostName = /^.*\.ngrok-free\.app$/;
 
     return localHostNames.includes(hostname) || ngrokHostName.test(hostname);
