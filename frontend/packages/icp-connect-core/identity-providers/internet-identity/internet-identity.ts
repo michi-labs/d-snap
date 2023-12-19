@@ -1,3 +1,4 @@
+import { ConnectError } from "../../errors/connect.error";
 import { IdentityProvider } from "../identity-provider.interface";
 import { InternetIdentityConfig } from "./internet-identity.types";
 import { AnonymousIdentity, Identity } from "@dfinity/agent";
@@ -9,7 +10,7 @@ const defaultConfig: InternetIdentityConfig = {
 };
 
 export class InternetIdentity implements IdentityProvider {
-  public type: "web" | "native" = "web";
+  public readonly type = "web";
   private name = "Internet Identity";
   private config: InternetIdentityConfig = defaultConfig;
   private client!: AuthClient;
@@ -50,14 +51,16 @@ export class InternetIdentity implements IdentityProvider {
   public connect(): Promise<void> {
     if (!this.client) throw new Error("init must be called before this method");
 
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve) => {
       this.client.login({
         identityProvider: this.config.providerUrl,
         onSuccess: async () => {
           await this.setData();
           resolve();
         },
-        onError: reject,
+        onError: (reason) => {
+          throw new ConnectError(reason);
+        },
       });
     });
   }

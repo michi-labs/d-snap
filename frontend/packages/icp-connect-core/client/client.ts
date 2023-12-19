@@ -1,32 +1,53 @@
+import { FetchRootKeyError } from "../errors";
 import { ActorMap, CanisterMap, CreateClientOptions, IdentityProviders } from "./client.types";
 import { Actor, AnonymousIdentity, HttpAgent, Identity } from "@dfinity/agent";
 
 export class Client<T extends Record<string, any>> {
+  private readonly host: URL;
+  private readonly agent: HttpAgent;
+  private identity: Identity;
   private actors: ActorMap<T> = {} as ActorMap<T>;
 
   private constructor(
-    private identity: Identity,
-    private readonly agent: HttpAgent,
+    host: string,
     private readonly _canisters: CanisterMap<T>,
     private readonly providers: IdentityProviders
   ) {
+    this.identity = new AnonymousIdentity();
+
+    this.host = new URL(host);
+
+    this.agent = new HttpAgent({
+      host: this.host.origin,
+      identity: new AnonymousIdentity(),
+    });
+
     this.init();
   }
 
   private init(): void {
-    // TODO: only in development
-    this.agent
-      .fetchRootKey()
-      .then((key) => {
-        console.log("Root key fetched");
-        console.log({ key });
-      })
-      .catch((err: any) => {
-        console.warn("Unable to fetch root key. Check to ensure that your local replica is running");
-        console.log({ err });
-      });
+    if (this.isLocal()) {
+      this.agent
+        .fetchRootKey()
+        .then((key) => {
+          console.log("Root key fetched");
+          console.log({ key });
+        })
+        .catch((err: any) => {
+          throw new FetchRootKeyError(err);
+        });
+    }
 
     this.setActors();
+  }
+
+  private isLocal(): boolean {
+    const { hostname } = this.host;
+    const localHostNames = ["127.0.0.1", "localhost"];
+    // Support for ngrok
+    const ngrokHostName = /^.*\.ngrok-free\.app$/;
+
+    return localHostNames.includes(hostname) || ngrokHostName.test(hostname);
   }
 
   public setIdentity(identity: Identity) {
@@ -82,13 +103,6 @@ export class Client<T extends Record<string, any>> {
       throw error;
     }
 
-    const identity = new AnonymousIdentity();
-
-    const agent = new HttpAgent({
-      host,
-      identity: new AnonymousIdentity(),
-    });
-
-    return new Client<T>(identity, agent, canisters, providers);
+    return new Client<T>(host, canisters, providers);
   }
 }

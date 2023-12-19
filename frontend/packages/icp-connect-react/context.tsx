@@ -45,13 +45,17 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
   }, []);
 
   async function connect() {
-    await authProvider.connect();
+    try {
+      await authProvider.connect();
 
-    if (authProvider.type === "web") {
-      const identity = authProvider.getIdentity();
-      client.setIdentity(identity);
-      setIdentity(identity);
-      setIsAuthenticated(true);
+      if (authProvider.type === "web") {
+        const identity = authProvider.getIdentity();
+        client.setIdentity(identity);
+        setIdentity(identity);
+        setIsAuthenticated(true);
+      }
+    } catch (error) {
+      throw error;
     }
   }
 
