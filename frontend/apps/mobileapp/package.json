@@ -1,8 +1,8 @@
 {
-  "name": "mobileapp",
+  "name": "dsnap",
   "version": "0.1.0",
   "private": true,
-  "main": "expo-router/entry",
+  "main": "./index.js",
   "scripts": {
     "dev": "expo start",
     "dev:android": "expo start --android",
