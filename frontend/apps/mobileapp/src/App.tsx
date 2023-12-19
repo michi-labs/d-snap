@@ -1,12 +1,8 @@
 import * as test from "./declarations/test";
 import * as user from "./declarations/user";
-import { Home } from "./pages/Home";
-import { Login } from "./pages/Login";
-import SuccessPage from "./pages/Success";
 // @ts-ignore
 import { IC_HOST, INTERNET_IDENTITY_URL } from "@env";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { ExpoRoot } from "expo-router";
 import { Client } from "icp-connect-core/client";
 import { InternetIdentityReactNative } from "icp-connect-react-native/identity-providers";
 import { IcpConnectContextProvider } from "icp-connect-react/context";
@@ -44,18 +40,11 @@ export default function App() {
     setClient(client);
   }
 
-  const Stack = createNativeStackNavigator();
+  const ctx = require.context("../app");
 
   return client ? (
     <IcpConnectContextProvider client={client}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="login" component={Login} options={{ headerShown: false }} />
-          {/* TODO: add tabs */}
-          {/* <Stack.Screen name="home" component={Home} /> */}
-          <Stack.Screen name="success" component={SuccessPage} options={{ headerShown: false }} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <ExpoRoot context={ctx} />
     </IcpConnectContextProvider>
   ) : (
     <Text>Loading...</Text>
