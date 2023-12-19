@@ -10,7 +10,7 @@ import { Principal } from "@dfinity/principal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 import * as WebBrowser from "expo-web-browser";
-import { ConnectError, IdentityProvider } from "icp-connect-core";
+import { IdentityProvider } from "icp-connect-core";
 
 export const KEY_STORAGE_KEY = "identity";
 export const KEY_STORAGE_DELEGATION = "delegation";
@@ -115,7 +115,7 @@ export class InternetIdentityReactNative implements IdentityProvider {
       url.searchParams.set("pubkey", derKey);
       await WebBrowser.openBrowserAsync(url.toString());
     } catch (error) {
-      throw new ConnectError(error);
+      throw error;
     }
   }
 
