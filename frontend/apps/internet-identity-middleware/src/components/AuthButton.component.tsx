@@ -10,7 +10,7 @@ const AuthButton = () => {
     </Button>
   ) : (
     <Button className="text-sm w-full mb-3 bg-blue-600 text-white" onClick={() => navigate()}>
-      Go back
+      Redirect me to app
     </Button>
   );
 };

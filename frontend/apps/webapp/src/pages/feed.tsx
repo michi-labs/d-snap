@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button";
 import { CardHeader, CardContent, CardFooter, Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Layout from "dsnap/components/layout";
-import { CanisterTypes } from "dsnap/declarations";
 import { useAuthGuard } from "dsnap/hooks/useRouterGuard";
 import { AuthContext } from "dsnap/lib/auth/auth-context";
+import { CanisterTypes } from "dsnap/lib/canisters";
 import { ActorMap } from "icp-connect-core/client";
 import { useActor } from "icp-connect-react/hooks";
 import Link from "next/link";
@@ -54,7 +54,7 @@ const FeedPage = () => {
               <div className="flex items-center justify-center h-full mt-11">
                 <div className="flex flex-col items-center justify-center gap-4">
                   <p className="text-lg font-semibold">No posts yet</p>
-                  <p className="text-sm text-gray-500">When you post, they'll show up here.</p>
+                  <p className="text-sm text-gray-500">When you post, they&apos;ll show up here.</p>
                 </div>
               </div>
             )}

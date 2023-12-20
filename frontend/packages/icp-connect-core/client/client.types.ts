@@ -1,4 +1,4 @@
-import { IdentityProvider } from "../identity-providers/identity-provider.interface";
+import { IdentityProvider } from "../identity-providers";
 import { ActorConfig, Agent, HttpAgentOptions } from "@dfinity/agent";
 import { IDL } from "@dfinity/candid";
 import { Principal } from "@dfinity/principal";

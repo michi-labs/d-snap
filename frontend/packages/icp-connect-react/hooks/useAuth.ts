@@ -9,19 +9,21 @@ export type LoginOptions = {
 };
 
 export type Auth = {
+  identity: Identity;
+  isAuthenticated: boolean;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
-  isAuthenticated: boolean;
-  identity: Identity;
+  onAppLinkOpened: (params: URLSearchParams) => Promise<void>;
 };
 
 export const useAuth = (): Auth => {
-  const { connect, disconnect, isAuthenticated, identity } = useContext(IcpConnectContext);
+  const { identity, isAuthenticated, connect, disconnect, onAppLinkOpened } = useContext(IcpConnectContext);
 
   return {
     identity,
     isAuthenticated,
     connect,
     disconnect,
+    onAppLinkOpened,
   };
 };
