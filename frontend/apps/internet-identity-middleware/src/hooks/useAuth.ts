@@ -1,17 +1,14 @@
-import { useContext, useState } from "react";
+import { AuthContext } from "../context/auth.context";
+import { IncompleteEd25519KeyIdentity } from "../services/incomplete-identity";
+import { useParams } from "./useParams";
 import { fromHex } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
-
-import { AuthContext } from "../context/auth.context";
-import { useParams } from "./useParams";
 import { DelegationIdentity, Ed25519PublicKey } from "@dfinity/identity";
-import { IncompleteEd25519KeyIdentity } from "../services/incomplete-identity";
+import { useContext, useState } from "react";
 
 const INTERNET_IDENTITY_PROVIDER_DEFAULT_URL = "https://identity.ic0.app";
-const INTERNET_IDENTITY_PROVIDER_URL =
-  process.env.REACT_APP_INTERNET_IDENTITY_PROVIDER_URL;
-export const IDENTITY_PROVIDER =
-  INTERNET_IDENTITY_PROVIDER_URL || INTERNET_IDENTITY_PROVIDER_DEFAULT_URL;
+const INTERNET_IDENTITY_PROVIDER_URL = process.env.REACT_APP_INTERNET_IDENTITY_PROVIDER_URL;
+export const IDENTITY_PROVIDER = INTERNET_IDENTITY_PROVIDER_URL || INTERNET_IDENTITY_PROVIDER_DEFAULT_URL;
 
 export const useAuth = () => {
   const { isAuth, authenticate } = useContext(AuthContext);
@@ -41,6 +38,9 @@ export const useAuth = () => {
             authenticate();
           }
         },
+        onError: (err) => {
+          console.log(err);
+        },
       });
     } catch (error) {
       throw error;
@@ -51,8 +51,9 @@ export const useAuth = () => {
     if (!delegation) throw new Error("delegation not defined");
 
     window.open(
-      `${redirect_uri}authorize-client-success?key=${pubkey}&delegation=${delegation}`
+    const url = new URL(decodeURIComponent(redirect_uri));
     );
+    window.open(`${url.href}?key=${pubkey}&delegation=${delegation}`);
   }
 
   return {
