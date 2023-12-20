@@ -10,14 +10,15 @@ import { Principal } from "@dfinity/principal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 import * as WebBrowser from "expo-web-browser";
-import { NativeIdentityProvider } from "icp-connect-core/identity-providers";
+import { IdentityProvider } from "icp-connect-core";
 
 export const KEY_STORAGE_KEY = "identity";
 export const KEY_STORAGE_DELEGATION = "delegation";
 
 export type StoredKey = string | CryptoKeyPair;
 
-export class InternetIdentityReactNative implements NativeIdentityProvider {
+export class InternetIdentityReactNative implements IdentityProvider {
+  public readonly type = "native";
   public name = "Internet Identity";
   private _identity: Identity = new AnonymousIdentity();
   private _key: SignIdentity | null = null;
@@ -34,6 +35,7 @@ export class InternetIdentityReactNative implements NativeIdentityProvider {
     }
 
     if (localKey) {
+      this._key = localKey;
       if (localChain && isDelegationValid(localChain)) {
         const identity = DelegationIdentity.fromDelegation(localKey, localChain);
         this._identity = identity;
@@ -73,12 +75,11 @@ export class InternetIdentityReactNative implements NativeIdentityProvider {
     return SecureStore.deleteItemAsync("delegation");
   }
 
-  public async successHandler(url: string): Promise<void> {
+  public async onAppLinkOpened(params: URLSearchParams): Promise<void> {
     if (!this.getPrincipal().isAnonymous()) return;
 
-    const search = new URLSearchParams(url?.split("?")[1]);
-    const delegations = search.get("delegations");
-    const userPublicKey = search.get("userPublicKey");
+    const delegations = params.get("delegations");
+    const userPublicKey = params.get("userPublicKey");
     // TODO: validate this._key === userPublicKey
 
     if (delegations && userPublicKey) {
@@ -101,17 +102,21 @@ export class InternetIdentityReactNative implements NativeIdentityProvider {
   public async connect(): Promise<void> {
     if (!this._key) throw new Error("Key not set");
 
-    // If `connect` has been called previously, then close/remove any previous windows
-    WebBrowser.dismissBrowser();
+    try {
+      // If `connect` has been called previously, then close/remove any previous windows
+      WebBrowser.dismissBrowser();
 
-    const derKey = toHex(this._key.getPublicKey().toDer());
+      const derKey = toHex(this._key.getPublicKey().toDer());
 
-    // Open a new window with the IDP provider.
-    const url = new URL(this.config.providerUrl);
-    url.searchParams.set("redirect_uri", encodeURIComponent(this.config.appLink));
+      // Open a new window with the IDP provider.
+      const url = new URL(this.config.providerUrl);
+      url.searchParams.set("redirect_uri", encodeURIComponent(this.config.appLink));
 
-    url.searchParams.set("pubkey", derKey);
-    await WebBrowser.openBrowserAsync(url.toString());
+      url.searchParams.set("pubkey", derKey);
+      await WebBrowser.openBrowserAsync(url.toString());
+    } catch (error) {
+      throw error;
+    }
   }
 
   public async disconnect(): Promise<void> {

@@ -1,4 +1,4 @@
-import { CanisterTypes } from "@/declarations";
+import { CanisterTypes } from "../canisters";
 import { ActorMap } from "icp-connect-core/client";
 import { useActor, useAuth } from "icp-connect-react/hooks";
 import { ReactNode, createContext, useEffect, useState } from "react";
