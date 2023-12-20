@@ -43,6 +43,7 @@ export const useAuth = () => {
         },
       });
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -50,9 +51,8 @@ export const useAuth = () => {
   function navigate() {
     if (!delegation) throw new Error("delegation not defined");
 
-    window.open(
     const url = new URL(decodeURIComponent(redirect_uri));
-    );
+
     window.open(`${url.href}?key=${pubkey}&delegation=${delegation}`);
   }
 
