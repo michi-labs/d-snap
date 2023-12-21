@@ -1,9 +1,11 @@
-import { useAuth } from "icp-connect-react/hooks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Linking, Text, View } from "react-native";
+
+import { useAuth } from "icp-connect-react/hooks";
 
 const SuccessPage = () => {
   const { onAppLinkOpened } = useAuth();
+  const [params, setParams] = useState<URLSearchParams | undefined>(undefined);
 
   // TODO: Execute here onAppLinkOpened
 
@@ -17,6 +19,7 @@ const SuccessPage = () => {
         const url = new URL(urlString);
         const params = new URLSearchParams(url.search);
         await onAppLinkOpened(params);
+        setParams(params);
         // TODO: Navigate Profile
       } else {
         console.warn("No initial URL found");
@@ -30,6 +33,7 @@ const SuccessPage = () => {
     <View>
       <Text>Mobile App</Text>
       <Text>Coming soon...</Text>
+      <Text>{params && JSON.stringify(params)}</Text>
     </View>
   );
 };
