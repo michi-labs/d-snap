@@ -1,12 +1,15 @@
-import "../app/globals.css";
-import { AppLoader } from "../components/app-loader";
-import { AuthContextProvider } from "../lib/auth/auth-context";
-import { canisters, CanisterTypes } from "dsnap/lib/canisters";
+import { AppProps } from "next/app";
+import { useEffect, useState } from "react";
+
 import { Client } from "icp-connect-core/client";
 import { InternetIdentity } from "icp-connect-core/identity-providers";
 import { IcpConnectContextProvider } from "icp-connect-react/context";
-import { AppProps } from "next/app";
-import { useEffect, useState } from "react";
+
+import { AppLoader } from "@/components/app-loader";
+import { AuthContextProvider } from "@/lib/auth/auth-context";
+import { CanisterTypes, canisters } from "@/lib/canisters";
+
+import "../app/globals.css";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const [client, setClient] = useState<Client<CanisterTypes> | undefined>();

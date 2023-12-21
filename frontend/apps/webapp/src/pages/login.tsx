@@ -1,6 +1,6 @@
-import { AuthButton } from "../lib/auth/auth-button";
-import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
-import { useAuthGuard } from "dsnap/hooks/useRouterGuard";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuthGuard } from "@/hooks/useRouterGuard";
+import { AuthButton } from "@/lib/auth/auth-button";
 
 export default function LoginPage() {
   useAuthGuard({ isPrivate: false });

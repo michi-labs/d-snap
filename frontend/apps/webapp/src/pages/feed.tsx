@@ -1,16 +1,18 @@
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { CardHeader, CardContent, CardFooter, Card } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import Layout from "dsnap/components/layout";
-import { useAuthGuard } from "dsnap/hooks/useRouterGuard";
-import { AuthContext } from "dsnap/lib/auth/auth-context";
-import { CanisterTypes } from "dsnap/lib/canisters";
-import { ActorMap } from "icp-connect-core/client";
-import { useActor } from "icp-connect-react/hooks";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import z from "zod";
+
+import { ActorMap } from "icp-connect-core/client";
+import { useActor } from "icp-connect-react/hooks";
+
+import Layout from "@/components/layout";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useAuthGuard } from "@/hooks/useRouterGuard";
+import { AuthContext } from "@/lib/auth/auth-context";
+import { CanisterTypes } from "@/lib/canisters";
 
 type NestedArray = Array<[string, { id: string; images: { url: string }[]; description: string }]>;
 

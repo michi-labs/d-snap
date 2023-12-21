@@ -1,20 +1,22 @@
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { CardHeader, CardContent, CardFooter, Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { storage } from "@/lib/firebase";
-import Layout from "dsnap/components/layout";
-import { Input } from "dsnap/components/ui/input";
-import { ScrollArea } from "dsnap/components/ui/scroll-area";
-import { useAuthGuard } from "dsnap/hooks/useRouterGuard";
-import { CanisterTypes } from "dsnap/lib/canisters";
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { ActorMap } from "icp-connect-core/client";
-import { useActor } from "icp-connect-react/hooks";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+
+import { ActorMap } from "icp-connect-core/client";
+import { useActor } from "icp-connect-react/hooks";
+
+import Layout from "@/components/layout";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
+import { useAuthGuard } from "@/hooks/useRouterGuard";
+import { CanisterTypes } from "@/lib/canisters";
+import { storage } from "@/lib/firebase";
 
 const CreatePostPage = () => {
   useAuthGuard({ isPrivate: true });

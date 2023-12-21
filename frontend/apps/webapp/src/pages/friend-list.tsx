@@ -1,10 +1,11 @@
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { CardHeader, Card } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import Layout from "dsnap/components/layout";
-import { useAuthGuard } from "dsnap/hooks/useRouterGuard";
 import Link from "next/link";
+
+import Layout from "@/components/layout";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useAuthGuard } from "@/hooks/useRouterGuard";
 
 const FriendListPage = () => {
   useAuthGuard({ isPrivate: true });

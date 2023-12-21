@@ -1,6 +1,7 @@
+import { Actor, AnonymousIdentity, HttpAgent, Identity } from "@dfinity/agent";
+
 import { FetchRootKeyError } from "../errors";
 import { ActorMap, CanisterMap, CreateClientOptions, IdentityProviders } from "./client.types";
-import { Actor, AnonymousIdentity, HttpAgent, Identity } from "@dfinity/agent";
 
 export class Client<T extends Record<string, any>> {
   private readonly host: URL;

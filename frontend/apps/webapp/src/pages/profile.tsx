@@ -1,19 +1,21 @@
-import { Button } from "@/components/ui/button";
-import { CardTitle, CardDescription, CardHeader, CardContent, CardFooter, Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { storage } from "@/lib/firebase";
-import Layout from "dsnap/components/layout";
-import { useAuthGuard } from "dsnap/hooks/useRouterGuard";
-import { AuthButton } from "dsnap/lib/auth/auth-button";
-import { AuthContext } from "dsnap/lib/auth/auth-context";
-import { CanisterTypes } from "dsnap/lib/canisters";
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { ActorMap } from "icp-connect-core/client";
-import { useActor } from "icp-connect-react/hooks";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { set } from "zod";
+
+import { ActorMap } from "icp-connect-core/client";
+import { useActor } from "icp-connect-react/hooks";
+
+import Layout from "@/components/layout";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuthGuard } from "@/hooks/useRouterGuard";
+import { AuthButton } from "@/lib/auth/auth-button";
+import { AuthContext } from "@/lib/auth/auth-context";
+import { CanisterTypes } from "@/lib/canisters";
+import { storage } from "@/lib/firebase";
 
 const ProfilePage = () => {
   useAuthGuard({ isPrivate: true });

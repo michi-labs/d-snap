@@ -1,6 +1,6 @@
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
-import Layout from "dsnap/components/layout";
-import { useAuthGuard } from "dsnap/hooks/useRouterGuard";
+import Layout from "@/components/layout";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAuthGuard } from "@/hooks/useRouterGuard";
 
 const InboxPage = () => {
   useAuthGuard({ isPrivate: true });

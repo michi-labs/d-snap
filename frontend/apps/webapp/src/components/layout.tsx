@@ -1,7 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { AuthContext } from "dsnap/lib/auth/auth-context";
 import Link from "next/link";
 import { ReactNode, useContext } from "react";
+
+import { Button } from "@/components/ui/button";
+import { AuthContext } from "@/lib/auth/auth-context";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const { profile } = useContext(AuthContext);
