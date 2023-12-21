@@ -22,22 +22,19 @@
         "name": "next"
       }
     ],
-    "paths": {
-      "dsnap/*": [
-        "./src/*"
+    "paths": {      
+      "@/components/*": [
+        "./src/components/*"
       ],
-      "@/declarations": [
-        "./src/declarations"
+      "@/hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@/lib/*": [
+        "./src/lib/*"
       ],
       "@/declarations/*": [
         "./src/declarations/*"
       ],
-      "@/components/*": [
-        "./src/components/*"
-      ],
-      "@/lib/*": [
-        "./src/lib/*"
-      ]
     }
   },
   "include": [

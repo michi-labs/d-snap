@@ -1,16 +1,19 @@
-import { InternetIdentityReactNativeConfig } from "./internet-identity-react-native.types";
 import { AnonymousIdentity, Identity, SignIdentity, toHex } from "@dfinity/agent";
 import {
-  Ed25519KeyIdentity,
   DelegationChain,
   DelegationIdentity,
+  Ed25519KeyIdentity,
   isDelegationValid,
 } from "@dfinity/identity";
 import { Principal } from "@dfinity/principal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Device from "expo-device";
 import * as SecureStore from "expo-secure-store";
 import * as WebBrowser from "expo-web-browser";
+
 import { IdentityProvider } from "icp-connect-core";
+
+import { InternetIdentityReactNativeConfig } from "./internet-identity-react-native.types";
 
 export const KEY_STORAGE_KEY = "identity";
 export const KEY_STORAGE_DELEGATION = "delegation";
@@ -92,7 +95,9 @@ export class InternetIdentityReactNative implements IdentityProvider {
 
         this._identity = identity;
 
-        WebBrowser.dismissBrowser();
+        if (["iOS", "iPadOS"].includes(Device.osName || "")) {
+          WebBrowser.dismissBrowser();
+        }
       } else {
         throw new Error("key or chain aren't defined");
       }
@@ -104,7 +109,9 @@ export class InternetIdentityReactNative implements IdentityProvider {
 
     try {
       // If `connect` has been called previously, then close/remove any previous windows
-      WebBrowser.dismissBrowser();
+      if (["iOS", "iPadOS"].includes(Device.osName || "")) {
+        WebBrowser.dismissBrowser();
+      }
 
       const derKey = toHex(this._key.getPublicKey().toDer());
 
@@ -113,7 +120,7 @@ export class InternetIdentityReactNative implements IdentityProvider {
       url.searchParams.set("redirect_uri", encodeURIComponent(this.config.appLink));
 
       url.searchParams.set("pubkey", derKey);
-      await WebBrowser.openBrowserAsync(url.toString());
+      await WebBrowser.openBrowserAsync(url.toString(), { showTitle: false });
     } catch (error) {
       throw error;
     }

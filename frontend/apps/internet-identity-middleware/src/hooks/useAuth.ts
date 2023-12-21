@@ -1,10 +1,11 @@
-import { AuthContext } from "../context/auth.context";
-import { IncompleteEd25519KeyIdentity } from "../services/incomplete-identity";
-import { useParams } from "./useParams";
 import { fromHex } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
 import { DelegationIdentity, Ed25519PublicKey } from "@dfinity/identity";
 import { useContext, useState } from "react";
+
+import { AuthContext } from "../context/auth.context";
+import { IncompleteEd25519KeyIdentity } from "../services/incomplete-identity";
+import { useParams } from "./useParams";
 
 const INTERNET_IDENTITY_PROVIDER_DEFAULT_URL = "https://identity.ic0.app";
 const INTERNET_IDENTITY_PROVIDER_URL = process.env.REACT_APP_INTERNET_IDENTITY_PROVIDER_URL;
@@ -53,7 +54,7 @@ export const useAuth = () => {
 
     const url = new URL(decodeURIComponent(redirect_uri));
 
-    window.open(`${url.href}?key=${pubkey}&delegation=${delegation}`);
+    window.open(`${url.href}?key=${pubkey}&delegation=${delegation}`, "_self");
   }
 
   return {

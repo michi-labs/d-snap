@@ -1,5 +1,6 @@
+import { Pressable, StyleSheet, Text } from "react-native";
+
 import { useAuth } from "icp-connect-react/hooks";
-import { Text, StyleSheet, Pressable } from "react-native";
 
 export function AuthButton() {
   const { isAuthenticated, connect, disconnect } = useAuth();
