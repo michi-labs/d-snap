@@ -44,6 +44,8 @@
   ],
   "exclude": [
     "node_modules",
-    "./src/declarations"
+    "./src/declarations",
+    ".next",
+    "build"
   ]
 }

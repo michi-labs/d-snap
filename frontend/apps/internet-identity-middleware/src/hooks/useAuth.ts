@@ -54,7 +54,7 @@ export const useAuth = () => {
 
     const url = new URL(decodeURIComponent(redirect_uri));
 
-    window.open(`${url.href}?key=${pubkey}&delegation=${delegation}`, "_self");
+    window.open(`${url.href}?publicKey=${pubkey}&delegation=${delegation}`, "_self");
   }
 
   return {

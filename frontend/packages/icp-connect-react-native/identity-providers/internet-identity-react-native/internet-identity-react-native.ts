@@ -11,7 +11,7 @@ import * as Device from "expo-device";
 import * as SecureStore from "expo-secure-store";
 import * as WebBrowser from "expo-web-browser";
 
-import { IdentityProvider } from "icp-connect-core";
+import { IdentityProvider, AppLinkParams } from "icp-connect-core";
 
 import { InternetIdentityReactNativeConfig } from "./internet-identity-react-native.types";
 
@@ -78,15 +78,15 @@ export class InternetIdentityReactNative implements IdentityProvider {
     return SecureStore.deleteItemAsync("delegation");
   }
 
-  public async onAppLinkOpened(params: URLSearchParams): Promise<void> {
+  public async onAppLinkOpened(params: AppLinkParams): Promise<void> {
     if (!this.getPrincipal().isAnonymous()) return;
 
-    const delegations = params.get("delegations");
-    const userPublicKey = params.get("userPublicKey");
-    // TODO: validate this._key === userPublicKey
+    const {delegation, publicKey} = params;
+    
+    // TODO: validate this._key === publicKey
 
-    if (delegations && userPublicKey) {
-      const chain = DelegationChain.fromJSON(JSON.parse(decodeURIComponent(delegations)));
+    if (delegation && publicKey) {
+      const chain = DelegationChain.fromJSON(JSON.parse(decodeURIComponent(delegation)));
 
       await this.saveChain(chain);
 

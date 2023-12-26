@@ -1,26 +1,27 @@
-import { useEffect, useState } from "react";
-import { Linking, Text, View } from "react-native";
+import { useEffect } from "react";
+import { Text, View } from "react-native";
+import { useLocalSearchParams } from 'expo-router';
 
 import { useAuth } from "icp-connect-react/hooks";
+import { AppLinkParams } from "icp-connect-core";
 
 const SuccessPage = () => {
   const { onAppLinkOpened } = useAuth();
-  const [params, setParams] = useState<URLSearchParams | undefined>(undefined);
+
+  const params = useLocalSearchParams<AppLinkParams>();
+
 
   useEffect(() => {
-    console.log("success");
-
     async function onLoad() {
-      const urlString = await Linking.getInitialURL();
 
-      if (urlString) {
-        const url = new URL(urlString);
-        const params = new URLSearchParams(url.search);
-        await onAppLinkOpened(params);
-        setParams(params);
+      const { delegation, publicKey } = params;
+
+      if (delegation && publicKey) {
+
+        await onAppLinkOpened({ delegation, publicKey });
         // TODO: Navigate Profile
       } else {
-        console.warn("No initial URL found");
+        console.warn("Invalid App Link Params");
       }
     }
 
@@ -29,9 +30,8 @@ const SuccessPage = () => {
 
   return (
     <View>
-      <Text>Mobile App</Text>
-      <Text>Coming soon...</Text>
-      <Text>{params && JSON.stringify(params)}</Text>
+      <Text>Success page</Text>
+      <Text>{params.delegation}</Text>
     </View>
   );
 };

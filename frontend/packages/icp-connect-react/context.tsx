@@ -1,5 +1,5 @@
 import { AnonymousIdentity, Identity } from "@dfinity/agent";
-import { Client } from "icp-connect-core";
+import { AppLinkParams, Client } from "icp-connect-core";
 import React, { ReactNode, createContext, useEffect, useState } from "react";
 
 export type IcpConnectContextType<T extends Record<string, any>> = {
@@ -8,7 +8,7 @@ export type IcpConnectContextType<T extends Record<string, any>> = {
   isAuthenticated: boolean;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
-  onAppLinkOpened(params: URLSearchParams): Promise<void>;
+  onAppLinkOpened(params: AppLinkParams): Promise<void>;
 };
 
 export type IcpConnectContextProviderProps<T extends Record<string, any>> = {
@@ -67,7 +67,7 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
     setIsAuthenticated(false);
   }
 
-  async function onAppLinkOpened(params: URLSearchParams) {
+  async function onAppLinkOpened(params: AppLinkParams) {
     if (authProvider.type !== "native") {
       console.warn("onAppLinkOpened only should called in native apps");
     }
@@ -85,6 +85,7 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
   return (
     isReady && (
       <IcpConnectContext.Provider
+        // TODO: useMemo is recommended here
         value={{
           client,
           identity,
