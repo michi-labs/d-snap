@@ -7,8 +7,6 @@ const SuccessPage = () => {
   const { onAppLinkOpened } = useAuth();
   const [params, setParams] = useState<URLSearchParams | undefined>(undefined);
 
-  // TODO: Execute here onAppLinkOpened
-
   useEffect(() => {
     console.log("success");
 

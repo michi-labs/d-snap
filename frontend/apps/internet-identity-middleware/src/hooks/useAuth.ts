@@ -9,7 +9,7 @@ import { useParams } from "./useParams";
 
 const INTERNET_IDENTITY_PROVIDER_DEFAULT_URL = "https://identity.ic0.app";
 const INTERNET_IDENTITY_PROVIDER_URL = process.env.REACT_APP_INTERNET_IDENTITY_PROVIDER_URL;
-export const IDENTITY_PROVIDER = INTERNET_IDENTITY_PROVIDER_URL || INTERNET_IDENTITY_PROVIDER_DEFAULT_URL;
+export const IDENTITY_PROVIDER = INTERNET_IDENTITY_PROVIDER_URL ?? INTERNET_IDENTITY_PROVIDER_DEFAULT_URL;
 
 export const useAuth = () => {
   const { isAuth, authenticate } = useContext(AuthContext);

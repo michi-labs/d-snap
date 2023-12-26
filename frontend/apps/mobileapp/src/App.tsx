@@ -1,5 +1,4 @@
 // @ts-ignore
-import { IC_HOST, INTERNET_IDENTITY_URL } from "@env";
 import { ExpoRoot } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text } from "react-native";
@@ -7,6 +6,9 @@ import { Text } from "react-native";
 import { Client } from "icp-connect-core/client";
 import { InternetIdentityReactNative } from "icp-connect-react-native/identity-providers";
 import { IcpConnectContextProvider } from "icp-connect-react/context";
+
+// @ts-ignore
+import { IC_HOST, INTERNET_IDENTITY_URL } from "@env";
 
 import * as test from "./declarations/test";
 import * as user from "./declarations/user";

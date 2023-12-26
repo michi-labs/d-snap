@@ -22,7 +22,7 @@
         "name": "next"
       }
     ],
-    "paths": {      
+    "paths": {
       "@/components/*": [
         "./src/components/*"
       ],
@@ -34,15 +34,13 @@
       ],
       "@/declarations/*": [
         "./src/declarations/*"
-      ],
+      ]
     }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "build/types/**/*.ts",
-    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
