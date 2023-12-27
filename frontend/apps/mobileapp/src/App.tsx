@@ -9,8 +9,10 @@ import { IcpConnectContextProvider } from "icp-connect-react/context";
 
 // @ts-ignore
 import { IC_HOST, INTERNET_IDENTITY_URL } from "@env";
+
 import { Canisters } from "./canisters";
 import { AuthContextProvider } from "./lib/auth/auth-context";
+import { CanisterTypes } from "./lib/canisters";
 
 export default function App() {
   const [client, setClient] = useState<Client<Canisters> | undefined>();
@@ -21,12 +23,12 @@ export default function App() {
 
   async function initClient() {
     const internetIdentity = new InternetIdentityReactNative({
-      providerUrl: INTERNET_IDENTITY_URL,
-      appLink: "exp://192.168.0.125:8081/--/success", //TODO: Get this dinamically
+      providerUrl: "https://6a02-177-228-109-161.ngrok-free.app?canisterId=aovwi-4maaa-aaaaa-qaagq-cai",
+      appLink: "exp://127.0.0.1:8081/--/success", //TODO: Get this dynamically
     });
 
-    const client = await Client.create<Canisters>({
-      host: IC_HOST,
+    const client = await Client.create<CanisterTypes>({
+      host: "https://6a02-177-228-109-161.ngrok-free.app",
       canisters: Canisters,
       providers: {
         "internet-identity": internetIdentity,
