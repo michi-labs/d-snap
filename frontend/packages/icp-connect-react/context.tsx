@@ -31,8 +31,8 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
 
   useEffect(() => {
     async function bootstrap() {
-      client.init();
-      currentProvider.init();
+      await client.init();
+      await currentProvider.init();
 
       const identity = currentProvider.getIdentity();
 
