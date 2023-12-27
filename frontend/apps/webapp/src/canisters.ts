@@ -1,9 +1,9 @@
 import * as test from "@/declarations/test";
 import * as user from "@/declarations/user";
 
-export const canisters = {
+export const Canisters = {
   test,
   user,
 };
 
-export type CanisterTypes = typeof canisters;
+export type Canisters = typeof Canisters;

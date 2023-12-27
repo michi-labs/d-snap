@@ -75,7 +75,7 @@ export class InternetIdentityReactNative implements IdentityProvider {
   }
 
   private deleteChain(): Promise<void> {
-    return SecureStore.deleteItemAsync("delegation");
+    return AsyncStorage.removeItem(KEY_STORAGE_DELEGATION);
   }
 
   public async onAppLinkOpened(params: AppLinkParams): Promise<void> {
@@ -127,6 +127,7 @@ export class InternetIdentityReactNative implements IdentityProvider {
   }
 
   public async disconnect(): Promise<void> {
+    await this.deleteChain();
     this._identity = new AnonymousIdentity();
     this._chain = null;
   }

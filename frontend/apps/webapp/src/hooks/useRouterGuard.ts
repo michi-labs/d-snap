@@ -22,6 +22,5 @@ export function useAuthGuard(options: AuthGuardOptions) {
 
   if (options.isPrivate && !profile) {
     router.push("profile");
-    return;
   }
 }

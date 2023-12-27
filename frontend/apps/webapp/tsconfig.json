@@ -44,9 +44,6 @@
     ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "./src/declarations",
-    ".next",
-    "build"
+    "node_modules"
   ]
 }
