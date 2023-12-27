@@ -22,24 +22,23 @@ export class Client<T extends Record<string, any>> {
       host: this.host.origin,
       identity: new AnonymousIdentity(),
     });
-
-    this.init();
   }
 
-  private init(): void {
-    if (this.isLocal()) {
-      this.agent
-        .fetchRootKey()
-        .then((key) => {
-          console.log("Root key fetched");
-          console.log({ key });
-        })
-        .catch((err: any) => {
-          throw new FetchRootKeyError(err);
-        });
-    }
+  public async init(): Promise<void> {
+    await this.fetchRootKey();
 
     this.setActors();
+  }
+
+  private async fetchRootKey(): Promise<void> {
+    if (!this.isLocal()) return;
+
+    try {
+      await this.agent.fetchRootKey()
+      console.log("Root key fetched");
+    } catch (error) {
+      throw new FetchRootKeyError(error);
+    }
   }
 
   private isLocal(): boolean {
@@ -47,8 +46,11 @@ export class Client<T extends Record<string, any>> {
     const localHostNames = ["127.0.0.1", "localhost"];
     // TODO: wildcard for ngrok free and premium
     const ngrokHostName = /^.*\.ngrok-free\.app$/;
+    const localtunelHostName = /^.*\.loca\.lt$/;
 
-    return localHostNames.includes(hostname) || ngrokHostName.test(hostname);
+    const isLocal = localHostNames.includes(hostname) || ngrokHostName.test(hostname) || localtunelHostName.test(hostname);
+
+    return isLocal;
   }
 
   public setIdentity(identity: Identity) {
@@ -94,15 +96,6 @@ export class Client<T extends Record<string, any>> {
 
   public static async create<T extends Record<string, any>>(options: CreateClientOptions<T>) {
     const { host, canisters, providers } = options;
-
-    const inits = Object.entries(providers).map(async (current) => current[1].init());
-
-    // TODO: donn't initialize inits here
-    try {
-      await Promise.all(inits);
-    } catch (error) {
-      throw error;
-    }
 
     return new Client<T>(host, canisters, providers);
   }

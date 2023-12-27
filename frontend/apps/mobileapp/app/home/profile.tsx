@@ -5,10 +5,11 @@ import { ActorMap } from "icp-connect-core";
 import { useActor } from "icp-connect-react/hooks";
 
 import { AuthContext } from "../../src/lib/auth/auth-context";
-import { CanisterTypes } from "../../src/lib/canisters";
+import { Canisters } from "../../src/canisters";
+
 
 const ProfilePage = () => {
-  const user = useActor<CanisterTypes>("user") as ActorMap<CanisterTypes>["user"];
+  const user = useActor<Canisters>("user") as ActorMap<Canisters>["user"];
   const { profile } = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");

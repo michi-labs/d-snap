@@ -27,29 +27,36 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [identity, setIdentity] = useState<Identity>(new AnonymousIdentity());
 
-  const authProvider = client.getProviders()["internet-identity"];
+  const currentProvider = client.getProviders()["internet-identity"];
 
   useEffect(() => {
-    const identity = authProvider.getIdentity();
+    async function bootstrap() {
+      client.init();
+      currentProvider.init();
 
-    setIdentity(identity);
-    client.setIdentity(identity);
+      const identity = currentProvider.getIdentity();
 
-    if (!identity.getPrincipal().isAnonymous()) {
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
+      setIdentity(identity);
+      client.setIdentity(identity);
+
+      if (!identity.getPrincipal().isAnonymous()) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+
+      setIsReady(true);
     }
 
-    setIsReady(true);
+    bootstrap();
   }, []);
 
   async function connect() {
     try {
-      await authProvider.connect();
+      await currentProvider.connect();
 
-      if (authProvider.type === "web") {
-        const identity = authProvider.getIdentity();
+      if (currentProvider.type === "web") {
+        const identity = currentProvider.getIdentity();
         client.setIdentity(identity);
         setIdentity(identity);
         setIsAuthenticated(true);
@@ -60,7 +67,7 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
   }
 
   async function disconnect() {
-    await authProvider.disconnect();
+    await currentProvider.disconnect();
     const identity = new AnonymousIdentity();
     setIdentity(identity);
     client.setIdentity(identity);
@@ -68,14 +75,14 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
   }
 
   async function onAppLinkOpened(params: AppLinkParams) {
-    if (authProvider.type !== "native") {
+    if (currentProvider.type !== "native") {
       console.warn("onAppLinkOpened only should called in native apps");
     }
 
-    if (authProvider.onAppLinkOpened) {
-      await authProvider.onAppLinkOpened(params);
+    if (currentProvider.onAppLinkOpened) {
+      await currentProvider.onAppLinkOpened(params);
 
-      const identity = authProvider.getIdentity();
+      const identity = currentProvider.getIdentity();
       client.setIdentity(identity);
       setIdentity(identity);
       setIsAuthenticated(true);
