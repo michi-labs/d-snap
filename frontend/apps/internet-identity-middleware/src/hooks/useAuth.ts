@@ -1,7 +1,8 @@
+import { useContext, useState } from "react";
+
 import { fromHex } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
 import { DelegationIdentity, Ed25519PublicKey } from "@dfinity/identity";
-import { useContext, useState } from "react";
 
 import { AuthContext } from "../context/auth.context";
 import { IncompleteEd25519KeyIdentity } from "../services/incomplete-identity";
