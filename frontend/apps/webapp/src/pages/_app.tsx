@@ -7,12 +7,13 @@ import { IcpConnectContextProvider } from "icp-connect-react/context";
 
 import { AppLoader } from "@/components/app-loader";
 import { AuthContextProvider } from "@/lib/auth/auth-context";
-import { CanisterTypes, canisters } from "@/lib/canisters";
+
+import { Canisters } from "../canisters";
 
 import "../app/globals.css";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const [client, setClient] = useState<Client<CanisterTypes> | undefined>();
+  const [client, setClient] = useState<Client<Canisters> | undefined>();
 
   useEffect(() => {
     initClient();
@@ -23,9 +24,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       providerUrl: process.env.NEXT_PUBLIC_INTERNET_IDENTITY_URL,
     });
 
-    const client = await Client.create<CanisterTypes>({
+    const client = await Client.create<Canisters>({
       host: process.env.NEXT_PUBLIC_IC_HOST!,
-      canisters,
+      canisters: Canisters,
       providers: {
         "internet-identity": internetIdentity,
       },

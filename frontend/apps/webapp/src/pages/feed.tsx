@@ -12,7 +12,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuthGuard } from "@/hooks/useRouterGuard";
 import { AuthContext } from "@/lib/auth/auth-context";
-import { CanisterTypes } from "@/lib/canisters";
+import { Canisters } from "../canisters";
 
 type NestedArray = Array<[string, { id: string; images: { url: string }[]; description: string }]>;
 
@@ -34,7 +34,7 @@ const ZResponseSchema = z.object({
 const FeedPage = () => {
   useAuthGuard({ isPrivate: true });
   const { profile } = useContext(AuthContext);
-  const user = useActor<CanisterTypes>("user") as ActorMap<CanisterTypes>["user"];
+  const user = useActor<Canisters>("user") as ActorMap<Canisters>["user"];
   const [feed, setFeed] = useState<NestedArray>([]);
   useEffect(() => {
     async function run() {

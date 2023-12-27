@@ -9,19 +9,10 @@ import { IcpConnectContextProvider } from "icp-connect-react/context";
 
 // @ts-ignore
 import { IC_HOST, INTERNET_IDENTITY_URL } from "@env";
-
-import * as test from "./declarations/test";
-import * as user from "./declarations/user";
-
-const canisters = {
-  test,
-  user,
-};
-
-type CanisterTypes = typeof canisters;
+import { Canisters } from "./canisters";
 
 export default function App() {
-  const [client, setClient] = useState<Client<CanisterTypes> | undefined>();
+  const [client, setClient] = useState<Client<Canisters> | undefined>();
 
   useEffect(() => {
     initClient();
@@ -33,9 +24,9 @@ export default function App() {
       appLink: "exp://192.168.0.125:8081/--/success", //TODO: Get this dinamically
     });
 
-    const client = await Client.create<CanisterTypes>({
+    const client = await Client.create<Canisters>({
       host: IC_HOST,
-      canisters,
+      canisters: Canisters,
       providers: {
         "internet-identity": internetIdentity,
       },

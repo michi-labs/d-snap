@@ -1,7 +1,6 @@
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { set } from "zod";
 
 import { ActorMap } from "icp-connect-core/client";
 import { useActor } from "icp-connect-react/hooks";
@@ -14,8 +13,9 @@ import { Label } from "@/components/ui/label";
 import { useAuthGuard } from "@/hooks/useRouterGuard";
 import { AuthButton } from "@/lib/auth/auth-button";
 import { AuthContext } from "@/lib/auth/auth-context";
-import { CanisterTypes } from "@/lib/canisters";
 import { storage } from "@/lib/firebase";
+
+import { Canisters } from "../canisters";
 
 const ProfilePage = () => {
   useAuthGuard({ isPrivate: true });
@@ -30,7 +30,7 @@ const ProfilePage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const user = useActor<CanisterTypes>("user") as ActorMap<CanisterTypes>["user"];
+  const user = useActor<Canisters>("user") as ActorMap<Canisters>["user"];
 
   useEffect(() => {
     if (profile?.picture?.url) {

@@ -8,7 +8,7 @@ export function AuthButton() {
 }
 
 type LoginButtonProps = {
-  login: () => void;
+  readonly login: () => void;
 };
 
 function LoginButton(props: LoginButtonProps) {
@@ -23,7 +23,7 @@ function LoginButton(props: LoginButtonProps) {
 }
 
 type LogoutButtonProps = {
-  logout: () => void;
+  readonly logout: () => void;
 };
 
 function LogoutButton(props: LogoutButtonProps) {

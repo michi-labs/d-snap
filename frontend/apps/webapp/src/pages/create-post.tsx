@@ -15,8 +15,9 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuthGuard } from "@/hooks/useRouterGuard";
-import { CanisterTypes } from "@/lib/canisters";
 import { storage } from "@/lib/firebase";
+
+import { Canisters } from "../canisters";
 
 const CreatePostPage = () => {
   useAuthGuard({ isPrivate: true });
@@ -48,7 +49,7 @@ const CreatePostPage = () => {
     );
   };
 
-  const user = useActor<CanisterTypes>("user") as ActorMap<CanisterTypes>["user"];
+  const user = useActor<Canisters>("user") as ActorMap<Canisters>["user"];
   const {
     register,
     handleSubmit,
