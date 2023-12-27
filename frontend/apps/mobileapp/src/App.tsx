@@ -1,6 +1,6 @@
 // @ts-ignore
 import { ExpoRoot } from "expo-router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text } from "react-native";
 
 import { Client } from "icp-connect-core/client";
@@ -10,6 +10,7 @@ import { IcpConnectContextProvider } from "icp-connect-react/context";
 // @ts-ignore
 import { IC_HOST, INTERNET_IDENTITY_URL } from "@env";
 import { Canisters } from "./canisters";
+import { AuthContextProvider } from "./lib/auth/auth-context";
 
 export default function App() {
   const [client, setClient] = useState<Client<Canisters> | undefined>();
@@ -40,7 +41,9 @@ export default function App() {
   return client ? (
     // @ts-ignore
     <IcpConnectContextProvider client={client}>
-      <ExpoRoot context={ctx} />
+      <AuthContextProvider>
+        <ExpoRoot context={ctx} />
+      </AuthContextProvider>
     </IcpConnectContextProvider>
   ) : (
     <Text>Loading...</Text>

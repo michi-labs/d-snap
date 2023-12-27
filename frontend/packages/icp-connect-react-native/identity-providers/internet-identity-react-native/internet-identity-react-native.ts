@@ -27,7 +27,7 @@ export class InternetIdentityReactNative implements IdentityProvider {
   private _key: SignIdentity | null = null;
   private _chain: DelegationChain | null = null;
 
-  constructor(private readonly config: InternetIdentityReactNativeConfig) {}
+  constructor(private readonly config: InternetIdentityReactNativeConfig) { }
 
   public async init(): Promise<void> {
     const localKey = await this.getKey();
@@ -81,26 +81,30 @@ export class InternetIdentityReactNative implements IdentityProvider {
   public async onAppLinkOpened(params: AppLinkParams): Promise<void> {
     if (!this.getPrincipal().isAnonymous()) return;
 
-    const {delegation, publicKey} = params;
-    
-    // TODO: validate this._key === publicKey
+    const { delegation, publicKey } = params;
 
-    if (delegation && publicKey) {
-      const chain = DelegationChain.fromJSON(JSON.parse(decodeURIComponent(delegation)));
+    if (!delegation || !!publicKey) {
+      throw new Error("delegation or publicKey not set");
+    }
 
-      await this.saveChain(chain);
+    if (!this._key) throw new Error("key not set");
 
-      if (this._key && this._chain) {
-        const identity: DelegationIdentity = DelegationIdentity.fromDelegation(this._key, this._chain);
+    const derKey = toHex(this._key.getPublicKey().toDer());
 
-        this._identity = identity;
+    if (derKey !== publicKey) throw new Error("key doesn't match");
 
-        if (["iOS", "iPadOS"].includes(Device.osName || "")) {
-          WebBrowser.dismissBrowser();
-        }
-      } else {
-        throw new Error("key or chain aren't defined");
-      }
+    const chain = DelegationChain.fromJSON(JSON.parse(decodeURIComponent(delegation)));
+
+    if (!isDelegationValid(chain)) throw new Error("delegation is not valid");
+
+    await this.saveChain(chain);
+
+    const identity: DelegationIdentity = DelegationIdentity.fromDelegation(this._key, this._chain!);
+
+    this._identity = identity;
+
+    if (["iOS", "iPadOS"].includes(Device.osName || "")) {
+      WebBrowser.dismissBrowser();
     }
   }
 
