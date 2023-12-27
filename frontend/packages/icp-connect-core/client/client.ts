@@ -25,8 +25,6 @@ export class Client<T extends Record<string, any>> {
   }
 
   public async init(): Promise<void> {
-    await this.fetchRootKey();
-
     this.setActors();
   }
 
@@ -54,8 +52,7 @@ export class Client<T extends Record<string, any>> {
   }
 
   public setIdentity(identity: Identity) {
-    if (identity) this.agent.replaceIdentity(identity);
-    else this.agent.invalidateIdentity();
+    this.agent.replaceIdentity(identity);
 
     this.identity = identity;
 
@@ -66,8 +63,10 @@ export class Client<T extends Record<string, any>> {
     return this.identity;
   }
 
-  private setActors(): void {
-    const actors = Object.entries(this._canisters).reduce((reducer, current) => {
+  private async setActors(): Promise<void> {
+    await this.fetchRootKey();
+
+    const actors: any = Object.entries(this._canisters).reduce((reducer, current) => {
       const [name, canister] = current;
       const { idlFactory, canisterId, configuration = {} } = canister;
 
