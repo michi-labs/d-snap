@@ -83,7 +83,7 @@ export class InternetIdentityReactNative implements IdentityProvider {
 
     const { delegation, publicKey } = params;
 
-    if (!delegation || !!publicKey) {
+    if (!delegation || !publicKey) {
       throw new Error("delegation or publicKey not set");
     }
 
