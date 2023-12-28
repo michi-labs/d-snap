@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "expo start",
+    "dev": "expo start --reset-cache",
     "dev:android": "expo start --android",
     "dev:ios": "expo start --ios",
-    "dev:web": "expo start --web"
+    "dev:web": "expo start --web",
+    "clean": "rm -rf .expo && rm -rf .turbo && rm -rf node_modules"
   },
   "dependencies": {
     "expo": "~49.0.15",
