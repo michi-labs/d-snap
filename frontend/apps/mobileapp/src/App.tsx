@@ -21,14 +21,14 @@ export default function App() {
     initClient();
   }, []);
 
-  async function initClient() {
+  function initClient() {
     const internetIdentity = new InternetIdentityReactNative({
       providerUrl: "https://6a02-177-228-109-161.ngrok-free.app?canisterId=aovwi-4maaa-aaaaa-qaagq-cai",
       appLink: "exp://127.0.0.1:8081/--/success", //TODO: Get this dynamically
     });
 
-    const client = await Client.create<CanisterTypes>({
-      host: "https://6a02-177-228-109-161.ngrok-free.app",
+    const client = Client.create<Canisters>({
+      host: IC_HOST,
       canisters: Canisters,
       providers: {
         "internet-identity": internetIdentity,
