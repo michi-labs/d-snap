@@ -19,12 +19,12 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     initClient();
   }, []);
 
-  async function initClient() {
+  function initClient() {
     const internetIdentity = new InternetIdentity({
       providerUrl: process.env.NEXT_PUBLIC_INTERNET_IDENTITY_URL,
     });
 
-    const client = await Client.create<Canisters>({
+    const client = Client.create<Canisters>({
       host: process.env.NEXT_PUBLIC_IC_HOST!,
       canisters: Canisters,
       providers: {

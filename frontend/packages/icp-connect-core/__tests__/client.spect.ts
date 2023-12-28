@@ -33,7 +33,7 @@ describe("Client", () => {
     // A new identity should be retrieved after browser authentication.
     const newIdentity = new AnonymousIdentity();
 
-    client.setIdentity(newIdentity);
+    await client.replaceIdentity(newIdentity);
 
     previousIdentity.getPrincipal().toString();
 

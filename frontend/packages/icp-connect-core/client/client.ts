@@ -3,29 +3,29 @@ import { Actor, AnonymousIdentity, HttpAgent, Identity } from "@dfinity/agent";
 import { FetchRootKeyError } from "../errors";
 import { ActorMap, CanisterMap, CreateClientOptions, IdentityProviders } from "./client.types";
 
-export class Client<T extends Record<string, any>> {
-  private readonly host: URL;
+export class Client<T extends Record<string, unknown>> {
   private readonly agent: HttpAgent;
   private identity: Identity;
   private actors: ActorMap<T> = {} as ActorMap<T>;
 
   private constructor(
-    host: string,
+    private readonly host: URL,
     private readonly _canisters: CanisterMap<T>,
     private readonly providers: IdentityProviders
   ) {
     this.identity = new AnonymousIdentity();
 
-    this.host = new URL(host);
-
     this.agent = new HttpAgent({
       host: this.host.origin,
       identity: new AnonymousIdentity(),
+      // TODO: try to remove this
+      verifyQuerySignatures: false
     });
   }
 
   public async init(): Promise<void> {
-    this.setActors();
+    await this.fetchRootKey();
+    await this.setActors();
   }
 
   private async fetchRootKey(): Promise<void> {
@@ -51,7 +51,7 @@ export class Client<T extends Record<string, any>> {
     return isLocal;
   }
 
-  public async setIdentity(identity: Identity): Promise<void> {
+  public async replaceIdentity(identity: Identity): Promise<void> {
     this.agent.replaceIdentity(identity);
 
     this.identity = identity;
@@ -64,9 +64,7 @@ export class Client<T extends Record<string, any>> {
   }
 
   private async setActors(): Promise<void> {
-    await this.fetchRootKey();
-
-    const actors: any = Object.entries(this._canisters).reduce((reducer, current) => {
+    const actors = Object.entries(this._canisters).reduce((reducer, current) => {
       const [name, canister] = current;
       const { idlFactory, canisterId, configuration = {} } = canister;
 
@@ -93,9 +91,9 @@ export class Client<T extends Record<string, any>> {
     return this.providers;
   }
 
-  public static async create<T extends Record<string, any>>(options: CreateClientOptions<T>) {
+  public static create<T extends Record<string, unknown>>(options: CreateClientOptions<T>) {
     const { host, canisters, providers } = options;
 
-    return new Client<T>(host, canisters, providers);
+    return new Client<T>(new URL(host), canisters, providers);
   }
 }

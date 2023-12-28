@@ -36,8 +36,7 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
 
       const identity = currentProvider.getIdentity();
 
-      await client.setIdentity(identity);
-
+      await client.replaceIdentity(identity);
       setIdentity(identity);
 
       if (!identity.getPrincipal().isAnonymous()) {
@@ -58,7 +57,7 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
 
       if (currentProvider.type === "web") {
         const identity = currentProvider.getIdentity();
-        client.setIdentity(identity);
+        await client.replaceIdentity(identity);
         setIdentity(identity);
         setIsAuthenticated(true);
       }
@@ -70,8 +69,8 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
   async function disconnect() {
     await currentProvider.disconnect();
     const identity = new AnonymousIdentity();
+    await client.replaceIdentity(identity);
     setIdentity(identity);
-    client.setIdentity(identity);
     setIsAuthenticated(false);
   }
 
@@ -84,7 +83,7 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
       await currentProvider.onAppLinkOpened(params);
 
       const identity = currentProvider.getIdentity();
-      client.setIdentity(identity);
+      await client.replaceIdentity(identity);
       setIdentity(identity);
       setIsAuthenticated(true);
     }

@@ -19,13 +19,13 @@ export default function App() {
     initClient();
   }, []);
 
-  async function initClient() {
+  function initClient() {
     const internetIdentity = new InternetIdentityReactNative({
       providerUrl: INTERNET_IDENTITY_URL,
       appLink: "exp://192.168.0.125:8081/--/success", //TODO: Get this dinamically
     });
 
-    const client = await Client.create<Canisters>({
+    const client = Client.create<Canisters>({
       host: IC_HOST,
       canisters: Canisters,
       providers: {
