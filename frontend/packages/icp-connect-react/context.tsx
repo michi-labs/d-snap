@@ -36,8 +36,9 @@ export const IcpConnectContextProvider = <T extends Record<string, any>>({
 
       const identity = currentProvider.getIdentity();
 
+      await client.setIdentity(identity);
+
       setIdentity(identity);
-      client.setIdentity(identity);
 
       if (!identity.getPrincipal().isAnonymous()) {
         setIsAuthenticated(true);

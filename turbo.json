@@ -30,7 +30,7 @@
       "dependsOn": ["build"]
     },
     "clean": {
-      "dependsOn": ["stop"]
+      "dependsOn": ["^clean"]
     }
   }
 }

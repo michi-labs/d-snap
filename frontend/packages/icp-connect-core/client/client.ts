@@ -25,8 +25,6 @@ export class Client<T extends Record<string, any>> {
   }
 
   public async init(): Promise<void> {
-    await this.fetchRootKey();
-
     this.setActors();
   }
 
@@ -34,7 +32,7 @@ export class Client<T extends Record<string, any>> {
     if (!this.isLocal()) return;
 
     try {
-      await this.agent.fetchRootKey()
+      await this.agent.fetchRootKey();
       console.log("Root key fetched");
     } catch (error) {
       throw new FetchRootKeyError(error);
@@ -53,21 +51,22 @@ export class Client<T extends Record<string, any>> {
     return isLocal;
   }
 
-  public setIdentity(identity: Identity) {
-    if (identity) this.agent.replaceIdentity(identity);
-    else this.agent.invalidateIdentity();
+  public async setIdentity(identity: Identity): Promise<void> {
+    this.agent.replaceIdentity(identity);
 
     this.identity = identity;
 
-    this.setActors();
+    await this.setActors();
   }
 
   public getIdentity(): Identity {
     return this.identity;
   }
 
-  private setActors(): void {
-    const actors = Object.entries(this._canisters).reduce((reducer, current) => {
+  private async setActors(): Promise<void> {
+    await this.fetchRootKey();
+
+    const actors: any = Object.entries(this._canisters).reduce((reducer, current) => {
       const [name, canister] = current;
       const { idlFactory, canisterId, configuration = {} } = canister;
 

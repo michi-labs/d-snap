@@ -5,6 +5,9 @@
   "author": "MichiLabs",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "clean": "rm -rf build && rm -rf .turbo && rm -rf node_modules"
+  },
   "dependencies": {
     "@dfinity/agent": "^0.20.2",
     "@dfinity/auth-client": "^0.20.2",
