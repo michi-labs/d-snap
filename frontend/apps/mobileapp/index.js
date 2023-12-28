@@ -1,7 +1,8 @@
-import "fast-text-encoding";
-import "react-native-url-polyfill/auto";
-import App from "./src/App";
 import { registerRootComponent } from "expo";
+
+import './shim';
+import App from "./src/App";
+
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in Expo Go or in a native build,
