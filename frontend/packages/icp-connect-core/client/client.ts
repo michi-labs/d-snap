@@ -32,7 +32,7 @@ export class Client<T extends Record<string, any>> {
     if (!this.isLocal()) return;
 
     try {
-      await this.agent.fetchRootKey()
+      await this.agent.fetchRootKey();
       console.log("Root key fetched");
     } catch (error) {
       throw new FetchRootKeyError(error);
@@ -51,12 +51,12 @@ export class Client<T extends Record<string, any>> {
     return isLocal;
   }
 
-  public setIdentity(identity: Identity) {
+  public async setIdentity(identity: Identity): Promise<void> {
     this.agent.replaceIdentity(identity);
 
     this.identity = identity;
 
-    this.setActors();
+    await this.setActors();
   }
 
   public getIdentity(): Identity {
