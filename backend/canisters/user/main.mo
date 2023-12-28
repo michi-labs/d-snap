@@ -25,6 +25,30 @@ actor User {
         #userCouldNotBeCreated;
     };
 
+    public composite query func getProfileByPrincipal(principal : Principal) : async Result.Result<Types.UserProfile, GetProfileError> {        
+        let user : ?User = users.get(principal);
+
+        switch user {
+            case (?usr) {
+                let profile : Types.UserProfile = await usr.canister.getProfile();
+                #ok(profile);
+            };
+            case null #err(#userNotFound);
+        };
+    };
+
+    public composite query func getPostsByUserId(principal : Principal) : async Result.Result<Types.GetPostsResult, GetPostsError> {
+        let user : ?User = users.get(principal);
+
+        switch user {
+            case (?usr) {
+                let posts : Types.GetPostsResult = await usr.canister.getPosts();
+                #ok(posts);
+            };
+            case null #err(#userNotFound);
+        };
+    };
+
     public query func getUsers() : async [User] {
         Iter.toArray(users.vals());
     };
