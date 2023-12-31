@@ -1,16 +1,21 @@
-import { AuthButton } from "../src/components/auth/auth-button";
 import { Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+
+import { AuthButton } from "../src/lib/auth/auth-button";
 
 const IndexPage = () => {
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+      <Text className="text-lg my-4">DSnap, click on Login to continue.</Text>
       <AuthButton />
       <StatusBar style="auto" />
       <Link replace href="/success">
         <Text>Success</Text>
+      </Link>
+      <Link replace href="/home/profile">
+        <Text>Profile</Text>
       </Link>
     </View>
   );

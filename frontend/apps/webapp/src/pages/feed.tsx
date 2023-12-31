@@ -12,6 +12,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuthGuard } from "@/hooks/useRouterGuard";
 import { AuthContext } from "@/lib/auth/auth-context";
+
 import { Canisters } from "../canisters";
 
 type NestedArray = Array<[string, { id: string; images: { url: string }[]; description: string }]>;

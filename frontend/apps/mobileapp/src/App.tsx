@@ -1,6 +1,6 @@
 // @ts-ignore
 import { ExpoRoot } from "expo-router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text } from "react-native";
 
 import { Client } from "icp-connect-core/client";
@@ -9,7 +9,10 @@ import { IcpConnectContextProvider } from "icp-connect-react/context";
 
 // @ts-ignore
 import { IC_HOST, INTERNET_IDENTITY_URL } from "@env";
+
 import { Canisters } from "./canisters";
+import { AuthContextProvider } from "./lib/auth/auth-context";
+import { CanisterTypes } from "./lib/canisters";
 
 export default function App() {
   const [client, setClient] = useState<Client<Canisters> | undefined>();
@@ -18,13 +21,13 @@ export default function App() {
     initClient();
   }, []);
 
-  async function initClient() {
+  function initClient() {
     const internetIdentity = new InternetIdentityReactNative({
-      providerUrl: INTERNET_IDENTITY_URL,
-      appLink: "exp://192.168.0.125:8081/--/success", //TODO: Get this dinamically
+      providerUrl: "https://6a02-177-228-109-161.ngrok-free.app?canisterId=aovwi-4maaa-aaaaa-qaagq-cai",
+      appLink: "exp://127.0.0.1:8081/--/success", //TODO: Get this dynamically
     });
 
-    const client = await Client.create<Canisters>({
+    const client = Client.create<Canisters>({
       host: IC_HOST,
       canisters: Canisters,
       providers: {
@@ -40,7 +43,9 @@ export default function App() {
   return client ? (
     // @ts-ignore
     <IcpConnectContextProvider client={client}>
-      <ExpoRoot context={ctx} />
+      <AuthContextProvider>
+        <ExpoRoot context={ctx} />
+      </AuthContextProvider>
     </IcpConnectContextProvider>
   ) : (
     <Text>Loading...</Text>
