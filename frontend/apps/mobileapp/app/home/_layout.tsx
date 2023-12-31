@@ -18,20 +18,26 @@ const LayoutHome = () => {
       <View className="h-full flex flex-col items-center justify-center">
         <Slot />
         <View className="absolute items-center bottom-0">
-          <View className="w-[86%] h-14 p-2 flex flex-row items-center justify-between bg-gray-500 border-t border-gray-300">
+          <View className="w-[88%] h-14 flex flex-row items-center justify-between bg-purple-500 border-t border-gray-300">
             <Pressable>
-              <Link replace href="/home/feed">
-                <HomeIcon className="w-8 h-8 text-black" />
+              <Link replace href="/home/feed" className="">
+                <View className="p-2">
+                  <HomeIcon className="p-2 w-8 h-8 text-black" />
+                </View>
               </Link>
             </Pressable>
             <Pressable>
-              <Link replace href="/home/create-post">
-                <PlusIcon className="w-8 h-8 text-black" />
+              <Link replace href="/home/create-post" className="">
+                <View className="p-2">
+                  <PlusIcon className="p-2 w-8 h-8 text-black" />
+                </View>
               </Link>
             </Pressable>
             <Pressable>
               <Link replace href="/home/profile">
-                <Image className="w-8 h-8 rounded-full" source={{ uri: profile.picture.url }} />
+                <View className="p-2 flex items-center justify-center">
+                  <Image className="w-8 h-8 rounded-full" source={{ uri: profile.picture.url }} />
+                </View>
               </Link>
             </Pressable>
           </View>

@@ -1,6 +1,6 @@
 import { Link, useLocalSearchParams } from "expo-router";
 import React, { useEffect } from "react";
-import { Text, View } from "react-native";
+import { Text, TextBase, View } from "react-native";
 
 import { AppLinkParams } from "icp-connect-core";
 import { useAuth } from "icp-connect-react/hooks";
