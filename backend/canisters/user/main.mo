@@ -25,6 +25,7 @@ actor User {
         #userCouldNotBeCreated;
     };
 
+    // TODO: remove this for production
     public composite query func getProfileByPrincipal(principal : Principal) : async Result.Result<Types.UserProfile, GetProfileError> {        
         let user : ?User = users.get(principal);
 
@@ -37,6 +38,7 @@ actor User {
         };
     };
 
+    // TODO: remove this for production
     public composite query func getPostsByUserId(principal : Principal) : async Result.Result<Types.GetPostsResult, GetPostsError> {
         let user : ?User = users.get(principal);
 
@@ -49,12 +51,13 @@ actor User {
         };
     };
 
+    // TODO: remove this for production
     public query func getUsers() : async [User] {
         Iter.toArray(users.vals());
     };
 
     public shared ({ caller }) func create(data : Types.CreateUserData) : async Result.Result<(), CreateUserError> {
-        // if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
+        if (Principal.isAnonymous(caller)) return #err(#userNotAuthenticated);
         // TODO: Verifify crossdevice principals
 
         let user : ?User = users.get(caller);

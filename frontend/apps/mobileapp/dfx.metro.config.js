@@ -9,9 +9,9 @@ const fs = require("fs");
  */
 function setCanisterVariables(canisterNames, relativeRootPath) {
   try {
-    const canisters = require(path.resolve(relativeRootPath, ".dfx", "local", "canister_ids.json"));
-
     const network = process.env.DFX_NETWORK || "local";
+
+    const canisters = require(path.resolve(relativeRootPath, ".dfx", network, "canister_ids.json"));
 
     const variables = [];
 

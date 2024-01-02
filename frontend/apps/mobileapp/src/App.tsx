@@ -12,7 +12,6 @@ import { IC_HOST, INTERNET_IDENTITY_URL } from "@env";
 
 import { Canisters } from "./canisters";
 import { AuthContextProvider } from "./lib/auth/auth-context";
-import { CanisterTypes } from "./lib/canisters";
 
 export default function App() {
   const [client, setClient] = useState<Client<Canisters> | undefined>();
@@ -23,7 +22,7 @@ export default function App() {
 
   function initClient() {
     const internetIdentity = new InternetIdentityReactNative({
-      providerUrl: "https://6a02-177-228-109-161.ngrok-free.app?canisterId=aovwi-4maaa-aaaaa-qaagq-cai",
+      providerUrl: INTERNET_IDENTITY_URL,
       appLink: "exp://127.0.0.1:8081/--/success", //TODO: Get this dynamically
     });
 
