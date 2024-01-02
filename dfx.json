@@ -1,13 +1,6 @@
 {
   "version": 1,
   "canisters": {
-    "test": {
-      "main": "backend/canisters/test/main.mo",
-      "type": "motoko",
-      "declarations": {
-        "node_compatibility": true
-      }
-    },
     "user": {
       "main": "backend/canisters/user/main.mo",
       "type": "motoko",
