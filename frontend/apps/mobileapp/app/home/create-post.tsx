@@ -61,9 +61,16 @@ const CreatePostPage = () => {
           <Image
             source={{ uri: "https://placehold.it/254x254" }}
             style={{ width: 200, height: 200, marginBottom: 20 }}
+            className="rounded-md"
           />
         )}
-        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, marginBottom: 20 }} />}
+        {image && (
+          <Image
+            source={{ uri: image }}
+            style={{ width: 200, height: 200, marginBottom: 20 }}
+            className="rounded-sm"
+          />
+        )}
         {!image && (
           <Pressable onPress={pickImage}>
             <View className="border-[1px] border-purple-500 px-12 py-4 rounded-md flex flex-row justify-around bg-purple-500">
@@ -76,9 +83,9 @@ const CreatePostPage = () => {
         )}
         <TextInput
           placeholder="Write something for your picture"
-          placeholderTextColor={"black"}
+          placeholderTextColor={"gray"}
           multiline={true}
-          className="text-gray-500 my-8 rounded-md pt-5 pr-5 pb-5 pl-2 border-black border-[1px] h-20 w-full"
+          className="text-gray-500 my-8 rounded-md pt-2 pr-5 pb-5 pl-2 border-black border-[1px] h-20 w-full"
           onChangeText={(value) => {
             setDescription(value);
           }}

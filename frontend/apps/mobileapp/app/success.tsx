@@ -1,4 +1,4 @@
-import { Link, useLocalSearchParams } from "expo-router";
+import { Link, router, useLocalSearchParams } from "expo-router";
 import React, { useEffect } from "react";
 import { Text, TextBase, View } from "react-native";
 
@@ -16,7 +16,8 @@ const SuccessPage = () => {
 
       if (delegation && publicKey) {
         await onAppLinkOpened({ delegation, publicKey });
-        // TODO: Navigate Profile
+
+        router.replace("/home/profile");
       } else {
         console.warn("Invalid App Link Params");
       }

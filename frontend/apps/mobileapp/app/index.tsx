@@ -11,12 +11,12 @@ const IndexPage = () => {
       <Text className="text-lg my-4">DSnap, click on Login to continue.</Text>
       <AuthButton />
       <StatusBar style="auto" />
-      <Link replace href="/success">
+      {/* <Link replace href="/success">
         <Text>Success</Text>
       </Link>
       <Link replace href="/home/profile">
         <Text>Profile</Text>
-      </Link>
+      </Link> */}
     </View>
   );
 };

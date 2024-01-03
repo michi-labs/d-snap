@@ -1,6 +1,5 @@
-import { Link } from "expo-router";
 import React, { useContext, useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Image, ScrollView, Text, View } from "react-native";
 import z from "zod";
 
 import { ActorMap } from "icp-connect-core";
@@ -66,7 +65,13 @@ const FeedPage = () => {
           const [postId, postContent] = post;
           return (
             <View key={postId}>
+              <Image
+                source={{ uri: "http://placehold.it/200x200" }}
+                style={{ width: 200, height: 200, marginBottom: 20 }}
+                className="rounded-md"
+              />
               <Text>{JSON.stringify(postContent)}</Text>
+              <Text>{postContent.images[0].url}</Text>
             </View>
           );
         })}

@@ -8,9 +8,8 @@ import { IcpConnectContextProvider } from "icp-connect-react/context";
 import { AppLoader } from "@/components/app-loader";
 import { AuthContextProvider } from "@/lib/auth/auth-context";
 
-import { Canisters } from "../canisters";
-
 import "../app/globals.css";
+import { Canisters } from "../canisters";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const [client, setClient] = useState<Client<Canisters> | undefined>();

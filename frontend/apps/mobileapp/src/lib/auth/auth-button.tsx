@@ -15,7 +15,7 @@ type LoginButtonProps = {
 
 function LoginButton(props: LoginButtonProps) {
   return (
-    <Pressable style={styles.button} onPress={() => props.login()}>
+    <Pressable style={styles.button} onPress={() => props.login()} className="bg-purple-500">
       <Text style={styles.text}>Login</Text>
     </Pressable>
   );
@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: "black",
   },
   text: {
     fontSize: 16,
