@@ -66,12 +66,10 @@ const FeedPage = () => {
           return (
             <View key={postId}>
               <Image
-                source={{ uri: "http://placehold.it/200x200" }}
+                source={{ uri: postContent.images[0].url || "https://placehold.it/254x254" }}
                 style={{ width: 200, height: 200, marginBottom: 20 }}
                 className="rounded-md"
               />
-              <Text>{JSON.stringify(postContent)}</Text>
-              <Text>{postContent.images[0].url}</Text>
             </View>
           );
         })}

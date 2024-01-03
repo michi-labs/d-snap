@@ -1,8 +1,11 @@
+import cn from "classnames";
 import * as ImagePicker from "expo-image-picker";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { PlusCircle } from "lucide-react-native";
 import React, { useState } from "react";
-import { Button, Image, Pressable, Text, TextInput, View } from "react-native";
+import { Image, Pressable, Text, TextInput, View } from "react-native";
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
 
 import { ActorMap } from "icp-connect-core";
 import { useActor } from "icp-connect-react/hooks";
@@ -14,6 +17,7 @@ const CreatePostPage = () => {
   const [image, setImage] = useState<string | null>(null);
   const [imageRemoteUri, setImageRemoteUri] = useState<string | null>(null);
   const [description, setDescription] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
   const user = useActor<Canisters>("user") as ActorMap<Canisters>["user"];
 
   const pickImage = async () => {
@@ -26,13 +30,17 @@ const CreatePostPage = () => {
     });
 
     console.log({ result });
+    console.log(result.assets[0].uri);
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
-      console.table(result.assets);
+      console.log(result.assets[0], "ASSETS");
       // Upload to firebase
-      const storageRef = ref(storage, `dsnap-web/post/${result.assets[0].fileName || "demo"}`);
-      const uploadTask = uploadBytesResumable(storageRef, result.assets[0]);
+      const storageRef = ref(storage, `dsnap-web/post/${uuidv4()}.jpeg`);
+      const blob = await fetch(result.assets[0].uri).then((r) => r.blob());
+      const uploadTask = uploadBytesResumable(storageRef, blob, {
+        contentType: "image/jpeg",
+      });
 
       uploadTask.on(
         "state_changed",
@@ -68,8 +76,17 @@ const CreatePostPage = () => {
           <Image
             source={{ uri: image }}
             style={{ width: 200, height: 200, marginBottom: 20 }}
-            className="rounded-sm"
+            className="rounded-md"
           />
+        )}
+        {image && (
+          <Pressable
+            className="bg-white w-full px-4 py-2 rounded flex flex-row items-center justify-center border-black border-[1px]"
+            onPress={() => {
+              setImage(null);
+            }}>
+            <Text className="text-lg text-black font-medium">Remove image</Text>
+          </Pressable>
         )}
         {!image && (
           <Pressable onPress={pickImage}>
@@ -92,9 +109,12 @@ const CreatePostPage = () => {
         />
 
         <Pressable
-          className="bg-purple-600 w-full text-white px-4 py-2 rounded flex flex-row items-center justify-center"
+          className={cn(
+            "bg-purple-600 w-full text-white px-4 py-2 rounded flex flex-row items-center justify-center",
+            isLoading && "opacity-50"
+          )}
           onPress={async () => {
-            console.log("submit");
+            setIsLoading(true);
             try {
               const result = await user.createPost({
                 images: [{ url: imageRemoteUri || "" }],
@@ -104,6 +124,7 @@ const CreatePostPage = () => {
             } catch (error) {
               console.log(error);
             }
+            setIsLoading(false);
           }}>
           <Text className="text-lg text-white font-medium">Submit</Text>
         </Pressable>
