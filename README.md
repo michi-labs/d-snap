@@ -1,6 +1,31 @@
 # dSnap
 
-Welcome to your new dSnap project and to the internet computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.
+dSnap is both a web and mobile social dApp deployed on ICP and using Internet Identity.
+
+It contains the development of a middleware to authenticate users using Internet Identity on mobile devices.
+
+There are also included some NPM packages that facilitate middleware integration and connection with canisters.
+
+## Project structure:
+
+backend
+
+- canisters
+  - user
+- packages
+  - Image.mo
+  - Utils.mo
+
+frontend
+
+- apps
+  - internet-identity-middleware
+  - mobileapp
+  - webapp
+- packages
+  - icp-connect-core
+  - icp-connect-react
+  - icp-connect-react-react-native
 
 ## Install OS Dependencies
 
